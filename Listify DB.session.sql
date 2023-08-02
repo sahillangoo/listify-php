@@ -6,7 +6,6 @@ CREATE TABLE users (
     phone_number VARCHAR(20),
     password VARCHAR(255) NOT NULL,
     profile_image VARCHAR(255),
-    verified BOOLEAN,
     role VARCHAR(20),
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
