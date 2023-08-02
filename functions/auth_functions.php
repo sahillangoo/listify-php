@@ -10,15 +10,15 @@ List of functions:
   signOut() - signOut the user
 */
 
+// start the session
+session_start();
 // Include the database connection file
-use JetBrains\PhpStorm\NoReturn;
-
 include_once 'config/db_connect.php';
 
 // Function to check if the user is logged in
 function isLoggedIn(): bool
 {
-  if (isset($_SESSION['user_id'])) {
+  if (isset($_SESSION['user_id']) && is_int($_SESSION['user_id'])) {
     return true;
   } else {
     return false;
@@ -35,9 +35,10 @@ function hashPassword($password): string
 function createUser($username, $email, $phone, $password): void
 {
   try {
+    global $PDO;
     // Check if the email is already registered
     $sql = "SELECT COUNT(email) AS num FROM users WHERE email = :email";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $PDO->prepare($sql);
     $stmt->bindValue(':email', $email);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -48,7 +49,7 @@ function createUser($username, $email, $phone, $password): void
 
     // Check if the phone number is already registered
     $sql = "SELECT COUNT(phone) AS num FROM users WHERE phone = :phone";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $PDO->prepare($sql);
     $stmt->bindValue(':phone', $phone);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -69,7 +70,7 @@ function createUser($username, $email, $phone, $password): void
 
       // Insert the user into the database
       $sql = "INSERT INTO users (username, email, phone, password, role, created_at) VALUES (:username, :email, :phone, :password, :role, :created_at)";
-      $stmt = $pdo->prepare($sql);
+      $stmt = $PDO->prepare($sql);
       $stmt->bindValue(':username', $username);
       $stmt->bindValue(':email', $email);
       $stmt->bindValue(':phone', $phone);
@@ -80,7 +81,7 @@ function createUser($username, $email, $phone, $password): void
 
       if ($result) {
         // Get the user id
-        $user_id = $pdo->lastInsertId();
+        $user_id = $PDO->lastInsertId();
 
         // Set the session variables
         $_SESSION['user_id'] = $user_id;
@@ -89,11 +90,17 @@ function createUser($username, $email, $phone, $password): void
         $_SESSION['phone'] = $phone;
         $_SESSION['role'] = $role;
         $_SESSION['created_at'] = $created_at;
+
+        // Redirect to the dashboard
+        header('location: index.php');
+      } else {
+        // Show an error message
+        $error_message = 'Something went wrong. Please try again.';
       }
-    } catch (Exception $e) {
+    } catch (PDOException $e) {
       echo $e->getMessage();
     } finally {
-      unset($pdo);
+      unset($PDO);
     }
   }
 }
@@ -108,9 +115,10 @@ function verifyPassword($password, $hashedPassword): bool
 function signIn($email, $password): void
 {
   try {
+    global $PDO;
     // Check if the email is registered
     $sql = "SELECT * FROM users WHERE email = :email";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $PDO->prepare($sql);
     $stmt->bindValue(':email', $email);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -120,7 +128,6 @@ function signIn($email, $password): void
     } else {
       // Check if the password matches
       $validPassword = verifyPassword($password, $user['password']);
-
       if ($validPassword) {
         // Set the session variables
         $_SESSION['user_id'] = $user['id'];
@@ -140,23 +147,19 @@ function signIn($email, $password): void
   } catch (Exception $e) {
     echo $e->getMessage();
   } finally {
-    unset($pdo);
+    unset($PDO);
   }
 }
 
 // Function to signOut the user
-#[NoReturn] function signOut(): void
+function signOut(): void
 {
   // Unset the session variables
-  unset($_SESSION['user_id']);
-  unset($_SESSION['username']);
-  unset($_SESSION['email']);
-  unset($_SESSION['phone']);
-  unset($_SESSION['role']);
-  unset($_SESSION['created_at']);
-
+  session_unset();
+  // Destroy the session
+  session_destroy();
   // User signed out successfully
   header('Location: ../public/index.php');
+  echo "<script>alert('You have successfully logged out!')</script>";
   exit;
 }
-

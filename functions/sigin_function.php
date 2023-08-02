@@ -4,7 +4,6 @@ Authentication file for signIn for the Webapp
 */
 
 // Include the file
-include_once '../config/db_connect.php';
 include_once './auth_functions.php';
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
@@ -13,7 +12,7 @@ if (isLoggedIn()) {
   exit;
 }
 
-// Function to check and process user signup data
+// Function to check and validate user signin data
 function processSigningForm($email, $password): void
 {
   // Check if any field is empty
@@ -35,10 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   try {
     // Call the function to check and process the data
     processSigningForm($email, $password);
+
     // If all checks pass, SigIn
     signIn($email, $password);
+
     // Redirect to index page after successful registration
     header("Location: index.php");
+    exit();
+  } catch (PDOException $e) {
+    // If any database exception occurs, redirect back to signup page with the error message
+    header("Location: signing.php?error=" . urlencode("Something went wrong. Please try again later."));
     exit();
   } catch (Exception $e) {
     // If any exception occurs, redirect back to signup page with the error message
@@ -47,5 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } finally {
     // Close the connection
     $pdo = null;
+
+    
   }
 }

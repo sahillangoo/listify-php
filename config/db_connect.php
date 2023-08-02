@@ -7,8 +7,8 @@ Database : MySQL (MariaDB)
 Database Name : listify_db
 
 TODO on Production:
-PROD for production
-DEV for development
+  PROD for production
+  DEV for development
 
 */
 
@@ -41,8 +41,8 @@ function connectToDB()
     ];
       return new PDO($dsn, DB_USER, DB_PASS, $options);
   } catch (PDOException $e) {
-    // Handle any errors that occur during the connection
-    die("Database connection failed: " . $e->getMessage());
+    $msg = "Database connection failed: " . $e->getMessage();
+    error_log($msg);
+    die($msg);
   }
 }
-

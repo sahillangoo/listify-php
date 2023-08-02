@@ -20,6 +20,7 @@ function processSignupForm($username, $email, $phone, $password): void
   if (empty($username) || empty($email) || empty($phone) || empty($password)) {
     throw new Exception("All fields are required.");
   }
+
   // Check if the username is valid only letters and numbers
   if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
     throw new Exception("Invalid username.");
@@ -48,21 +49,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $phone = $_POST['phone'];
   $password = $_POST['password'];
 
-  try {
-    // Call the function to check and process the data
-    processSignupForm($username, $email, $phone, $password);
-    // If all checks pass, create the user
-    createUser($username, $email, $phone, $password);
-    // Redirect to index page after successful registration
-    header("Location: index.php");
-    exit();
-  } catch (Exception $e) {
-    // If any exception occurs, redirect back to signup page with the error message
-    header("Location: signup.php?error=" . urlencode($e->getMessage()));
-    exit();
-  } finally {
-    // Close the connection
-    $pdo = null;
+
+try {
+  // Call the function to check and process the data
+  processSignupForm($username, $email, $phone, $password);
+  // If all checks pass, create the user
+  createUser($username, $email, $phone, $password);
+  // Redirect to index page after successful registration
+  header("Location: index.php");
+  exit();
+} catch (Exception $e) {
+  // If any exception occurs, redirect back to signup page with the error message
+  header("Location: signup.php?error=" . urlencode($e->getMessage()));
+  exit();
+} catch (Throwable $e) {
+  // Handle any other error
+  header("Location: signup.php?error=" . urlencode($e->getMessage()));
+  exit();
+} finally {
+  // Close the connection
+  $pdo = null;
   }
 }
 
