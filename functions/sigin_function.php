@@ -5,7 +5,7 @@ Authentication file for signIn for the Webapp
 
 // Include the file
 include_once '../config/db_connect.php';
-include_once '../function/auth_functions.php';
+include_once './auth_functions.php';
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if (isLoggedIn()) {
@@ -14,7 +14,7 @@ if (isLoggedIn()) {
 }
 
 // Function to check and process user signup data
-function processSigninForm($email, $password)
+function processSigningForm($email, $password): void
 {
   // Check if any field is empty
   if (empty($email) || empty($password)) {
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   try {
     // Call the function to check and process the data
-    processSigninForm($email, $password);
+    processSigningForm($email, $password);
     // If all checks pass, SigIn
     signIn($email, $password);
     // Redirect to index page after successful registration
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
   } catch (Exception $e) {
     // If any exception occurs, redirect back to signup page with the error message
-    header("Location: signin.php?error=" . urlencode($e->getMessage()));
+    header("Location: signing.php?error=" . urlencode($e->getMessage()));
     exit();
   } finally {
     // Close the connection

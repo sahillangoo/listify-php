@@ -1,11 +1,10 @@
 <?php
 
-// sanitize fucnction
-function sanitize($data)
+// sanitize function
+function sanitize($data): string
 {
   $data = trim($data);
   $data = stripslashes($data);
   $data = htmlspecialchars($data);
-  $data = strip_tags($data);
-  return $data;
+  return strip_tags($data);
 }

@@ -12,19 +12,17 @@ DEV for development
 
 */
 
-// define('ENV', 'PROD');
-define('ENV', 'DEV');
-
+// const('ENV', 'PROD');
+const ENV = 'DEV';
+const DB_HOST = 'localhost';
 if (ENV === 'PROD') {
-  define('DB_HOST', 'localhost');
-  define('DB_NAME', 'db_name');
-  define('DB_USER', 'db_user');
-  define('DB_PASS', 'db_pass');
+    define('DB_NAME', 'db_name');
+    define('DB_USER', 'db_user');
+    define('DB_PASS', 'db_pass');
 } else {
-  define('DB_HOST', 'localhost');
-  define('DB_NAME', 'listify_db');
-  define('DB_USER', 'root');
-  define('DB_PASS', '');
+    define('DB_NAME', 'listify_db');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
 }
 
 // Timezone Configuration
@@ -41,8 +39,7 @@ function connectToDB()
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Set default fetch mode to associative array
       PDO::ATTR_EMULATE_PREPARES => false, // Disable prepared statement emulation
     ];
-    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-    return $pdo;
+      return new PDO($dsn, DB_USER, DB_PASS, $options);
   } catch (PDOException $e) {
     // Handle any errors that occur during the connection
     die("Database connection failed: " . $e->getMessage());

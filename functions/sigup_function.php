@@ -5,7 +5,7 @@ Authentication file for Signup for the Webapp
 
 // Include the file
 include_once '../config/db_connect.php';
-include_once '../function/auth_functions.php';
+include_once './auth_functions.php';
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if (isLoggedIn()) {
@@ -14,7 +14,7 @@ if (isLoggedIn()) {
 }
 
 // Function to check and process user signup data
-function processSignupForm($username, $email, $phone, $password)
+function processSignupForm($username, $email, $phone, $password): void
 {
   // Check if any field is empty
   if (empty($username) || empty($email) || empty($phone) || empty($password)) {

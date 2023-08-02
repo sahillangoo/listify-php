@@ -11,10 +11,12 @@ List of functions:
 */
 
 // Include the database connection file
+use JetBrains\PhpStorm\NoReturn;
+
 include_once 'config/db_connect.php';
 
 // Function to check if the user is logged in
-function isLoggedIn()
+function isLoggedIn(): bool
 {
   if (isset($_SESSION['user_id'])) {
     return true;
@@ -24,14 +26,13 @@ function isLoggedIn()
 }
 
 // Function to hash the password using bcrypt algorithm with a cost of 10
-function hashPassword($password)
+function hashPassword($password): string
 {
-  $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
-  return $hash;
+  return password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
 }
 
 // Function to Check is user Registered then Create a new user in the database with username, email, phone, password and set user to defualt role
-function createUser($username, $email, $phone, $password)
+function createUser($username, $email, $phone, $password): void
 {
   try {
     // Check if the email is already registered
@@ -98,13 +99,13 @@ function createUser($username, $email, $phone, $password)
 }
 
 // Function to verify the password
-function verifyPassword($password, $hashedPassword)
+function verifyPassword($password, $hashedPassword): bool
 {
   return password_verify($password, $hashedPassword);
 }
 
 // Function to signIn the user
-function signIn($email, $password)
+function signIn($email, $password): void
 {
   try {
     // Check if the email is registered
@@ -114,7 +115,7 @@ function signIn($email, $password)
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user == false) {
+    if (!$user) {
       throw new Exception('That email address is not registered!');
     } else {
       // Check if the password matches
@@ -144,7 +145,7 @@ function signIn($email, $password)
 }
 
 // Function to signOut the user
-function signOut()
+#[NoReturn] function signOut(): void
 {
   // Unset the session variables
   unset($_SESSION['user_id']);
@@ -158,4 +159,4 @@ function signOut()
   header('Location: ../public/index.php');
   exit;
 }
-?>
+

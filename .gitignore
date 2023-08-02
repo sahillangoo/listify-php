@@ -1,0 +1,9 @@
+node_modules
+*.log*
+.cache
+.output
+.env
+package-lock.json
+# IntelliJ
+*.iml
+.idea/
