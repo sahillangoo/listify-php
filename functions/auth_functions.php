@@ -6,6 +6,8 @@ List of functions:
   hashPassword() - Hash the password using bcrypt algorithm with a cost of 10
   createUser() - Create a new user in the database with username, email, phone, password and set user to defualt role
   verifyPassword() - Verify the password
+  signIn() - signIn the user
+  signOut() - signOut the user
 */
 
 // Include the database connection file
@@ -29,10 +31,10 @@ function hashPassword($password)
 }
 
 // Function to Check is user Registered then Create a new user in the database with username, email, phone, password and set user to defualt role
-function createUser($pdo, $username, $email, $phone, $password, $role, $timestamp)
+function createUser($username, $email, $phone, $password)
 {
   try {
-    // Check if the user is already registered
+    // Check if the email is already registered
     $sql = "SELECT COUNT(email) AS num FROM users WHERE email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':email', $email);
@@ -53,23 +55,16 @@ function createUser($pdo, $username, $email, $phone, $password, $role, $timestam
     if ($row['num'] > 0) {
       throw new Exception('That phone number already exists!');
     }
-
-    // Check if the username is already registered
-    $sql = "SELECT COUNT(username) AS num FROM users WHERE username = :username";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':username', $username);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($row['num'] > 0) {
-      throw new Exception('That username already exists!');
-    }
   } catch (Exception $e) {
     echo $e->getMessage();
   } finally {
     try {
       // Hash the password
       $password = hashPassword($password);
+      // Set the default role
+      $role = 'user';
+      // Set the timestamp
+      $created_at = date('Y-m-d H:i:s');
 
       // Insert the user into the database
       $sql = "INSERT INTO users (username, email, phone, password, role, created_at) VALUES (:username, :email, :phone, :password, :role, :created_at)";
@@ -79,7 +74,7 @@ function createUser($pdo, $username, $email, $phone, $password, $role, $timestam
       $stmt->bindValue(':phone', $phone);
       $stmt->bindValue(':password', $password);
       $stmt->bindValue(':role', $role);
-      $stmt->bindValue(':created_at', $timestamp);
+      $stmt->bindValue(':created_at', $created_at);
       $result = $stmt->execute();
 
       if ($result) {
@@ -92,11 +87,7 @@ function createUser($pdo, $username, $email, $phone, $password, $role, $timestam
         $_SESSION['email'] = $email;
         $_SESSION['phone'] = $phone;
         $_SESSION['role'] = $role;
-        $_SESSION['created_at'] = $timestamp;
-
-        // User created successfully
-        header('Location: ../public/index.php');
-        exit;
+        $_SESSION['created_at'] = $created_at;
       }
     } catch (Exception $e) {
       echo $e->getMessage();
@@ -107,11 +98,64 @@ function createUser($pdo, $username, $email, $phone, $password, $role, $timestam
 }
 
 // Function to verify the password
-function verifyPassword($password, $hash)
+function verifyPassword($password, $hashedPassword)
 {
-  if (password_verify($password, $hash)) {
-    return true;
-  } else {
-    return false;
+  return password_verify($password, $hashedPassword);
+}
+
+// Function to signIn the user
+function signIn($email, $password)
+{
+  try {
+    // Check if the email is registered
+    $sql = "SELECT * FROM users WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':email', $email);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user == false) {
+      throw new Exception('That email address is not registered!');
+    } else {
+      // Check if the password matches
+      $validPassword = verifyPassword($password, $user['password']);
+
+      if ($validPassword) {
+        // Set the session variables
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['phone'] = $user['phone'];
+        $_SESSION['role'] = $user['role'];
+        $_SESSION['created_at'] = $user['created_at'];
+
+        // User signed in successfully
+        header('Location: ../public/index.php');
+        exit;
+      } else {
+        throw new Exception('Incorrect password!');
+      }
+    }
+  } catch (Exception $e) {
+    echo $e->getMessage();
+  } finally {
+    unset($pdo);
   }
 }
+
+// Function to signOut the user
+function signOut()
+{
+  // Unset the session variables
+  unset($_SESSION['user_id']);
+  unset($_SESSION['username']);
+  unset($_SESSION['email']);
+  unset($_SESSION['phone']);
+  unset($_SESSION['role']);
+  unset($_SESSION['created_at']);
+
+  // User signed out successfully
+  header('Location: ../public/index.php');
+  exit;
+}
+?>

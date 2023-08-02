@@ -46,8 +46,6 @@ function connectToDB()
   } catch (PDOException $e) {
     // Handle any errors that occur during the connection
     die("Database connection failed: " . $e->getMessage());
-  } finally {
-    // Call the connectToDB function
-    $pdo = connectToDB();
   }
 }
+
