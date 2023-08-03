@@ -1,13 +1,22 @@
--- Date: 2021-05-02 17:00:00
+-- Date: 2021-03-28 17:00:00
+-- Listify DB Schema
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20),
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    phone_number VARCHAR(50),
     password VARCHAR(255) NOT NULL,
     profile_image VARCHAR(255),
-    role VARCHAR(20),
+    role ENUM('admin', 'user') DEFAULT 'user',
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE password_reset_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token VARCHAR(100) NOT NULL,
+    expiration_time TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE listings (
@@ -24,7 +33,7 @@ CREATE TABLE listings (
     business_hours TEXT,
     display_image VARCHAR(255),
     gallery_images TEXT,
-    reviews INT DEFAULT 0,
+    reviews_count INT DEFAULT 0,
     longitude FLOAT,
     latitude FLOAT
 );

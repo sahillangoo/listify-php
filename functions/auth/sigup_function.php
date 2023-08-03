@@ -3,8 +3,7 @@
 Authentication file for Signup for the Webapp
 */
 
-// Include the file
-include_once '../config/db_connect.php';
+// Include the auth functions file
 include_once './auth_functions.php';
 
 // Check if the user is already logged in, if yes then redirect him to welcome page

@@ -13,7 +13,7 @@ List of functions:
 // start the session
 session_start();
 // Include the database connection file
-include_once 'config/db_connect.php';
+include_once '../../config/db_connect.php';
 
 // Function to check if the user is logged in
 function isLoggedIn(): bool
@@ -163,3 +163,80 @@ function signOut(): void
   echo "<script>alert('You have successfully logged out!')</script>";
   exit;
 }
+
+// Function to generate a random token
+function generateToken($length = 50)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $token = '';
+    for ($i = 0; $i < $length; $i++) {
+        $token .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $token;
+}
+
+// Function to initiate the password reset process
+function initiatePasswordReset($email)
+{
+    global $PDO;
+
+    // Check if the email exists in the database
+    $stmt = $PDO->prepare("SELECT id FROM users WHERE email = :email");
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user) {
+        throw new Exception("Email not found.");
+    }
+
+    // Generate a random token
+    $token = generateToken();
+
+    // Set the expiration time (e.g., 1 hour from now)
+    $expirationTime = date('Y-m-d H:i:s', strtotime('+2 hour'));
+
+    // Insert the token into the database
+    $stmt = $PDO->prepare("INSERT INTO password_reset_tokens (user_id, token, expiration_time) VALUES (:user_id, :token, :expiration_time)");
+    $stmt->bindParam(':user_id', $user['id']);
+    $stmt->bindParam(':token', $token);
+    $stmt->bindParam(':expiration_time', $expirationTime);
+    $stmt->execute();
+
+    // Send an email to the user with the password reset link containing the token
+    $resetLink = "http://listify.com/reset_password.php?token=" . urlencode($token);
+    // Here, you should send the email to the user with the reset link
+
+    return true;
+}
+
+// Function to reset the password
+function resetPassword($token, $newPassword)
+{
+    global $PDO;
+
+    // Check if the token exists in the database and is not expired
+    $stmt = $PDO->prepare("SELECT user_id, expiration_time FROM password_reset_tokens WHERE token = :token AND expiration_time > NOW()");
+    $stmt->bindParam(':token', $token);
+    $stmt->execute();
+    $tokenData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$tokenData) {
+        throw new Exception("Invalid or expired token.");
+    }
+
+    // Update the user's password in the database
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    $stmt = $PDO->prepare("UPDATE users SET password = :password WHERE id = :user_id");
+    $stmt->bindParam(':password', $hashedPassword);
+    $stmt->bindParam(':user_id', $tokenData['user_id']);
+    $stmt->execute();
+
+    // Delete the used token from the database
+    $stmt = $PDO->prepare("DELETE FROM password_reset_tokens WHERE token = :token");
+    $stmt->bindParam(':token', $token);
+    $stmt->execute();
+
+    return true;
+}
+?>

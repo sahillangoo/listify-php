@@ -3,7 +3,7 @@
 Authentication file for signIn for the Webapp
 */
 
-// Include the file
+// Include the auth functions file
 include_once './auth_functions.php';
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
@@ -53,6 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Close the connection
     $pdo = null;
 
-    
+
   }
 }
