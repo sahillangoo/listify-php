@@ -52,7 +52,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } finally {
     // Close the connection
     $pdo = null;
-
-
   }
 }

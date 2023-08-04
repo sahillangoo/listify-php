@@ -1,42 +1,19 @@
-<!--
-=========================================================
-* Soft UI Design System - v1.0.9
-=========================================================
-
-* Product Page:  https://www.creative-tim.com/product/soft-ui-design-system 
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="http://schema.org/WebPage">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
-  <title>
-    Soft UI Design System by Creative Tim
-  </title>
-  <!--     Fonts and icons     -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-  <!-- Nucleo Icons -->
-  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-  <!-- CSS Files -->
-  <link id="pagestyle" href="../assets/css/soft-design-system.css?v=1.0.9" rel="stylesheet" />
-  <!-- Nepcha Analytics (nepcha.com) -->
-  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+  <title>Listify - Comprehansive Listing App</title>
+  <?php
+  // turn on error reporting
+  ini_set('display_errors', 1);
+  error_reporting(E_ALL);
+
+  // include the head file
+  include_once './includes/_head.php';
+  ?>
 </head>
 
-<body class="sign-in-illustration">
+<body class="contact-us">
   <!-- Navbar -->
   <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
@@ -720,7 +697,7 @@
                   <a href="https://www.creative-tim.com/builder?ref=navbar-soft-design-system" class="btn btn-sm btn-outline-primary btn-round mb-0 me-1 mt-2 mt-md-0">Online Builder</a>
                 </li>
                 <li class="nav-item my-auto ms-3 ms-lg-0">
-                  <a href="https://www.creative-tim.com/product/soft-ui-design-system-pro" class="btn btn-sm  bg-gradient-dark  btn-round mb-0 me-1 mt-2 mt-md-0">Upgrade to Pro</a>
+                  <a href="https://www.creative-tim.com/product/soft-ui-design-system-pro" class="btn btn-sm  bg-gradient-primary  btn-round mb-0 me-1 mt-2 mt-md-0">Upgrade to Pro</a>
                 </li>
               </ul>
             </div>
@@ -730,55 +707,206 @@
       </div>
     </div>
   </div>
-  <section>
-    <div class="page-header min-vh-100">
+  <!-- -------- START HEADER 8 w/ card over right bg image ------- -->
+  <header>
+    <div class="page-header min-vh-85">
+      <div>
+        <img class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block border-radius-section border-top-end-radius-0 border-top-start-radius-0 border-bottom-end-radius-0" src="../assets/img/curved-images/curved8.jpg" alt="image">
+      </div>
       <div class="container">
         <div class="row">
-          <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
-            <div class="card card-plain">
-              <div class="card-header pb-0 text-left">
-                <h4 class="font-weight-bolder">Sign In</h4>
-                <p class="mb-0">Enter your email and password to sign in</p>
-              </div>
-              <div class="card-body">
-                <form role="form">
-                  <div class="mb-3">
-                    <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
-                  </div>
-                  <div class="mb-3">
-                    <input type="email" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="rememberMe">
-                    <label class="form-check-label" for="rememberMe">Remember me</label>
-                  </div>
-                  <div class="text-center">
-                    <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
-                  </div>
-                </form>
-              </div>
-              <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                <p class="mb-4 text-sm mx-auto">
-                  Don't have an account?
-                  <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign up</a>
+          <div class="col-lg-7 d-flex justify-content-center flex-column">
+            <div class="card d-flex blur justify-content-center p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
+              <div class="text-center">
+                <h3 class="text-gradient text-primary">Contact us</h3>
+                <p class="mb-0">
+                  For further questions, including partnership opportunities, please email hello@creative-tim.com
+                  or contact using our contact form.
                 </p>
               </div>
-            </div>
-          </div>
-          <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-            <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
-              <img src="../assets/img/shapes/pattern-lines.svg" alt="pattern-lines" class="position-absolute opacity-4 start-0">
-              <div class="position-relative">
-                <img class="max-width-500 w-100 position-relative z-index-2" src="../assets/img/illustrations/chat.png">
-              </div>
-              <h4 class="mt-5 text-white font-weight-bolder">"Attention is the new currency"</h4>
-              <p class="text-white">The more effortless the writing looks, the more effort the writer actually put into the process.</p>
+              <form id="contact-form" method="post" autocomplete="off">
+                <div class="card-body pb-2">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label>Full Name</label>
+                      <div class="input-group mb-4">
+                        <input class="form-control" placeholder="Full Name" aria-label="Full Name" type="text">
+                      </div>
+                    </div>
+                    <div class="col-md-6 ps-md-2">
+                      <label>Email</label>
+                      <div class="input-group">
+                        <input type="email" class="form-control" placeholder="hello@creative-tim.com">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group mb-0 mt-md-0 mt-4">
+                    <label>How can we help you?</label>
+                    <textarea name="message" class="form-control" id="message" rows="6" placeholder="Describe your problem in at least 250 characters"></textarea>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 text-center">
+                      <button type="submit" class="btn bg-gradient-primary mt-3 mb-0">Send Message</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </header>
+  <!-- -------- END HEADER 8 w/ card over right bg image ------- -->
+  <footer class="footer pt-5 mt-5">
+    <hr class="horizontal dark mb-5">
+    <div class="container">
+      <div class=" row">
+        <div class="col-md-3 mb-4 ms-auto">
+          <div>
+            <h6 class="text-gradient text-primary font-weight-bolder">Soft UI Design System</h6>
+          </div>
+          <div>
+            <h6 class="mt-3 mb-2 opacity-8">Social</h6>
+            <ul class="d-flex flex-row ms-n3 nav">
+              <li class="nav-item">
+                <a class="nav-link pe-1" href="https://www.facebook.com/CreativeTim/" target="_blank">
+                  <i class="fab fa-facebook text-lg opacity-8"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link pe-1" href="https://twitter.com/creativetim" target="_blank">
+                  <i class="fab fa-twitter text-lg opacity-8"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link pe-1" href="https://dribbble.com/creativetim" target="_blank">
+                  <i class="fab fa-dribbble text-lg opacity-8"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link pe-1" href="https://github.com/creativetimofficial" target="_blank">
+                  <i class="fab fa-github text-lg opacity-8"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link pe-1" href="https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w" target="_blank">
+                  <i class="fab fa-youtube text-lg opacity-8"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6 col-6 mb-4">
+          <div>
+            <h6 class="text-gradient text-primary text-sm">Company</h6>
+            <ul class="flex-column ms-n3 nav">
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/presentation" target="_blank">
+                  About Us
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/templates/free" target="_blank">
+                  Freebies
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/templates/premium" target="_blank">
+                  Premium Tools
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/blog" target="_blank">
+                  Blog
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6 col-6 mb-4">
+          <div>
+            <h6 class="text-gradient text-primary text-sm">Resources</h6>
+            <ul class="flex-column ms-n3 nav">
+              <li class="nav-item">
+                <a class="nav-link" href="https://iradesign.io/" target="_blank">
+                  Illustrations
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/bits" target="_blank">
+                  Bits & Snippets
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/affiliates/new" target="_blank">
+                  Affiliate Program
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6 col-6 mb-4">
+          <div>
+            <h6 class="text-gradient text-primary text-sm">Help & Support</h6>
+            <ul class="flex-column ms-n3 nav">
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/contact-us" target="_blank">
+                  Contact Us
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/knowledge-center" target="_blank">
+                  Knowledge Center
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://services.creative-tim.com/?ref=ct-soft-ui-footer" target="_blank">
+                  Custom Development
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/sponsorships" target="_blank">
+                  Sponsorships
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6 col-6 mb-4 me-auto">
+          <div>
+            <h6 class="text-gradient text-primary text-sm">Legal</h6>
+            <ul class="flex-column ms-n3 nav">
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/terms" target="_blank">
+                  Terms &amp; Conditions
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/privacy" target="_blank">
+                  Privacy Policy
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.creative-tim.com/license" target="_blank">
+                  Licenses (EULA)
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="text-center">
+            <p class="my-4 text-sm">
+              All rights reserved. Copyright © <script>
+                document.write(new Date().getFullYear())
+              </script> Soft UI Design System by <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
   <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
