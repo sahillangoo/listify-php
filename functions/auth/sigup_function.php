@@ -1,20 +1,28 @@
 <?php
 /*
-Authentication file for Signup for the Webapp
+* Authentication file for Signup for the Webapp
+List of functions:
+  processSignupForm() - Check and process the signup form data
 */
 
 // Include the auth functions file
 include_once './auth_functions.php';
 
-// Check if the user is already logged in, if yes then redirect him to welcome page
+// Check if the is admin or user anf is alredy logged in then redirect to respective pages
 if (isLoggedIn()) {
-  header('Location: ../public/index.php');
-  exit;
+  if ($_SESSION['user_type'] === 'admin') {
+    header("Location: ./../../admin/index.php");
+    exit();
+  } else {
+    header("Location: ./../../index.php");
+    exit();
+  }
 }
 
 // Function to check and process user signup data
 function processSignupForm($username, $email, $phone, $password): void
 {
+  try {
   // Check if any field is empty
   if (empty($username) || empty($email) || empty($phone) || empty($password)) {
     throw new Exception("All fields are required.");
@@ -39,6 +47,11 @@ function processSignupForm($username, $email, $phone, $password): void
   if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,18}$/", $password)) {
     throw new Exception("Password must be 8-18 characters long, contain letters, numbers and special characters.");
   }
+  } catch (Exception $e) {
+    // If any of the validation checks fail, redirect back to the signup page with the error message
+    header("Location: ./../../signup.php?error=" . urlencode($e->getMessage()));
+    exit();
+  }
 }
 
 // Assuming the form data is submitted via POST
@@ -48,26 +61,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $phone = $_POST['phone'];
   $password = $_POST['password'];
 
-
 try {
   // Call the function to check and process the data
   processSignupForm($username, $email, $phone, $password);
-  // If all checks pass, create the user
-  createUser($username, $email, $phone, $password);
-  // Redirect to index page after successful registration
-  header("Location: index.php");
-  exit();
+    // If all checks pass, create the user
+    createUser($username, $email, $phone, $password);
 } catch (Exception $e) {
-  // If any exception occurs, redirect back to signup page with the error message
-  header("Location: signup.php?error=" . urlencode($e->getMessage()));
+    // If any exception occurs, redirect back to signup page with the error message
+    header("Location: ./../../my-account.php?error=" . urlencode($e->getMessage()));
   exit();
 } catch (Throwable $e) {
-  // Handle any other error
-  header("Location: signup.php?error=" . urlencode($e->getMessage()));
+    // Handle any other error
+    header("Location: ./../../my-account.php.php?error=" . urlencode($e->getMessage()));
   exit();
 } finally {
-  // Close the connection
-  $pdo = null;
+    // Close the connection
+    $db = null;
   }
 }
 
