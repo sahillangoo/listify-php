@@ -4,8 +4,6 @@
 List of functions:
   isLoggedIn() - Check if the user is logged in
   hashPassword() - Hash the password using bcrypt algorithm with a cost of 10
-  checkUser() - Check if the username,email,phone is already registered
-  createUser() - Create a new user in the database
   verifyPassword() - Verify the password
   signIn() - signIn the user
   signOut() - signOut the user
@@ -34,93 +32,6 @@ function hashPassword($password): string
     'time_cost' => 4,
   ];
   return password_hash($password, PASSWORD_ARGON2ID, $options);
-}
-
-// Function to Check if the username,email,phone is already registered
-function checkUser($username, $email, $phone): void
-{
-  try {
-    global $db;
-
-    // Check if the username is already registered
-    $sql = "SELECT COUNT(username) AS num FROM users WHERE username = :username";
-    $stmt = $db->prepare($sql);
-    $stmt->bindValue(':username', $username);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($row['num'] > 0) {
-      throw new Exception('That username already exists!');
-    }
-
-    // Check if the email is already registered
-    $sql = "SELECT COUNT(email) AS num FROM users WHERE email = :email";
-    $stmt = $db->prepare($sql);
-    $stmt->bindValue(':email', $email);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($row['num'] > 0) {
-      throw new Exception('That email already exists!');
-    }
-
-    // Check if the phone number is already registered
-    $sql = "SELECT COUNT(phone) AS num FROM users WHERE phone = :phone";
-    $stmt = $db->prepare($sql);
-    $stmt->bindValue(':phone', $phone);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($row['num'] > 0) {
-      throw new Exception('That phone number already exists!');
-    }
-  } catch (Exception $e) {
-    echo $e->getMessage();
-    // send message to form page with error message
-    header("Location: ./../../my-account.php?error=" . $e->getMessage());
-    exit;
-  }
-}
-
-// function to create user in the database if user doent exists then if role is user go to index.php if role is admin go to admin.php
-function createUser($username, $email, $phone, $password, $role = 'user'): void
-{
-  try {
-    global $db;
-
-    // Check if the username, email, phone is already registered if not then create a new user
-    checkUser($username, $email, $phone);
-
-    // Hash the password
-    $hashedPassword = hashPassword($password);
-
-    // Set the timestamp
-    $created_at = date('Y-m-d H:i:s');
-
-    // Insert the user into the database
-    $sql = "INSERT INTO users (username, email, phone, password, role, created_at) VALUES (:username, :email, :phone, :password, :role, :created_at)";
-    $stmt = $db->prepare($sql);
-    $stmt->bindValue(':username', $username);
-    $stmt->bindValue(':email', $email);
-    $stmt->bindValue(':phone', $phone);
-    $stmt->bindValue(':password', $hashedPassword);
-    $stmt->bindValue(':role', $role);
-    $stmt->bindValue(':created_at', $created_at);
-    $stmt->execute();
-
-    // User created successfully
-    if ($role == 'user') {
-      header('Location: ./../../index.php');
-      exit;
-    } else if ($role == 'admin') {
-      header('Location: ./../../admin/index.php');
-      exit;
-    }
-  } catch (Exception $e) {
-    echo $e->getMessage();
-    // send message to form page with error message
-    header("Location: ./../../my-account.php?error=" . $e->getMessage());
-  }
 }
 
 // Function to verify the password
@@ -163,7 +74,6 @@ function signIn($email, $password): void
       }
     }
   } catch (Exception $e) {
-    echo $e->getMessage();
     // send message to form page with error message
     header("Location: ./../../my-account.php?error=" . $e->getMessage());
   }

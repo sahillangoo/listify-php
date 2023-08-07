@@ -1,17 +1,15 @@
 -- Date: 2021-03-28 17:00:00
 -- Listify DB Schema
 CREATE TABLE users (
-    id INT(4) PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(50) NOT NULL UNIQUE,
-    phone_number BIGINT(12) NOT NULL UNIQUE,
+    phone BIGINT(12) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     profile_image VARCHAR(255),
     role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
 
 CREATE TABLE password_reset_tokens (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -51,8 +49,7 @@ CREATE TABLE reviews (
     FOREIGN KEY (listing_id) REFERENCES listings(id)
 );
 
--- @block
 -- insert data into users table
-INSERT INTO users (username, email, phone_number, password, profile_image, role, user_since) VALUES
+INSERT INTO users (username, email, phone, password, profile_image, role, user_since) VALUES
 ('JohnDoe', 'john@example.com', '123456789', 'hashed_password', 'profile.jpg', 'user', NULL),
 ('JaneSmith', 'jane@example.com', '9876543210', 'hashed_password', 'profile.jpg', 'user', NULL);
