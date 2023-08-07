@@ -6,7 +6,7 @@ CREATE TABLE users (
     email VARCHAR(50) NOT NULL UNIQUE,
     phone BIGINT(12) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    profile_image VARCHAR(255),
+    profile_image VARCHAR(255) NOT NULL,
     role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

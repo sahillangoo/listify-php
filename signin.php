@@ -4,14 +4,32 @@
 <head>
   <title>Sigin/Sigup to Listify</title>
   <?php
-  // turn on error reporting
+
+  // ! error reporting
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
 
   // include the head file
   include_once './includes/_head.php';
+
+  // file location variables
+  $indexPage = "./index.php";
+  $signinPage = "./signin.php";
+  $dashboardPage = "./admin/index.php";
+
+
+  // start the session
+  session_start();
+  // turn on output buffering
   ob_start();
+
+  //  check if the user is logged in or not
+  if (isset($_SESSION['user_id'])) {
+    // redirect to the home
+    header("Location: ./index.php");
+  }
+
   ?>
 </head>
 
@@ -97,12 +115,12 @@
             <div class="tab-content" id="signup">
               <div class="tab-pane fade show" id="signup-tab-pane" role="tabpanel" aria-labelledby="signup-tab" tabindex="0">
                 <div class="card-body">
-                  <form action="./functions/auth/signup_function.php" method="post" name="signup" id="signup" class="needs-validation" novalidate autocomplete="on">
+                  <form action="./functions/auth/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation" novalidate autocomplete="on">
                     <legend class="my-3 small">Enter your details to SignUp</legend>
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="text" required class="form-control form-control-lg" placeholder="Username" id="username" aria-label="username" aria-describedby="username-addon">
+                        <input type="text" required class="form-control form-control-lg" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username-addon">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -112,7 +130,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class="form-control form-control-lg" placeholder="Email" id="email" aria-label="Email" aria-describedby="email-addon">
+                        <input type="email" required class="form-control form-control-lg" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -122,7 +140,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="tel" required class="form-control form-control-lg" placeholder="Phone" id="phone" aria-label="phone" aria-describedby="phone-addon">
+                        <input type="tel" required class="form-control form-control-lg" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -132,7 +150,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class="form-control form-control-lg" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                        <input type="password" class="form-control form-control-lg" id="password" name="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -141,7 +159,7 @@
                     </div>
 
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="terms" id="terms" required>
+                      <input class="form-check-input" type="checkbox" value="terms" id="terms" name="terms" required>
                       <label class="form-check-label" for="terms">
                         Agree to terms and conditions
                       </label>

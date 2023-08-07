@@ -10,6 +10,9 @@
 
   // include the head file
   include_once './includes/_head.php';
+  session_start();
+  ob_start();
+
   ?>
 </head>
 

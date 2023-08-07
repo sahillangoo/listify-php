@@ -1,13 +1,18 @@
 <?php
 /*
-*This file will contain Authentication helper functions that will be used throughout the application
-List of functions:
-  isLoggedIn() - Check if the user is logged in
-  hashPassword() - Hash the password using bcrypt algorithm with a cost of 10
-  verifyPassword() - Verify the password
-  signIn() - signIn the user
-  signOut() - signOut the user
-*/
+  *This file will contain Authentication helper functions that will be used throughout the application
+  List of functions:
+    isLoggedIn() - Check if the user is logged in
+    hashPassword() - Hash the password using bcrypt algorithm with a cost of 10
+    verifyPassword() - Verify the password
+    signIn() - signIn the user
+    signOut() - signOut the user
+  */
+
+// ! error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 // Include the database connection file
 $var = require_once __DIR__ . '/../db_connect.php';
@@ -98,7 +103,7 @@ function generateToken($length = 50)
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $token = '';
     for ($i = 0; $i < $length; $i++) {
-        $token .= $characters[rand(0, strlen($characters) - 1)];
+    $token .= $characters[rand(0, strlen($characters) - 1)];
     }
     return $token;
 }
@@ -115,7 +120,7 @@ function initiatePasswordReset($email)
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-        throw new Exception("Email not found.");
+    throw new Exception("Email not found.");
     }
 
     // Generate a random token
@@ -150,7 +155,7 @@ function resetPassword($token, $newPassword)
     $tokenData = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$tokenData) {
-        throw new Exception("Invalid or expired token.");
+    throw new Exception("Invalid or expired token.");
     }
 
     // Update the user's password in the database
@@ -166,5 +171,4 @@ function resetPassword($token, $newPassword)
     $stmt->execute();
 
     return true;
-}
-?>
+  }
