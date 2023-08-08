@@ -4,15 +4,21 @@
 <head>
   <title>Listify - Comprehansive Listing App</title>
   <?php
+
   // turn on error reporting
   ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
+
+  // include routes
+  require_once  './routes/routes.php';
 
   // include the head file
   include_once './includes/_head.php';
+  // start session
   session_start();
+  // turn on output buffering
   ob_start();
-
   ?>
 </head>
 

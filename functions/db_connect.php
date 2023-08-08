@@ -12,6 +12,11 @@ TODO on Production:
 
 */
 
+// ! error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // const('ENV', 'PROD');
 const ENV = 'DEV';
 const DB_HOST = 'localhost';
@@ -24,11 +29,6 @@ if (ENV === 'PROD') {
     define('DB_USER', 'root');
     define('DB_PASS', '');
 }
-
-// Timezone Configuration
-date_default_timezone_set('Asia/Kolkata');
-// start the session
-session_start();
 
 //Function to connect to the database using PDO
 function connectToDB()
@@ -44,7 +44,7 @@ function connectToDB()
       return new PDO($dsn, DB_USER, DB_PASS, $options);
   } catch (Exception $e) {
     error_log($e->getMessage());
-    exit('Something weird happened With DB'); //something a user can understand
+    exit('Something weird happened with DB || Is DB server turned on?'); //something a user can understand
   }
 }
 

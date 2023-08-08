@@ -4,7 +4,6 @@
 <head>
   <title>Sigin/Sigup to Listify</title>
   <?php
-
   // ! error reporting
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
@@ -12,12 +11,6 @@
 
   // include the head file
   include_once './includes/_head.php';
-
-  // file location variables
-  $indexPage = "./index.php";
-  $signinPage = "./signin.php";
-  $dashboardPage = "./admin/index.php";
-
 
   // start the session
   session_start();
@@ -29,7 +22,6 @@
     header("location: ./index.php");
     exit;
   }
-
   ?>
 </head>
 

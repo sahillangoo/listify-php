@@ -24,18 +24,11 @@
   Author: SahilLangoo
   lastModified: 7/8/2023
     */
-
-// ! error reporting
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+// include routes file
+require_once __DIR__ . '\routes\routes.php';
 // Include the auth functions file
-include_once './auth_functions.php';
+require_once './auth_functions.php';
 
-// file location variables
-$signinPage = "./../../signin.php";
-$indexPage = "./../../index.php";
 
 // Assuming the form data is submitted via POST
 if (isset($_POST['signup'])) {

@@ -2,20 +2,20 @@
 /*
   *This file will contain Authentication helper functions that will be used throughout the application
   List of functions:
-    isLoggedIn() - Check if the user is logged in
     hashPassword() - Hash the password using bcrypt algorithm with a cost of 10
     verifyPassword() - Verify the password
     signIn() - signIn the user
     signOut() - signOut the user
+    generateToken() - generate a random token
+    initiatePasswordReset() - initiate the password reset process
+    resetPassword() - reset the password
   */
-
-// ! error reporting
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 // Include the database connection file
 $var = require_once __DIR__ . '/../db_connect.php';
+
+// Timezone Configuration
+date_default_timezone_set('Asia/Kolkata');
 
 // Function to hash the password using PASSWORD_ARGON2ID algorithm with a cost of 12 memory cost of 2048 and time cost of 4 and returns the hashed password as a string or FALSE on failure.
 
