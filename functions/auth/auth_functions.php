@@ -17,16 +17,6 @@ error_reporting(E_ALL);
 // Include the database connection file
 $var = require_once __DIR__ . '/../db_connect.php';
 
-// Function to check if the user is logged in
-function isLoggedIn(): bool
-{
-  if (isset($_SESSION['user_id']) && is_int($_SESSION['user_id'])) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 // Function to hash the password using PASSWORD_ARGON2ID algorithm with a cost of 12 memory cost of 2048 and time cost of 4 and returns the hashed password as a string or FALSE on failure.
 
 function hashPassword($password): string
@@ -58,43 +48,55 @@ function signIn($email, $password): void
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-      throw new Exception('That email address is not registered!');
+      // Email doesn't exist, display a generic error message
+      throw new Exception('Incorrect Username or Password');
     } else {
       // Check if the password matches
       $validPassword = verifyPassword($password, $user['password']);
       if ($validPassword) {
-        // Set the session variables
-        $_SESSION['user_id'] = $user['id'];
+        // Password is correct, so start a new session
+        session_start();
+        // Store data in session variables
+        $_SESSION["loggedin"] = true;
         $_SESSION['username'] = $user['username'];
-        $_SESSION['email'] = $user['email'];
+        $_SESSION["email"] = $user['email'];
         $_SESSION['phone'] = $user['phone'];
+        $_SESSION['profile_image'] = $user['profile_image'];
         $_SESSION['role'] = $user['role'];
-        $_SESSION['created_at'] = $user['created_at'];
+        $_SESSION['user_since'] = $user['user_since'];
 
-        // User signed in successfully
-        header('Location: ./../../index.php');
-        exit;
+        // Redirect to the home page if role is user else redirect to the admin dashboard
+        if ($_SESSION['role'] === 'user') {
+          header('location: ./../../index.php');
+        } else {
+          header('location: ./../../admin/index.php');
+        }
+
+        exit();
       } else {
-        throw new Exception('Incorrect password!');
+        // Password is not valid, display a generic error message
+        throw new Exception('Incorrect Username or Password');
       }
     }
   } catch (Exception $e) {
     // send message to form page with error message
-    header("Location: ./../../my-account.php?error=" . $e->getMessage());
+    $_SESSION['errorsession'] = $e->getMessage();
+    header('location: ./../../signin.php');
+    exit();
+  } finally {
+    $pdo = null;
   }
 }
 
 // Function to signOut the user
-function signOut(): void
-{
+if (isset($_POST['signout'])) {
   // Unset the session variables
   session_unset();
   // Destroy the session
   session_destroy();
   // User signed out successfully
   header('Location: ./../../index.php');
-  echo "<script>alert('You have successfully logged out!')</script>";
-  exit;
+  exit();
 }
 
 // Function to generate a random token

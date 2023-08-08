@@ -20,10 +20,11 @@
   <?php
   // include the header file
   include_once './includes/_header.php';
-  // Function to check if the user is logged in
+
+  // Function to check if the user is logged in     $_SESSION["loggedin"] === true;
   function isLoggedIn()
   {
-    if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
       return true;
     } else {
       return false;
@@ -35,23 +36,24 @@
   } else {
     echo "User is not logged in";
   }
+  //output user details
+  echo "<pre>";
+  print_r($_SESSION);
+  echo "</pre>";
+
+  // siginout
+  if (isset($_POST['signout'])) {
+    session_destroy();
+    header('location: ./index.php');
+    exit();
+  }
   ?>
-  <!-- signin form html -->
-  <form action="../functions/auth/sigin_function.php" method="post">
-    <input type="text" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="submit" name="submit" value="Sign In">
-  </form><br>
-  <!-- signup form html -->
-  <form action="../functions/auth/sigin_function.php" method="post">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="text" name="email" placeholder="Email" required>
-    <input type="text" name="phone" placeholder="Phone" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="submit" name="submit" value="Sign Up">
-  </form><br>
 
 
+  <?php
+  // include the footer file
+  include_once './includes/_footer.php';
+  ?>
 </body>
 
 </html>

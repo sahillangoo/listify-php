@@ -164,6 +164,7 @@ if (isset($_POST['signup'])) {
     $db = null;
 
     // Set session variables
+    $_SESSION["loggedin"] = true;
     $_SESSION['username'] = $username;
     $_SESSION['email'] = $email;
     $_SESSION['phone'] = $phone;

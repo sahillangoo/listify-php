@@ -25,9 +25,9 @@
   ob_start();
 
   //  check if the user is logged in or not
-  if (isset($_SESSION['user_id'])) {
-    // redirect to the home
-    header("Location: ./index.php");
+  if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    header("location: ./index.php");
+    exit;
   }
 
   ?>
@@ -67,8 +67,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class="form-control form-control-lg" placeholder="Email" id="email" aria-label="Email" aria-describedby="email-addon">
-                        <div id="emailHelp" class="form-text">Enter your registered email.</div>
+                        <input type="email" required class="form-control form-control-lg" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -78,8 +77,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class="form-control form-control-lg" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon">
-                        <div id="passwordHelpBlock" class="form-text">Enter your password.</div>
+                        <input type="password" class="form-control form-control-lg" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -150,7 +148,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class="form-control form-control-lg" id="password" name="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                        <input type="password" class="form-control form-control-lg" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
