@@ -4,7 +4,6 @@
 <head>
   <title>Listify - Comprehansive Listing App</title>
   <?php
-
   // turn on error reporting
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
@@ -15,8 +14,7 @@
 
   // include the head file
   include_once './includes/_head.php';
-  // start session
-  session_start();
+
   // turn on output buffering
   ob_start();
   ?>
@@ -27,15 +25,7 @@
   // include the header file
   include_once './includes/_header.php';
 
-  // Function to check if the user is logged in     $_SESSION["loggedin"] === true;
-  function isLoggedIn()
-  {
-    if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+
   // check if the user is logged in echo loggedIn();
   if (isLoggedIn()) {
     echo "User is logged in";
