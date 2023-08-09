@@ -4,14 +4,10 @@
 <head>
   <title>Listify - Comprehansive Listing App</title>
   <?php
-  // ! error reporting
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-
+  // include config file
+  include_once './includes/_config.php';
   // include the head file
   include_once './includes/_head.php';
-
   ?>
 </head>
 

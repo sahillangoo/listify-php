@@ -4,22 +4,14 @@
 <head>
   <title>Sigin/Sigup to Listify</title>
   <?php
-  // ! error reporting
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-
+  // include config file
+  include_once './includes/_config.php';
   // include the head file
   include_once './includes/_head.php';
 
-  // start the session
-  session_start();
-  // turn on output buffering
-  ob_start();
-
   //  check if the user is logged in or not
-  if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: ./index.php");
+  if (isLoggedIn()) {
+    redirect('index.php');
     exit;
   }
   ?>

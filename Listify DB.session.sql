@@ -1,5 +1,6 @@
 -- Date: 2021-03-28 17:00:00
 -- Listify DB Schema
+--@block
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -10,34 +11,24 @@ CREATE TABLE users (
     role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE password_reset_tokens (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    token VARCHAR(100) NOT NULL,
-    expiration_time TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
+--@block
 CREATE TABLE listings (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    business_name VARCHAR(50) NOT NULL,
     description TEXT,
+    category VARCHAR(50),
     address VARCHAR(255),
     city VARCHAR(100),
-    category VARCHAR(100),
-    whatsapp_url VARCHAR(255),
-    instagram_id VARCHAR(255),
-    phone_number VARCHAR(20),
-    email VARCHAR(255),
-    business_hours TEXT,
+    whatsapp BIGINT(10),
+    instagram_id VARCHAR(50),
+    phone_number BIGINT(10),
+    email VARCHAR(50),
     display_image VARCHAR(255),
-    gallery_images TEXT,
     reviews_count INT DEFAULT 0,
-    longitude FLOAT,
-    latitude FLOAT
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
-
+--@block
 CREATE TABLE reviews (
     id INT PRIMARY KEY AUTO_INCREMENT,
     rating FLOAT,
@@ -48,8 +39,7 @@ CREATE TABLE reviews (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (listing_id) REFERENCES listings(id)
 );
-
+--@block
 -- insert data into users table
 INSERT INTO users (username, email, phone, password, profile_image, role, user_since) VALUES
-('JohnDoe', 'john@example.com', '123456789', 'hashed_password', 'profile.jpg', 'user', NULL),
-('JaneSmith', 'jane@example.com', '9876543210', 'hashed_password', 'profile.jpg', 'user', NULL);
+('sahillangoo', 'sahilahmed3066@gmail.com', 7006588022, '$argon2id$v=19$m=2048,t=4,p=1$SGg2elliQ2JZbUVYeEpVeA$MtwHADtrs/912gP60PvgfZL+PKExiyN3sCaLF518qpU', 'https://api.dicebear.com/6.x/micah/svg?seed=sahillangoo&flip=true&background=%230000ff&radius=50&margin=10&baseColor=f9c9b6', 'admin', '2023-08-07 16:16:11');
