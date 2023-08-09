@@ -1,4 +1,8 @@
 <?php
+//start session
+if (!isset($_SESSION)) {
+  session_start();
+}
 // Function to check if the user is logged
 function isLoggedIn()
 {
@@ -36,11 +40,12 @@ function isLoggedIn()
               <!-- siginout form if user is signed in -->
               <?php if (isLoggedIn()) : ?>
                 <li class="nav-item my-auto ms-3 ms-lg-0">
-                  <form action="./../functions/auth/auth_functions.php" method="post">
+                  <form action="./../functions/auth/signout_function.php" method="post">
                     <button href="./signin.php" type="submit" name="signout" value="Sign Out" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign Out">Sign Out</button>
                   </form>
-                <?php endif; ?>
-                <?php if (!isLoggedIn()) : ?>
+                </li>
+              <?php endif; ?>
+              <?php if (!isLoggedIn()) : ?>
                 <li class="nav-item my-auto ms-3 ms-lg-0">
                   <a href="./signin.php" class="btn btn-sm  bg-gradient-primary  btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="SigUp or SignIn to Listify">SignUp / SigIn</a>
                 </li>

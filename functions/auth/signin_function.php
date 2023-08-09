@@ -15,14 +15,14 @@ if (isset($_POST['signin'])) {
   // Check if any field is empty
   if (empty($email) || empty($password)) {
     $_SESSION['errorsession'] = "All Fields are Necessary.";
-    header('location: ./../../signin.php');
+    redirect('signin.php');
     exit();
   }
 
   // Check if the email is valid
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $_SESSION['errorsession'] = "Check your email.";
-    header('location: ./../../signin.php');
+    redirect('signin.php');
     exit();
   }
 

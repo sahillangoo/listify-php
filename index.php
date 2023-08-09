@@ -4,28 +4,21 @@
 <head>
   <title>Listify - Comprehansive Listing App</title>
   <?php
-  // turn on error reporting
+  // ! error reporting
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
 
-  // include routes
-  require_once  './routes/routes.php';
-
   // include the head file
   include_once './includes/_head.php';
 
-  // turn on output buffering
-  ob_start();
   ?>
 </head>
 
 <body class="index-page">
   <?php
   // include the header file
-  include_once './includes/_header.php';
-
-
+  include_once './includes/_navbar.php';
   // check if the user is logged in echo loggedIn();
   if (isLoggedIn()) {
     echo "User is logged in";

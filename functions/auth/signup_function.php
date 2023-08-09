@@ -24,18 +24,16 @@
   Author: SahilLangoo
   lastModified: 7/8/2023
     */
-// include routes file
-require_once __DIR__ . '\routes\routes.php';
+
 // Include the auth functions file
 require_once './auth_functions.php';
-
 
 // Assuming the form data is submitted via POST
 if (isset($_POST['signup'])) {
   // check if all fields are filled
   if (empty($_POST["username"]) || empty($_POST["email"]) || empty($_POST["phone"]) || empty($_POST["password"]) || empty($_POST["terms"])) {
     $_SESSION['errorsession'] = "All Fields are Necessary.";
-    header('location: ./../../signin.php');
+    redirect('signin.php');
     exit();
   }
 
@@ -49,28 +47,28 @@ if (isset($_POST['signup'])) {
   // Check if the username is valid only letters and numbers
   if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
     $_SESSION['errorsession'] = "Username must contain only letters or numbers.";
-    header('location: ./../../signin.php');
+    redirect('signin.php');
     exit();
   }
 
   // Check if the email is valid
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $_SESSION['errorsession'] = "Invalid Email. Please enter a valid email.";
-    header('location: ./../../signin.php');
+    redirect('signin.php');
     exit();
   }
 
   // Check if the phone number is valid (You can add more specific checks if needed)
   if (!preg_match('/^\d{10,}$/', $phone)) {
     $_SESSION['errorsession'] = "Invalid phone number. Please enter a 10-digit phone number.";
-    header('location: ./../../signin.php');
+    redirect('signin.php');
     exit();
   }
 
   // Check if the password is < 8 and > 18 characters and contains at least one lowercase letter, one uppercase letter, one number, and one special character
   if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,18}$/", $password)) {
     $_SESSION['errorsession'] = "Password must be 8-18 characters long, contain letters, numbers and special characters.";
-    header('location: ./../../signin.php');
+    redirect('signin.php');
     exit();
   }
 
@@ -143,19 +141,6 @@ if (isset($_POST['signup'])) {
     if ($stmt->rowCount() == 0) {
       throw new Exception('Could not register you in database - please try again at a later time.');
     }
-    // send message to form page with success message
-    $_SESSION['successsession'] = "You have been registered successfully.";
-    header("Location: ./../../index.php");
-    exit;
-  } catch (Exception $e) {
-    // send message to form page with error message
-    $_SESSION['errorsession'] = $e->getMessage();
-    header('location: ./../../signin.php');
-    exit;
-  } finally {
-    // unset db
-    $db = null;
-
     // Set session variables
     $_SESSION["loggedin"] = true;
     $_SESSION['username'] = $username;
@@ -163,9 +148,15 @@ if (isset($_POST['signup'])) {
     $_SESSION['phone'] = $phone;
     $_SESSION['role'] = $role;
     $_SESSION['user_since'] = $created_at;
-
     // Redirect to the home page
-    header("Location: ./../../index.php");
+    redirect('index.php');
+  } catch (Exception $e) {
+    // send message to form page with error message
+    $_SESSION['errorsession'] = $e->getMessage();
+    redirect('signin.php');
     exit();
+  } finally {
+    // unset db
+    $db = null;
   }
 }

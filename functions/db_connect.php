@@ -17,6 +17,16 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Site Url
+const BASE_URL = 'http://localhost:3000/';
+
+// function to set location
+function redirect($url)
+{
+  header('Location: ' . BASE_URL . $url);
+  exit();
+}
+
 // const('ENV', 'PROD');
 const ENV = 'DEV';
 const DB_HOST = 'localhost';
@@ -51,6 +61,10 @@ function connectToDB()
 // to use db
 $db = connectToDB();
 
+//start session
+if (!isset($_SESSION)) {
+  session_start();
+}
 /*
 echo "DB Connected Successfully";
 $sql = "SELECT * FROM users";
