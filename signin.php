@@ -27,7 +27,7 @@
             <div class="card card-plain">
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
-                <?php require_once('./functions/dialog.php'); ?>
+                <?php include_once('./functions/dialog.php'); ?>
                 <ul class="nav nav-tabs" id="account" role="tablist">
 
                   <li class="nav-item" role="presentation">
@@ -206,7 +206,7 @@
   </script>
   <?php
   // include the footer file
-  require_once './includes/_footer.php';
+  include_once './includes/_footer.php';
   ?>
 
 </body>

@@ -1,7 +1,8 @@
 <?php
+// Include the auth functions file
+include_once './auth_functions.php';
 // Include the database connection file
-require_once './../db_connect.php';
-
+include_once './../db_connect.php';
 // Function to signOut the user
 if (isset($_POST['signout'])) {
   // Unset the session variables

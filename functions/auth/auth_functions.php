@@ -12,7 +12,16 @@
 date_default_timezone_set('Asia/Kolkata');
 
 // Include the database connection file
-require_once './../db_connect.php';
+include_once './../db_connect.php';
+
+// Site Url
+const BASE_URL = 'http://localhost:3000/';
+// function to set location
+function redirect($url)
+{
+  header('Location: ' . BASE_URL . $url);
+  exit();
+}
 
 // Function to hash the password using PASSWORD_ARGON2ID algorithm with a cost of 12 memory cost of 2048 and time cost of 4 and returns the hashed password as a string or FALSE on failure.
 
@@ -55,6 +64,7 @@ function signIn($email, $password): void
         session_start();
         // Store data in session variables
         $_SESSION["loggedin"] = true;
+        $_SESSION["id"] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION["email"] = $user['email'];
         $_SESSION['phone'] = $user['phone'];
@@ -81,7 +91,6 @@ function signIn($email, $password): void
     redirect('signin.php');
     exit();
   } finally {
-    $pdo = null;
+    $db = null;
   }
 }
-

@@ -26,7 +26,7 @@
     */
 
 // Include the auth functions file
-require_once './auth_functions.php';
+include_once './auth_functions.php';
 
 // Assuming the form data is submitted via POST
 if (isset($_POST['signup'])) {
@@ -137,12 +137,15 @@ if (isset($_POST['signup'])) {
     $stmt->bindValue('role', $role);
     $stmt->bindValue('user_since', $created_at);
     $stmt->execute();
+    // user id from database
+    $user_id = $db->lastInsertId('user_id');
     //error handling
     if ($stmt->rowCount() == 0) {
       throw new Exception('Could not register you in database - please try again at a later time.');
     }
     // Set session variables
     $_SESSION["loggedin"] = true;
+    $_SESSION['user_id'] = $user_id;
     $_SESSION['username'] = $username;
     $_SESSION['email'] = $email;
     $_SESSION['phone'] = $phone;

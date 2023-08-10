@@ -9,23 +9,12 @@ Database Name : listify_db
 TODO on Production:
   PROD for production
   DEV for development
-
 */
 
 // ! error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-// Site Url
-const BASE_URL = 'http://localhost:3000/';
-
-// function to set location
-function redirect($url)
-{
-  header('Location: ' . BASE_URL . $url);
-  exit();
-}
 
 // const('ENV', 'PROD');
 const ENV = 'DEV';
@@ -57,7 +46,6 @@ function connectToDB()
     exit('Something weird happened with DB || Is DB server turned on?'); //something a user can understand
   }
 }
-
 // to use db
 $db = connectToDB();
 

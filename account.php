@@ -8,6 +8,8 @@
   <?php
   // include config file
   include_once './includes/_config.php';
+  // include the databse connection file
+  include_once './functions/db_connect.php';
   // include the head file
   include_once './includes/_head.php';
 
@@ -18,7 +20,19 @@
   }
   // convert user_since to a readable format
   $user_since = date('d M Y', strtotime($_SESSION['user_since']));
-
+  // get the user id from the session
+  $user_id = $_SESSION['id'];
+  // Fetch user's listings from the database
+  try {
+    $sql = "SELECT * FROM listings WHERE user_id = :user_id";
+    $stmt = $db->prepare($sql);
+    $stmt->execute(['user_id' => $user_id]);
+    $listings = $stmt->fetchAll();
+  } catch (PDOException $e) {
+    echo $e->getMessage();
+  } finally {
+    $stmt = null;
+  }
   ?>
 </head>
 
@@ -38,12 +52,11 @@
             </div>
             <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mt-sm-0 mt-4">
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <h4 class="mb-0"><?php echo $_SESSION['username']; ?></h4>
+                <h4 class="mb-0">@<?php echo $_SESSION['username']; ?></h4>
                 <div class="d-block">
                   <form action="#" method="post">
                     <button href="#" type="submit" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Edit Profile</button>
                   </form>
-
                 </div>
               </div>
               <div class="row">
@@ -61,12 +74,16 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-auto">
-                    <button href="#" type="submit" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</button>
-                </div>
-                <div class="col-auto">
+                <?php if (empty($listings)) : ?>
+                  <div class="col-auto">
+                    <a href="./create-listing.php" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</a>
+                  </div>
+                <?php endif; ?>
+                <?php if (!empty($listings)) : ?>
+                  <div class="col-auto">
                     <button href="#" type="submit" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Update Listing</button>
-                </div>
+                  </div>
+                <?php endif; ?>
               </div>
             </div>
           </div>
@@ -81,6 +98,19 @@
           <h3 class="mb-5">Listing</h3>
         </div>
       </div>
+      <!-- if the user has no listings, display a message -->
+      <?php if (empty($listings)) : ?>
+        <div class="alert alert-info" role="alert">
+          You have no listings yet. <a href="create_listing.php">Create a listing</a>
+        </div>
+      <?php endif; ?>
+      <?php foreach ($listings as $listing) : ?>
+        <li>
+          <strong><?php echo $listing['business_name']; ?></strong> - <?php echo $listing['description']; ?>
+          <a href="edit_listing.php?id=<?php echo $listing['id']; ?>">Edit</a>
+          <a href="delete_listing.php?id=<?php echo $listing['id']; ?>">Delete</a>
+        </li>
+      <?php endforeach; ?>
       <div class="row">
         <div class="col-lg-3 col-sm-6">
           <div class="card card-plain card-blog">
@@ -106,8 +136,6 @@
       </div>
     </div>
   </section>
-
-
   <?php
   // include the footer file
   include_once './includes/_footer.php';
