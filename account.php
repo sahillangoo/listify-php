@@ -45,50 +45,62 @@
   <section class="py-sm-7 py-2 position-relative">
     <div class="container">
       <div class="row">
-        <div class="col-12 mx-auto">
-          <div class="row py-lg-7 py-2">
-            <div class="col-lg-3 col-md-5 position-relative my-auto">
-              <img class="img border-radius-lg max-width-200 w-100 position-relative z-index-2" src="<?php echo $_SESSION['profile_image']; ?>" alt="user">
+        <!-- breadcrumb -->
+        <div class="container py-2 mt-3 overflow-hidden">
+          <div class="row">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
+                <li class="breadcrumb-item">My Account</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mx-auto">
+        <div class="row py-lg-7 py-2">
+          <div class="col-lg-3 col-md-5 position-relative my-auto">
+            <img class="img border-radius-lg max-width-200 w-100 position-relative z-index-2" src="<?php echo $_SESSION['profile_image']; ?>" alt="user">
+          </div>
+          <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mt-sm-0 mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h4 class="mb-0">@<?php echo $_SESSION['username']; ?></h4>
+              <div class="d-block">
+                <form action="#" method="post">
+                  <button href="#" type="submit" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Edit Profile</button>
+                </form>
+              </div>
             </div>
-            <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mt-sm-0 mt-4">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h4 class="mb-0">@<?php echo $_SESSION['username']; ?></h4>
-                <div class="d-block">
-                  <form action="#" method="post">
-                    <button href="#" type="submit" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Edit Profile</button>
-                  </form>
-                </div>
+            <div class="row">
+              <div class="col-auto">
+                <span class="h6">Phone: </span>
+                <span><?php echo $_SESSION['phone']; ?></span>
               </div>
-              <div class="row">
-                <div class="col-auto">
-                  <span class="h6">Phone: </span>
-                  <span><?php echo $_SESSION['phone']; ?></span>
-                </div>
-                <div class="col-auto">
-                  <span class="h6">Email ID: </span>
-                  <span><?php echo $_SESSION['email']; ?></span>
-                </div>
-                <div class="col-auto">
-                  <span class="h6">User Since: </span>
-                  <span><?php echo $user_since; ?></span>
-                </div>
+              <div class="col-auto">
+                <span class="h6">Email ID: </span>
+                <span><?php echo $_SESSION['email']; ?></span>
               </div>
-              <div class="row">
-                <?php if (empty($listings)) : ?>
-                  <div class="col-auto">
-                    <a href="./create-listing.php" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</a>
-                  </div>
-                <?php endif; ?>
-                <?php if (!empty($listings)) : ?>
-                  <div class="col-auto">
-                    <button href="#" type="submit" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Update Listing</button>
-                  </div>
-                <?php endif; ?>
+              <div class="col-auto">
+                <span class="h6">User Since: </span>
+                <span><?php echo $user_since; ?></span>
               </div>
+            </div>
+            <div class="row">
+              <?php if (empty($listings)) : ?>
+                <div class="col-auto">
+                  <a href="./create-listing.php" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</a>
+                </div>
+              <?php endif; ?>
+              <?php if (!empty($listings)) : ?>
+                <div class="col-auto">
+                  <button href="#" type="submit" name="editprofile" value="editprofile" class="btn btn-sm btn-outline-info text-nowrap mb-0">Update Listing</button>
+                </div>
+              <?php endif; ?>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </section>
   <section class="py-3">

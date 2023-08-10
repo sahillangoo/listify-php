@@ -18,7 +18,6 @@
 </head>
 
 <body class="sign-in-illustration">
-
   <section>
     <div class="page-header min-vh-100">
       <div class="container">
@@ -27,21 +26,21 @@
             <div class="card card-plain">
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
+                <h4 class="font-weight-bolder text-primary text-gradient">Welcome back</h4>
                 <?php include_once('./functions/dialog.php'); ?>
-                <ul class="nav nav-tabs" id="account" role="tablist">
+                <div class="nav-wrapper position-center end-0">
+                  <ul class="nav nav-pills nav-fill p-1" id="account" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link mb-0 px-0 py-1 active" id="signin-tab" data-bs-toggle="tab" data-bs-target="#signin-tab-pane" role="tab" aria-controls="signin-tab-pane" aria-selected="true">Sign In</a>
+                    </li>
 
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="signin-tab" data-bs-toggle="tab" data-bs-target="#signin-tab-pane" type="button" role="tab" aria-controls="signin-tab-pane" aria-selected="true">Sign In</button>
-                  </li>
-
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-tab-pane" type="button" role="tab" aria-controls="signup-tab-pane" aria-selected="false">Sign Up</button>
-                  </li>
-                </ul>
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link mb-0 px-0 py-1" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-tab-pane" role="tab" aria-controls="signup-tab-pane" aria-selected="false">Sign Up</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
-
             </div>
-
             <div class="tab-content" id="signin">
               <div class="tab-pane fade show active" id="signin-tab-pane" role="tabpanel" aria-labelledby="signin-tab" tabindex="0">
                 <div class="card-body">
@@ -70,7 +69,7 @@
                     </div>
 
                     <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="rememberMe">
+                      <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" checked>
                       <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div>
 

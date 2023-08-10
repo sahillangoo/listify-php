@@ -45,7 +45,7 @@
               <?php if (isLoggedIn()) : ?>
                 <li class="nav-item my-auto ms-3 ms-lg-0">
                   <!-- user profile pic -->
-                  <img src="<?php echo $_SESSION['profile_image']; ?>" class="avatar avatar-sm me-1" alt="user profile pic">
+                  <img src="<?php echo $_SESSION['profile_image']; ?>" class="avatar avatar-sm rounded-circle" alt="user profile pic">
                 </li>
               <?php endif; ?>
             </ul>

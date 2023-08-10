@@ -1,7 +1,7 @@
 <?php
 if (isset($_SESSION['successsession'])) {
     echo ('
-    <div class="alert alert-success alert-with-icon">
+    <div class="alert alert-success text-white font-weight-bold alert-with-icon alert-dismissible fade show">
         <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
         <i class="tim-icons icon-simple-remove"></i>
         </button>
@@ -15,7 +15,7 @@ unset($_SESSION["successsession"]);
 
 if (isset($_SESSION['errorsession'])) {
     echo ('
-    <div class="alert alert-danger alert-with-icon alert-dismissible fade show">
+    <div class="alert alert-danger text-white font-weight-bold alert-with-icon alert-dismissible fade show">
     <p class="small">
     <strong>Oh snap!</strong> - ' . htmlspecialchars($_SESSION['errorsession'], ENT_QUOTES, 'UTF-8') . '
     </p>
@@ -26,7 +26,7 @@ if (isset($_SESSION['errorsession'])) {
 unset($_SESSION["errorsession"]);
 
 if (isset($_SESSION['warningsession'])) {
-    echo '<div class="alert alert-warning alert-with-icon">
+    echo '<div class="alert alert-warning text-white font-weight-bold alert-with-icon alert-dismissible fade show">
         <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
         <i class="tim-icons icon-simple-remove"></i>
         </button>
