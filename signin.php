@@ -26,7 +26,7 @@
             <div class="card card-plain">
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
-                <h4 class="font-weight-bolder text-primary text-gradient">Welcome back</h4>
+                <h2 class="font-weight-bolder text-primary text-gradient text-center">Welcome back</h2>
                 <?php include_once('./functions/dialog.php'); ?>
                 <div class="nav-wrapper position-center end-0">
                   <ul class="nav nav-pills nav-fill p-1" id="account" role="tablist">
@@ -44,13 +44,13 @@
             <div class="tab-content" id="signin">
               <div class="tab-pane fade show active" id="signin-tab-pane" role="tabpanel" aria-labelledby="signin-tab" tabindex="0">
                 <div class="card-body">
-
+                  <!-- TODO fix lables and tool tips -->
                   <form action="./functions/auth/signin_function.php" method="post" name="signin" id="signin" class="needs-validation" novalidate autocomplete="on">
-                    <legend class="my-3 small">Enter your email and password to sign in</legend>
+                    <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">Enter your email and password to sign in</p>
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class="form-control form-control-lg" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon">
+                        <input type="email" required class=" form-control" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -60,7 +60,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class="form-control form-control-lg" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                        <input type="password" class=" form-control" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -73,7 +73,7 @@
                       <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div>
 
-                    <a class="small" href="javascript:;">
+                    <a class=" text-primary text-gradient text-sm" href="javascript:;">
                       Lost your password?
                     </a>
 
@@ -97,11 +97,11 @@
               <div class="tab-pane fade show" id="signup-tab-pane" role="tabpanel" aria-labelledby="signup-tab" tabindex="0">
                 <div class="card-body">
                   <form action="./functions/auth/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation" novalidate autocomplete="on">
-                    <legend class="my-3 small">Enter your details to SignUp</legend>
+                    <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">Enter your details to SignUp</p>
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="text" required class="form-control form-control-lg" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username-addon">
+                        <input type="text" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -111,7 +111,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class="form-control form-control-lg" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon">
+                        <input type="email" required class=" form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -121,7 +121,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="tel" required class="form-control form-control-lg" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon">
+                        <input type="tel" required class=" form-control" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -131,7 +131,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class="form-control form-control-lg" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -179,9 +179,6 @@
       </div>
     </div>
   </section>
-
-
-
   <script type="text/javascript">
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (() => {

@@ -13,4 +13,5 @@
 <link href="./assets/css/nucleo-icons.css" rel="stylesheet" />
 <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
 
-<script src="https://kit.fontawesome.com/097d0a3a70.js" crossorigin="anonymous" async type="774ea4a4cb5458dccb139311-text/javascript"></script>
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/c4bd7c7b30.js" async crossorigin="anonymous"></script>
