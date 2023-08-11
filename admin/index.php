@@ -41,13 +41,13 @@
 <link rel="icon" type="image/png" href="./assets/img/favicon.png">
 
 <title>
-  
+
    Soft UI Dashboard  by Creative Tim
-  
 
-  
 
-  
+
+
+
 </title>
 
 
@@ -83,7 +83,7 @@
 
   <body>
 
-      
+
 
 
 

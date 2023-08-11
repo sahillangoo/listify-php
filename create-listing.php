@@ -35,14 +35,6 @@
   } catch (PDOException $e) {
     echo $e->getMessage();
   }
-
-
-
-
-
-
-
-
   ?>
 </head>
 
@@ -79,50 +71,89 @@
           <div class="card-body">
             <div class="row">
               <div class="mb-4">
-                <label>Business Name</label>
+                <label>Business Name *</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Business Name" name="business_name" require>
+                  <input type="text" class="form-control has-validation" placeholder="Business Name" name="business_name" require>
                 </div>
               </div>
               <div class="form-group mb-4">
-                <label>Description</label>
-                <textarea name="description" class="form-control" id="description" placeholder="About your Business" rows="2" require></textarea>
+                <label>Description *</label>
+                <textarea name="description" class="form-control has-validation" id="description" placeholder="About your Business" rows="2" require></textarea>
               </div>
-              <div class="col-md-6">
-                <label>Category</label>
-                <div class="input-group mb-4">
-                  <input class="form-control" placeholder="" aria-label="First Name..." type="text">
+              <div class="mb-3">
+                <label for="business-category">Business Category: *</label>
+                <select class="form-control has-validation" id="business-category" name="business-category" require>
+                  <option value="">Select a category</option>
+                  <option value="restaurants">Restaurants</option>
+                  <option value="info-technology">Information & Technology</option>
+                  <option value="Bank">Bank</option>
+                  <option value="healthcare">Healthcare</option>
+                  <option value="retail-store">Retail Store</option>
+                  <option value="Travel">Travel</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">Address *</label>
+                <input type="text" class="form-control has-validation" id="address" name="address" require>
+              </div>
+              <div class="col-md-6 ps-2 mb-3">
+                <label for="city" class="form-label">City *</label>
+                <select class="form-control has-validation" id="city" name="city" require>
+                  <option value="">Select a City</option>
+                  <option value="srinagar">Srinagar</option>
+                  <option value="anantnag">Anantnag</option>
+                  <option value="bandipora">Bandipora</option>
+                  <option value="baramulla">Baramulla</option>
+                  <option value="budgam">Budgam</option>
+                  <option value="ganderbal">Ganderbal</option>
+                  <option value="kulgam">Kulgam</option>
+                  <option value="kupwara">Kupwara</option>
+                  <option value="pulwama">Pulwama</option>
+                  <option value="shopian">Shopian</option>
+                </select>
+              </div>
+              <div class="col-md-6 ps-2 mb-3">
+                <label for="pincode" class="form-label">Pincode *</label>
+                <input type="text" class="form-control has-validation" id="pincode" name="pincode" require>
+              </div>
+              <div class="mb-3">
+                <label for="phone_number" class="form-label">Phone Number *</label>
+                <input type="text" class="form-control" id="phone_number" name="phone_number" require>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" class="form-control" id="email" name="email" require>
+              </div>
+              <div class="col-md-6 ps-2 mb-3">
+                <label for="whatsapp" class="form-label">WhatsApp</label>
+                <input type="text" class="form-control" id="whatsapp" name="whatsapp">
+              </div>
+              <div class="col-md-6 ps-2 mb-3">
+                <label for="instagram" class="form-label">Instagram</label>
+                <input type="text" class="form-control" id="instagram" name="instagram">
+              </div>
+              <div class="col-md-6 ps-2 mb-3">
+                <label for="facebook" class="form-label">Facebook</label>
+                <input type="text" class="form-control" id="facebook" name="facebook">
+              </div>
+              <div class="col-md-6 ps-2 mb-3">
+                <label for="website" class="form-label">Website</label>
+                <input type="text" class="form-control" id="website" name="website">
+              </div>
+              <div class="mb-3">
+                <label for="formFile" class="form-label">Upload Business Display Image</label>
+                <input class="form-control" type="file" id="formFile" name="business_image" require>
+              </div>
+                <div class="col-md-12">
+                  <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked="">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">I agree to the <a href="javascript:;" class="text-dark"><u>Terms and Conditions</u></a>.</label>
+                  </div>
+                <div class="col-md-12">
+                  <button type="submit" class="btn bg-gradient-dark w-100">Send Message</button>
                 </div>
               </div>
-              <div class="col-md-6 ps-2">
-                <label>Last Name</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="" aria-label="Last Name...">
-                </div>
-              </div>
             </div>
-            <div class="mb-4">
-              <label>Email Address</label>
-              <div class="input-group">
-                <input type="email" class="form-control" placeholder="">
-              </div>
-            </div>
-            <div class="form-group mb-4">
-              <label>Your message</label>
-              <textarea name="message" class="form-control" id="message" rows="4"></textarea>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-check form-switch mb-4">
-                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked="">
-                  <label class="form-check-label" for="flexSwitchCheckDefault">I agree to the <a href="javascript:;" class="text-dark"><u>Terms and Conditions</u></a>.</label>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <button type="submit" class="btn bg-gradient-dark w-100">Send Message</button>
-              </div>
-            </div>
-          </div>
         </form>
       </div>
     </div>
