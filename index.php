@@ -13,25 +13,11 @@
 
 <body class="index-page">
   <?php
+  /*
+  Todo - Remove template code create home page for listing site 
+  */
   // include the header file
   include_once './includes/_navbar.php';
-  // check if the user is logged in echo loggedIn();
-  if (isLoggedIn()) {
-    echo "User is logged in";
-  } else {
-    echo "User is not logged in";
-  }
-  //output user details
-  echo "<pre>";
-  print_r($_SESSION);
-  echo "</pre>";
-
-  // siginout
-  if (isset($_POST['signout'])) {
-    session_destroy();
-    header('location: ./index.php');
-    exit();
-  }
   ?>
   <!-- -------- START HEADER 1 w/ text and image on right ------- -->
   <header>

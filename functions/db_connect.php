@@ -16,6 +16,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Timezone Configuration
+date_default_timezone_set('Asia/Kolkata');
+
 // const('ENV', 'PROD');
 const ENV = 'DEV';
 const DB_HOST = 'localhost';
@@ -53,12 +56,3 @@ $db = connectToDB();
 if (!isset($_SESSION)) {
   session_start();
 }
-/*
-echo "DB Connected Successfully";
-$sql = "SELECT * FROM users";
-$stmt = $db->query($sql);
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-echo "<pre>";
-print_r($users);
-echo "</pre>";
-*/

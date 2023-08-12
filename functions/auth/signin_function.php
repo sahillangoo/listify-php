@@ -25,9 +25,6 @@ if (isset($_POST['signin'])) {
     redirect('signin.php');
     exit();
   }
-
-  // TODO Check if the remember me checkbox is checked
-
   // If all checks pass, SigIn
   signIn($email, $password);
 }

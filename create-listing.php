@@ -6,6 +6,7 @@
     Create Listing - Listify
   </title>
   <?php
+ // TODO fix lables and tooltips add validation
   // include config file
   include_once './includes/_config.php';
   // include the databse connection file
@@ -68,7 +69,7 @@
           Enter your business details below to create a new listing.
         </p>
         <div class="card-body">
-          <!-- TODO fix lables and tooltips add validation -->
+
           <form role="form" id="create_listing" method="post" autocomplete="off" action="./functions/listings/create_listing.php" name="signin" class="needs-validation" novalidate>
             <div class="row">
 

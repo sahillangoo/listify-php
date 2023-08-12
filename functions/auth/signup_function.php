@@ -149,6 +149,7 @@ if (isset($_POST['signup'])) {
     $_SESSION['username'] = $username;
     $_SESSION['email'] = $email;
     $_SESSION['phone'] = $phone;
+    $_SESSION['profile_image'] = $profile_pic;
     $_SESSION['role'] = $role;
     $_SESSION['user_since'] = $created_at;
     // Redirect to the home page

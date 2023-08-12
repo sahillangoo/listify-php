@@ -5,11 +5,7 @@
     hashPassword() - Hash the password using bcrypt algorithm with a cost of 10
     verifyPassword() - Verify the password
     signIn() - signIn the user
-    signOut() - signOut the user
-    */
-
-// Timezone Configuration
-date_default_timezone_set('Asia/Kolkata');
+*/
 
 // Include the database connection file
 include_once './../db_connect.php';

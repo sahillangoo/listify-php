@@ -4,6 +4,9 @@
 <head>
   <title>Sigin/Sigup to Listify</title>
   <?php
+
+   // Todo add terms and conditions & prvacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
+
   // include config file
   include_once './includes/_config.php';
   // include the head file
@@ -179,6 +182,7 @@
       </div>
     </div>
   </section>
+  <!-- Signin Section End -->
   <script type="text/javascript">
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (() => {
