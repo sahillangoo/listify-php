@@ -20,7 +20,6 @@ function redirect($url)
 }
 
 // Function to hash the password using PASSWORD_ARGON2ID algorithm with a cost of 12 memory cost of 2048 and time cost of 4 and returns the hashed password as a string or FALSE on failure.
-
 function hashPassword($password): string
 {
   $options = [

@@ -11,41 +11,55 @@ CREATE TABLE users (
     role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
---@block
 CREATE TABLE listings (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    business_name VARCHAR(50) NOT NULL,
-    description TEXT,
-    category VARCHAR(50),
-    address VARCHAR(255),
-    city VARCHAR(50),
-    pincode INT(6),
-    phone_number BIGINT(10),
-    email VARCHAR(50),
+    user_id INT NOT NULL UNIQUE,
+    businessName VARCHAR(50) NOT NULL UNIQUE DEFAULT 'No business name provided',
+    description TEXT NOT NULL DEFAULT 'No description provided',
+    category VARCHAR(50) NOT NULL DEFAULT 'other',
+    address VARCHAR(255) NOT NULL DEFAULT 'No address provided',
+    city VARCHAR(50) NOT NULL DEFAULT 'No city provided',
+    pincode INT(6) NOT NULL DEFAULT 0,
+    phoneNumber BIGINT(10) NOT NULL DEFAULT 0,
+    email VARCHAR(50) NOT NULL DEFAULT 'No email provided',
     whatsapp BIGINT(10),
-    facebook_id VARCHAR(50),
-    instagram_id VARCHAR(50),
+    facebookId VARCHAR(50),
+    instagramId VARCHAR(50),
     website VARCHAR(50),
-    display_image VARCHAR(255),
-    reviews_count INT DEFAULT 0,
+    displayImage VARCHAR(255) NOT NULL DEFAULT 'default.jpg',
+    reviewsCount INT DEFAULT 0,
     rating FLOAT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+--@block
+INSERT INTO users (
+        username,
+        email,
+        phone,
+        password,
+        profile_image,
+        role,
+        user_since
+    )
+VALUES (
+        'sahillangoo',
+        'sahilahmed3066@gmail.com',
+        7006588022,
+        '$argon2id$v=19$m=2048,t=4,p=1$SGg2elliQ2JZbUVYeEpVeA$MtwHADtrs/912gP60PvgfZL+PKExiyN3sCaLF518qpU',
+        'https://api.dicebear.com/6.x/micah/svg?seed=sahillangoo&flip=true&background=%230000ff&radius=50&margin=10&baseColor=f9c9b6',
+        'admin',
+        '2023-08-07 16:16:11'
+    );
 --@block
 CREATE TABLE reviews (
     id INT PRIMARY KEY AUTO_INCREMENT,
     rating FLOAT,
     comment TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
     listing_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (listing_id) REFERENCES listings(id)
 );
---@block
--- insert data into users table
-INSERT INTO users (username, email, phone, password, profile_image, role, user_since) VALUES
-('sahillangoo', 'sahilahmed3066@gmail.com', 7006588022, '$argon2id$v=19$m=2048,t=4,p=1$SGg2elliQ2JZbUVYeEpVeA$MtwHADtrs/912gP60PvgfZL+PKExiyN3sCaLF518qpU', 'https://api.dicebear.com/6.x/micah/svg?seed=sahillangoo&flip=true&background=%230000ff&radius=50&margin=10&baseColor=f9c9b6', 'admin', '2023-08-07 16:16:11');

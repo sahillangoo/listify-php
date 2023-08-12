@@ -58,6 +58,7 @@
           </div>
         </div>
       </div>
+      <?php include_once('./functions/dialog.php'); ?>
       <div class="col-12 mx-auto">
         <div class="row py-lg-7 py-2">
           <div class="col-lg-3 col-md-5 position-relative my-auto">
@@ -116,37 +117,23 @@
         <div class="alert alert-info" role="alert">
           You have no listings yet. <a href="create_listing.php">Create a listing</a>
         </div>
-      <?php endif; ?>
-      <?php foreach ($listings as $listing) : ?>
-        <li>
-          <strong><?php echo $listing['business_name']; ?></strong> - <?php echo $listing['description']; ?>
-          <a href="edit_listing.php?id=<?php echo $listing['id']; ?>">Edit</a>
-          <a href="delete_listing.php?id=<?php echo $listing['id']; ?>">Delete</a>
-        </li>
-      <?php endforeach; ?>
-      <div class="row">
-        <div class="col-lg-3 col-sm-6">
-          <div class="card card-plain card-blog">
-            <div class="card-image border-radius-lg position-relative">
-              <a href="javascript:;">
-                <img class="w-100 border-radius-lg move-on-hover shadow" src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/assets/img/color-bags.jpg">
-              </a>
+      <?php else : ?>
+        <!-- if the user has listings  -->
+        <div class="row">
+          <?php foreach ($listings as $listing) : ?>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card mb-4">
+                <img src="./uploads/business_images/<?php echo $listing['displayImage']; ?>" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title"><?php echo $listing['businessName']; ?></h5>
+                  <p class="card-text"><?php echo $listing['description']; ?></p>
+                  <a href="#" class="btn btn-primary">Read More</a>
+                </div>
+              </div>
             </div>
-            <div class="card-body px-0">
-              <h5>
-                <a href="javascript:;" class="text-dark font-weight-bold">Rover raised $65 million</a>
-              </h5>
-              <p>
-                Finding temporary housing for your dog should be as easy as
-                renting an Airbnb. That’s the idea behind Rover ...
-              </p>
-              <a href="javascript:;" class="text-info icon-move-right">Read More
-                <i class="fas fa-arrow-right text-sm"></i>
-              </a>
-            </div>
-          </div>
+          <?php endforeach; ?>
         </div>
-      </div>
+      <?php endif; ?>
     </div>
   </section>
   <?php

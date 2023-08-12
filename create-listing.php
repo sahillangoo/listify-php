@@ -6,7 +6,7 @@
     Create Listing - Listify
   </title>
   <?php
- // TODO fix lables and tooltips add validation
+  // TODO fix lables and tooltips add validation
   // include config file
   include_once './includes/_config.php';
   // include the databse connection file
@@ -42,6 +42,11 @@
 <body class="blog-author bg-gray-100">
   <!-- Navbar Light -->
   <?php
+  // echo session
+  // echo '<pre>';
+  // print_r($_SESSION);
+  // echo '</pre>';
+
   // include the header file
   include_once './includes/_navbar.php';  ?>
   <!-- End Navbar -->
@@ -68,13 +73,14 @@
         <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">
           Enter your business details below to create a new listing.
         </p>
+        <?php include_once('./functions/dialog.php'); ?>
         <div class="card-body">
 
-          <form role="form" id="create_listing" method="post" autocomplete="off" action="./functions/listings/create_listing.php" name="signin" class="needs-validation" novalidate>
+          <form role="form" id="create_listing" method="post" autocomplete="on" action="./functions/listings/process_listing.php" enctype="multipart/form-data" name="create_listing" class="needs-validation" novalidate>
             <div class="row">
 
               <div class="col-md-6 ps-2 mb-3 ">
-                <input type="text" class="form-control has-validation" placeholder="Business Name" name="business_name" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input type="text" class="form-control has-validation" placeholder="Business Name" name="businessName" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -82,7 +88,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <select class="form-control has-validation" list="business-category" id="business-category" name="business-category" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
                   <datalist id="datalistOptions">
                     <option value="">Select a category</option>
                     <option value="restaurants">Restaurants</option>
@@ -100,7 +106,7 @@
                 <div class="valid-feedback">
                   Looks good!
                 </div>
-                <div class="invalid-feedback">Please enter valid E-mail.</div>
+                <div class="invalid-feedback">Please enter valid category.</div>
               </div>
 
               <div class="mb-3">
@@ -112,7 +118,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="address" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -148,7 +154,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control " placeholder="Phone +91" id="phone_number" name="phone_number" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input type="text" class="form-control " placeholder="Phone +91" id="phone_number" name="phoneNumber" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -171,7 +177,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control" placeholder="Instagram ID" id="instagram" name="instagram" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                <input type="text" class="form-control" placeholder="Instagram ID" id="instagram_id" name="instagramId" aria-label="instagram_id" aria-describedby="instagram_id" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -179,7 +185,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control" placeholder="Facebook ID" id="facebook" name="facebook" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                <input type="text" class="form-control" placeholder="Facebook ID" id="facebook_id" name="facebookId" aria-label="facebook_id" aria-describedby="facebook_id" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -187,30 +193,30 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="url" class="form-control" placeholder="Your Website Link" id="website" name="website" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                <input type="text" class="form-control" placeholder="Your Website Link" id="website" name="website" aria-label="website" aria-describedby="website" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
                 <div class="valid-feedback">
                   Looks good!
                 </div>
-                <div class="invalid-feedback">Please enter valid E-mail.</div>
+                <div class="invalid-feedback">Please enter valid website.</div>
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input class="form-control" type="file" id="business_image" name="business_image" accept="image/*" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input class="form-control" type="file" id="business_image" name="displayImage" accept="image/*" aria-label="display_image" aria-describedby="display_image" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
-                <div class="invalid-feedback">Please enter valid E-mail.</div>
+                <div class="invalid-feedback">Please enter valid display_image.</div>
               </div>
 
               <div class="mb-3">
                 <div class="form-check form-switch mb-3">
-                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked="">
+                  <input class="form-check-input" type="checkbox" name="terms" id="flexSwitchCheckDefault">
                   <label class="form-check-label" for="flexSwitchCheckDefault">I agree to the <a href="javascript:;" class="text-dark">Privacy Policy</a> and <a href="javascript:;" class="text-dark">Terms and Conditions</a>.</label>
                 </div>
               </div>
 
               <div class="mb-3">
-                <button type="submit" class="btn bg-gradient-primary w-100">Create Listing</button>
+                <button type="submit" name="create_listing" class="btn bg-gradient-primary w-100"><i class="fas fa-lock"></i> Create Listing</button>
               </div>
 
             </div>
