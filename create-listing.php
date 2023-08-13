@@ -20,8 +20,8 @@
     exit;
   }
   // get the user id from the session
-  $user_id = $_SESSION['id'];
-  // check users listing
+  $user_id = $_SESSION['user_id'];
+    // check users listing
   try {
     $sql = "SELECT * FROM listings WHERE user_id = :user_id";
     $stmt = $db->prepare($sql);

@@ -22,7 +22,7 @@
   // convert user_since to a readable format
   $user_since = date('d M Y', strtotime($_SESSION['user_since']));
   // get the user id from the session
-  $user_id = $_SESSION['id'];
+  $user_id = $_SESSION['user_id'];
   // Fetch user's listings from the database
   try {
     $sql = "SELECT * FROM listings WHERE user_id = :user_id";

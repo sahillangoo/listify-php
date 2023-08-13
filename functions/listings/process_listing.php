@@ -14,7 +14,7 @@ include_once './../functions.php';
 
 // Recive the data from the create listing form then validate it and If the listing is a new listing then insert it into the database
 if (isset($_POST['create_listing'])) {
-  $user_id = $_SESSION['id'];
+  $user_id = $_SESSION['user_id'];
   $businessName = $_POST['businessName'];
   $category = $_POST['category'];
   $description = $_POST['description'];
