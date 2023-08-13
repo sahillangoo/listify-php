@@ -23,7 +23,7 @@ if (!isset($_SESSION)) {
 }
 
 // Function to check if the user is logged
-function isLoggedIn()
+function isLoggedIn(): bool
 {
   if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     return true;

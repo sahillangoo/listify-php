@@ -1,6 +1,6 @@
   <!-- -------- START FOOTER 5 w/ DARK BACKGROUND ------- -->
   <footer class="footer py-5 bg-gradient-dark position-relative overflow-hidden">
-    <img src="../assets/img/shapes/waves-white.svg" alt="pattern-lines" class="position-absolute start-0 top-0 w-100 opacity-6">
+    <img src="./assets/img/shapes/waves-white.svg" alt="pattern-lines" class="position-absolute start-0 top-0 w-100 opacity-6">
     <div class="container">
       <div class="row">
         <div class="col-lg-4 me-auto mb-lg-0 mb-4 text-lg-start text-center">
@@ -55,12 +55,12 @@
   </footer>
 
   <!--   Core JS Files   -->
-  <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
-  <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="./assets/js/core/popper.min.js" type="text/javascript"></script>
+  <script src="./assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+  <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
   <!--  Plugin for Parallax, full documentation here: https://github.com/wagerfield/parallax  -->
-  <script src="../assets/js/plugins/parallax.min.js"></script>
+  <script src="./assets/js/plugins/parallax.min.js"></script>
   <!-- Control Center for Soft UI Kit: parallax effects, scripts for the example pages etc -->
   <!--  Google Maps Plugin    -->
   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script> -->
-  <script src="../assets/js/soft-design-system.min.js?v=1.0.9" type="text/javascript"></script>
+  <script src="./assets/js/soft-design-system.min.js?v=1.0.9" type="text/javascript"></script>

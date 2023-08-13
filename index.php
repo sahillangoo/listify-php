@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
 <head>
   <title>Listify - Comprehansive Listing App</title>

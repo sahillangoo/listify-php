@@ -2,10 +2,10 @@
 <html lang="en" itemscope itemtype="http://schema.org/WebPage">
 
 <head>
-  <title>Sigin/Sigup to Listify</title>
+  <title>Sign/Sigup to Listify</title>
   <?php
 
-   // Todo add terms and conditions & prvacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
+   // Todo add terms and conditions & privacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
 
   // include config file
   include_once './includes/_config.php';
@@ -47,7 +47,7 @@
             <div class="tab-content" id="signin">
               <div class="tab-pane fade show active" id="signin-tab-pane" role="tabpanel" aria-labelledby="signin-tab" tabindex="0">
                 <div class="card-body">
-                  <!-- TODO fix lables and tool tips -->
+                  <!-- TODO fix labels and tool tips -->
                   <form action="./functions/auth/signin_function.php" method="post" name="signin" id="signin" class="needs-validation" novalidate autocomplete="on">
                     <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">Enter your email and password to sign in</p>
 
@@ -164,15 +164,15 @@
                   <p class="my-4 text-sm mx-auto">
                   </p>
                 </div> -->
-              </div>
+              </div> 
             </div>
 
           </div>
           <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
             <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
-              <img src="../assets/img/shapes/pattern-lines.svg" alt="pattern-lines" class="position-absolute opacity-4 start-0">
+              <img src="./assets/img/shapes/pattern-lines.svg" alt="pattern-lines" class="position-absolute opacity-4 start-0">
               <div class="position-relative">
-                <img class="max-width-500 w-100 position-relative z-index-2" src="../assets/img/illustrations/chat.png">
+                <img class="max-width-500 w-100 position-relative z-index-2" src="./assets/img/illustrations/chat.png" alt="">
               </div>
               <h4 class="mt-5 text-white font-weight-bolder">"Attention is the new currency"</h4>
               <p class="text-white">The more effortless the writing looks, the more effort the writer actually put into the process.</p>
@@ -182,7 +182,7 @@
       </div>
     </div>
   </section>
-  <!-- Signin Section End -->
+  <!-- Signing Section End -->
   <script type="text/javascript">
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (() => {

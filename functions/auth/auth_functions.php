@@ -59,7 +59,7 @@ function signIn($email, $password): void
         session_start();
         // Store data in session variables
         $_SESSION["loggedin"] = true;
-        $_SESSION["id"] = $user['id'];
+        $_SESSION["user_id"] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION["email"] = $user['email'];
         $_SESSION['phone'] = $user['phone'];
@@ -71,10 +71,8 @@ function signIn($email, $password): void
         if ($_SESSION['role'] === 'user') {
           redirect('index.php');
         } else {
-          redirect('admin/index.php');
+          redirect('admin/dashboad.php');
         }
-
-        exit();
       } else {
         // Password is not valid, display a generic error message
         throw new Exception('Incorrect Username or Password');

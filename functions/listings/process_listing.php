@@ -3,10 +3,7 @@
   *This file will handle the create listing form data and insert it into the database
 
 */
-// ! error reporting
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 // Include the database connection file
 include_once './../db_connect.php';
 // Include the functions file

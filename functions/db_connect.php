@@ -19,19 +19,19 @@ error_reporting(E_ALL);
 // Timezone Configuration
 date_default_timezone_set('Asia/Kolkata');
 
-$ENV = $_ENV('ENV');
+$ENV = $_ENV['ENV'] ?? 'DEV';
 if ($ENV === 'PROD') {
-  $DB_HOST = $_ENV('AZURE_MYSQL_HOST');
-  $DB_PORT = $_ENV('AZURE_MYSQL_PORT');
-  $DB_NAME = $_ENV('AZURE_MYSQL_DBNAME');
-  $DB_USER = $_ENV('AZURE_MYSQL_USERNAME');
-  $DB_PASS = $_ENV('AZURE_MYSQL_PASSWORD');
+  $DB_HOST = $_ENV['AZURE_MYSQL_HOST'];
+  $DB_PORT = $_ENV['AZURE_MYSQL_PORT'];
+  $DB_NAME = $_ENV['AZURE_MYSQL_DBNAME'];
+  $DB_USER = $_ENV['AZURE_MYSQL_USERNAME'];
+  $DB_PASS = $_ENV['AZURE_MYSQL_PASSWORD'];
 } else {
   define('DB_HOST', 'localhost');
   define('DB_PORT', '3306');
-    define('DB_NAME', 'listify_db');
-    define('DB_USER', 'root');
-    define('DB_PASS', '');
+  define('DB_NAME', 'listify_db');
+  define('DB_USER', 'root');
+  define('DB_PASS', '');
 }
 
 //Function to connect to the database using PDO

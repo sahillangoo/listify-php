@@ -3,7 +3,7 @@
 http_response_code(404);
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="eng">
 
 <head>
   <title>404 Not Found</title>

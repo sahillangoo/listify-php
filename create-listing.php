@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
 <head>
   <title>
     Create Listing - Listify
   </title>
   <?php
-  // TODO fix lables and tooltips add validation
+  // TODO fix labels and tooltips add validation
   // include config file
   include_once './includes/_config.php';
-  // include the databse connection file
+  // include the database connection file
   include_once './functions/db_connect.php';
   // include the head file
   include_once './includes/_head.php';
@@ -80,7 +80,8 @@
             <div class="row">
 
               <div class="col-md-6 ps-2 mb-3 ">
-                <input type="text" class="form-control has-validation" placeholder="Business Name" name="businessName" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input type="text" class="form-control has-validation" placeholder="Business Name" name="businessName" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                       required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -88,8 +89,8 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
-                  <datalist id="datalistOptions">
+                <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                        required>
                     <option value="">Select a category</option>
                     <option value="restaurants">Restaurants</option>
                     <option value="info-technology">Information &amp; Technology</option>
@@ -101,7 +102,6 @@
                     <option value="Construction">Construction</option>
                     <option value="Food &amp; Beverage">Food &amp; Beverage</option>
                     <option value="Others">Others</option>
-                  </datalist>
                 </select>
                 <div class="valid-feedback">
                   Looks good!
@@ -110,7 +110,8 @@
               </div>
 
               <div class="mb-3">
-                <textarea name="description" class="form-control has-validation" id="description" placeholder="About your Business" rows="2" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require></textarea>
+                <textarea name="description" class="form-control has-validation" id="description" placeholder="About your Business" rows="2" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                          required></textarea>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -118,7 +119,8 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="address" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="address" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                       required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -126,8 +128,8 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <select class="form-control has-validation" placeholder="City" id="city" name="city" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
-                  <option value="">Select a City</option>
+                <select class="form-control has-validation" id="city" name="city" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                        required>
                   <option value="srinagar">Srinagar</option>
                   <option value="anantnag">Anantnag</option>
                   <option value="bandipora">Bandipora</option>
@@ -146,7 +148,8 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control has-validation" placeholder="Pincode" id="pincode" name="pincode" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input type="text" class="form-control has-validation" placeholder="Pincode" id="pincode" name="pincode" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                       required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -154,14 +157,16 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control " placeholder="Phone +91" id="phone_number" name="phoneNumber" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input type="text" class="form-control " placeholder="Phone +91" id="phone_number" name="phoneNumber" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                       required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
                 <div class="invalid-feedback">Please enter valid E-mail.</div>
               </div>
               <div class="col-md-6 ps-2 mb-3">
-                <input type="email" class="form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input type="email" class="form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                       required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -201,7 +206,8 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input class="form-control" type="file" id="business_image" name="displayImage" accept="image/*" aria-label="display_image" aria-describedby="display_image" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left" require>
+                <input class="form-control" type="file" id="business_image" name="displayImage" accept="image/*" aria-label="display_image" aria-describedby="display_image" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left"
+                       required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -210,8 +216,8 @@
 
               <div class="mb-3">
                 <div class="form-check form-switch mb-3">
-                  <input class="form-check-input" type="checkbox" name="terms" id="flexSwitchCheckDefault">
-                  <label class="form-check-label" for="flexSwitchCheckDefault">I agree to the <a href="javascript:;" class="text-dark">Privacy Policy</a> and <a href="javascript:;" class="text-dark">Terms and Conditions</a>.</label>
+                  <input class="form-check-input" type="checkbox" name="terms" id="terms">
+                  <label class="form-check-label" for="terms">I agree to the <a href="javascript:;" class="text-dark">Privacy Policy</a> and <a href="javascript:;" class="text-dark">Terms and Conditions</a>.</label>
                 </div>
               </div>
 
