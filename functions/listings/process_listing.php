@@ -163,7 +163,7 @@ if (isset($_POST['create_listing'])) {
   // check the image is empty and less than 2MB and the image type is jpg, jpeg or png then rename the image to business name and move it to the uploads/business_images/ folder
   $displayImage = $_FILES['displayImage'];
   if (!empty($displayImage)) {
-    $max_file_size = 2000000;
+    $max_file_size = 2000000; // 2mb
     $file_extension = pathinfo($displayImage['name'], PATHINFO_EXTENSION);
     $file_extension = strtolower($file_extension);
     switch ($file_extension) {

@@ -71,7 +71,7 @@ function signIn($email, $password): void
         if ($_SESSION['role'] === 'user') {
           redirect('index.php');
         } else {
-          redirect('admin/dashboad.php');
+          redirect('admin/dashboard.php');
         }
       } else {
         // Password is not valid, display a generic error message

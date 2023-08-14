@@ -1,6 +1,6 @@
 <?php
 /*
-Authentication file for signIn for the Webapp
+* Authentication file for signIn for the Webapp
 */
 
 // Include the auth functions file

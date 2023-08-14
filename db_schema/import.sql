@@ -33,7 +33,6 @@ CREATE TABLE listings (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
---@block
 INSERT INTO users (
         username,
         email,
