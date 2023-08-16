@@ -41,9 +41,9 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-6 col-md-7 d-flex justify-content-center flex-column">
-            <h1 class="text-gradient text-primary">Your Work With</h1>
-            <h1 class="mb-4">Soft Design System</h1>
-            <p class="lead pe-5 me-5">The time is now for it be okay to be great. People in this world shun people for being nice. </p>
+            <h1 class="mb-4">"Bringing order to the digital chaos"</h1>
+            <h1 class="text-gradient text-primary">~ Listify is the answer.</h1>
+            <p class="lead pe-5 me-5">Say goodbye to mundane lists and hello to Listify – the dynamic web app that turns your everyday lists into engaging narratives. </p>
             <div class="buttons">
               <button type="button" class="btn bg-gradient-primary mt-4">Get Started</button>
               <button type="button" class="btn text-primary shadow-none mt-4">Read more</button>
