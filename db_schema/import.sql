@@ -27,6 +27,8 @@ CREATE TABLE listings (
     instagramId VARCHAR(50),
     website VARCHAR(50),
     displayImage VARCHAR(255) NOT NULL DEFAULT 'default.jpg',
+    latitude FLOAT NOT NULL DEFAULT 0,
+    longitude FLOAT NOT NULL DEFAULT 0,
     reviewsCount INT DEFAULT 0,
     rating FLOAT DEFAULT 0,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
