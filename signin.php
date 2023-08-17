@@ -5,7 +5,7 @@
   <title>Sign/Sigup to Listify</title>
   <?php
 
-   // Todo add terms and conditions & privacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
+  // Todo add terms and conditions & privacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
 
   // include config file
   include_once './includes/_config.php';
@@ -53,7 +53,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class=" form-control" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                        <input type="email" required class=" form-control" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter valid email">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -63,7 +63,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class=" form-control" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                        <input type="password" class=" form-control" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter valid password">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -89,7 +89,8 @@
                 </div>
                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                   <p class="my-4 text-primary text-gradient text-sm mx-auto">
-                    Don't have an account Try SignUp!
+                    <a href="">
+                      Don't have an account Try SignUp!</a>
                   </p>
                 </div>
               </div>
@@ -104,7 +105,8 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="text" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                        <input type="text" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Username should not contain spaces.
+                        Username should only contain letters.">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -114,7 +116,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class=" form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                        <input type="email" required class=" form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter valid Email">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -124,7 +126,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="tel" required class=" form-control" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                        <input type="tel" required class=" form-control" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Phone number should be 10 digits">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -134,7 +136,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip on left">
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Password should be atleast 8 letters(Icluding A-Z, a-z, 0-9, special charaters)">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -164,7 +166,7 @@
                   <p class="my-4 text-sm mx-auto">
                   </p>
                 </div> -->
-              </div> 
+              </div>
             </div>
 
           </div>
@@ -174,8 +176,8 @@
               <div class="position-relative">
                 <img class="max-width-500 w-100 position-relative z-index-2" src="./assets/img/illustrations/chat.png" alt="">
               </div>
-              <h4 class="mt-5 text-white font-weight-bolder">"Attention is the new currency"</h4>
-              <p class="text-white">The more effortless the writing looks, the more effort the writer actually put into the process.</p>
+              <h4 class="mt-5 text-white font-weight-bolder"> "That's the magic of Listify!""</h4>
+              <p class="text-white">The innovative web app that empowers you to curate, personalize, and share lists effortlessly. </p>
             </div>
           </div>
         </div>
