@@ -5,7 +5,7 @@
   <title>Sign/Sigup to Listify</title>
   <?php
 
-  // Todo add terms and conditions & privacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
+  //  add terms and conditions & privacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
 
   // include config file
   include_once './includes/_config.php';
@@ -47,13 +47,13 @@
             <div class="tab-content" id="signin">
               <div class="tab-pane fade show active" id="signin-tab-pane" role="tabpanel" aria-labelledby="signin-tab" tabindex="0">
                 <div class="card-body">
-                  <!-- TODO fix labels and tool tips -->
+                  <!--  fix labels and tool tips -->
                   <form action="./functions/auth/signin_function.php" method="post" name="signin" id="signin" class="needs-validation" novalidate autocomplete="on">
                     <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">Enter your email and password to sign in</p>
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class=" form-control" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter valid email">
+                        <input type="email" required class=" form-control" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your Email">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -63,7 +63,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class=" form-control" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter valid password">
+                        <input type="password" class=" form-control" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your password">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -148,7 +148,11 @@
                       <input class="form-check-input" type="checkbox" value="terms" id="terms" name="terms" required>
                       <label class="form-check-label" for="terms">
                         Agree to terms and conditions
+
+
                       </label>
+
+
                       <div class="invalid-feedback">
                         You must agree before submitting.
                       </div>

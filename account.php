@@ -6,7 +6,7 @@
     My Account - Listify
   </title>
   <?php
-  // todo - remove template code and redesign the page
+  //  - remove template code and redesign the page
   // include config file
   include_once './includes/_config.php';
   // include the database connection file
