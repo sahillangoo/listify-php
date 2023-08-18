@@ -1,24 +1,24 @@
 <?php
 
 /*
-* Database connection Using PDO (PHP Data Object)
-* Database Variables
-Database : MySQL (MariaDB)
+* Database connection settings
 Database Name : listify_db
-
-TODO on Production:
-  PROD for production
-  DEV for development
 */
 
-// ! error reporting
+/* ! The code `ini_set('display_errors', 1); ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);` is used to configure the error reporting settings in PHP. */
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Timezone Configuration
+
+/* The line `date_default_timezone_set('Asia/Kolkata');` is used to set the default timezone for date
+and time functions in PHP. In this case, it sets the timezone to "Asia/Kolkata", which corresponds
+to the Indian Standard Time (IST). This ensures that any date and time operations in the PHP script
+will use the correct timezone. */
 date_default_timezone_set('Asia/Kolkata');
 
+/* The code block you provided is used to configure the database connection based on the environment. */
 $ENV = $_ENV['ENV'] ?? 'DEV';
 if ($ENV === 'PROD') {
   $DB_HOST = $_ENV['AZURE_MYSQL_HOST'];
@@ -34,7 +34,11 @@ if ($ENV === 'PROD') {
   define('DB_PASS', '');
 }
 
-//Function to connect to the database using PDO
+/**
+ * The function connects to a MySQL database using PDO and returns the PDO instance.
+ *
+ * @return an instance of the PDO class, which represents a connection to the database.
+ */
 function connectToDB()
 {
   try {
@@ -54,10 +58,13 @@ function connectToDB()
     exit('Something weird happened with DB || Is DB server turned on?'); //something a user can understand
   }
 }
-// to use db
+
+/* The line ` = connectToDB();` is calling the `connectToDB()` function and assigning its return
+value to the variable ``. */
 $db = connectToDB();
 
-//start session
+/* The code `//start session` and `if (!isset()) { session_start(); }` is used to start a
+session in PHP. */
 if (!isset($_SESSION)) {
   session_start();
 }
