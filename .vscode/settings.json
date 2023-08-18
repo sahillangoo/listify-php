@@ -14,5 +14,6 @@
 			"username": "root",
 			"password": ""
 		}
-	]
+	],
+	"docwriter.style": "Auto-detect"
 }
