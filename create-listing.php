@@ -88,17 +88,14 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="left" title="Choose Business Category" required>
+                <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="right" title="Which category suits your business" required>
                   <option value="">Select a category</option>
                   <option value="restaurants">Restaurants</option>
-                  <option value="info-technology">Information &amp; Technology</option>
                   <option value="Bank">Bank</option>
                   <option value="healthcare">Healthcare</option>
                   <option value="retail-store">Retail Store</option>
                   <option value="Travel">Travel</option>
                   <option value="Education">Education</option>
-                  <option value="Construction">Construction</option>
-                  <option value="Food &amp; Beverage">Food &amp; Beverage</option>
                   <option value="Others">Others</option>
                 </select>
                 <div class="valid-feedback">
@@ -108,7 +105,7 @@
               </div>
 
               <div class="mb-3">
-                <textarea name="description" class="form-control has-validation" id="description" placeholder="About your Business" rows="2" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter Business description" required></textarea>
+                <textarea name="description" class="form-control has-validation" id="description" placeholder="About your Business" rows="2" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter Business description" required></textarea>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -116,7 +113,9 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="address" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter address" required>
+                <input type="text" class="form-control d-none" name="latitude" id="latitude" disabled>
+                <input type="text" class="form-control d-none" name="longitude" id="longitude" longitude>
+                <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="address" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter address" required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -124,7 +123,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <select class="form-control has-validation" id="city" name="city" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter city name" required>
+                <select class="form-control has-validation" id="city" name="city" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter city name" required>
                   <option value="srinagar">Srinagar</option>
                   <option value="anantnag">Anantnag</option>
                   <option value="bandipora">Bandipora</option>
@@ -141,9 +140,8 @@
                 </div>
                 <div class="invalid-feedback">Please enter valid E-mail.</div>
               </div>
-
-              <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control has-validation" placeholder="Pincode" id="pincode" name="pincode" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter pincode" required>
+              <div class="col-md-6 ps-2 mb-3 ">
+                <input type="text" class="form-control has-validation" placeholder="Pincode" id="pincode" name="pincode" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter pincode" required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -151,22 +149,14 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control " placeholder="Phone +91" id="phone_number" name="phoneNumber" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter phone number " required>
+                <input type="text" class="form-control " placeholder="Phone +91" id="phone_number" name="phoneNumber" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter phone number " required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
                 <div class="invalid-feedback">Please enter valid E-mail.</div>
               </div>
               <div class="col-md-6 ps-2 mb-3">
-                <input type="email" class="form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your Email" required>
-                <div class="valid-feedback">
-                  Looks good!
-                </div>
-                <div class="invalid-feedback">Please enter valid E-mail.</div>
-              </div>
-
-              <div class="col-md-6 ps-2 mb-3">
-                <input type="tel" class="form-control" placeholder="WhatsApp Number" id="whatsapp" name="whatsapp" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter whatsapp number">
+                <input type="email" class="form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your Email" required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -174,7 +164,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control" placeholder="Instagram ID" id="instagram_id" name="instagramId" aria-label="instagram_id" aria-describedby="instagram_id" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter Instagram ID">
+                <input type="tel" class="form-control" placeholder="WhatsApp Number" id="whatsapp" name="whatsapp" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter whatsapp number">
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -182,7 +172,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control" placeholder="Facebook ID" id="facebook_id" name="facebookId" aria-label="facebook_id" aria-describedby="facebook_id" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter Facebook ID">
+                <input type="text" class="form-control" placeholder="Instagram ID" id="instagram_id" name="instagramId" aria-label="instagram_id" aria-describedby="instagram_id" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter Instagram ID">
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -190,7 +180,15 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input type="text" class="form-control" placeholder="Your Website Link" id="website" name="website" aria-label="website" aria-describedby="website" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter Link">
+                <input type="text" class="form-control" placeholder="Facebook ID" id="facebook_id" name="facebookId" aria-label="facebook_id" aria-describedby="facebook_id" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter Facebook ID">
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+                <div class="invalid-feedback">Please enter valid E-mail.</div>
+              </div>
+
+              <div class="col-md-6 ps-2 mb-3">
+                <input type="text" class="form-control" placeholder="Your Website Link" id="website" name="website" aria-label="website" aria-describedby="website" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter Link">
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -198,7 +196,7 @@
               </div>
 
               <div class="col-md-6 ps-2 mb-3">
-                <input class="form-control" type="file" id="business_image" name="displayImage" accept="image/*" aria-label="display_image" aria-describedby="display_image" data-bs-toggle="tooltip" data-bs-placement="left" title="Choose file" required>
+                <input class="form-control" type="file" id="business_image" name="displayImage" accept="image/*" aria-label="display_image" aria-describedby="display_image" data-bs-toggle="tooltip" data-bs-placement="right" title="Choose file" required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -222,11 +220,35 @@
       </div>
     </div>
   </section>
+
+
+
+
   <script type="text/javascript">
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
     (() => {
       'use strict'
-
+      document.addEventListener("DOMContentLoaded", function(event) {
+        const options = {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        };
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+          },
+          function(error) {
+            if (error.code === error.PERMISSION_DENIED) {
+              alert("Enable Geolocation permission for Location.");
+            }
+            console.log(error);
+          },
+          options
+        );
+      });
       // Fetch all the forms we want to apply custom Bootstrap validation styles to
       const forms = document.querySelectorAll('.needs-validation')
 

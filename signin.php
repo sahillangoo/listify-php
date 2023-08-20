@@ -25,7 +25,7 @@
     <div class="page-header min-vh-100">
       <div class="container">
         <div class="row">
-          <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
+          <div class="col-4 d-flex flex-column mx-lg-0 mx-auto">
             <div class="card card-plain">
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
@@ -53,7 +53,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class=" form-control" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your Email">
+                        <input type="email" required class=" form-control" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your Registered Email">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -63,7 +63,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class=" form-control" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your password">
+                        <input type="password" class=" form-control" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your password">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -88,9 +88,9 @@
                   </form>
                 </div>
                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                  <p class="my-4 text-primary text-gradient text-sm mx-auto">
+                  <p class="my-4 text-muted text-xs mx-auto">
                     <a href="">
-                      Don't have an account Try SignUp!</a>
+                      Don't have an account? Try SignUp!</a>
                   </p>
                 </div>
               </div>
@@ -105,8 +105,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="text" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Username should not contain spaces.
-                        Username should only contain letters.">
+                        <input type="text" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Username should only contain letters & numbers.">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -116,7 +115,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="email" required class=" form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter valid Email">
+                        <input type="email" required class=" form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your email to register.">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -126,7 +125,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="tel" required class=" form-control" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Phone number should be 10 digits">
+                        <input type="tel" required class=" form-control" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your 10 digit phone number.">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -136,7 +135,7 @@
 
                     <div class="form-group">
                       <div class="mb-3 has-validation">
-                        <input type="password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="left" title="Password should be atleast 8 letters(Icluding A-Z, a-z, 0-9, special charaters)">
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Password should be atleast 8 letters (including A-Z, a-z, 0-9, special charaters) and should not be a common password">
                         <div class="valid-feedback">
                           Looks good!
                         </div>
@@ -148,11 +147,7 @@
                       <input class="form-check-input" type="checkbox" value="terms" id="terms" name="terms" required>
                       <label class="form-check-label" for="terms">
                         Agree to terms and conditions
-
-
                       </label>
-
-
                       <div class="invalid-feedback">
                         You must agree before submitting.
                       </div>
@@ -174,7 +169,7 @@
             </div>
 
           </div>
-          <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+          <div class="col-7 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
             <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
               <img src="./assets/img/shapes/pattern-lines.svg" alt="pattern-lines" class="position-absolute opacity-4 start-0">
               <div class="position-relative">

@@ -15,6 +15,8 @@ if (isset($_POST['create_listing'])) {
   $businessName = $_POST['businessName'];
   $category = $_POST['category'];
   $description = $_POST['description'];
+  $latitude = $_POST['latitude'];
+  $longitude = $_POST['longitude'];
   $address = $_POST['address'];
   $city = $_POST['city'];
   $pincode = $_POST['pincode'];
@@ -45,7 +47,7 @@ if (isset($_POST['create_listing'])) {
 
   // check the data empty and sanitize it
   $requiredFields = array(
-    'businessName', 'category', 'description', 'address', 'city', 'pincode', 'phoneNumber', 'email'
+    'businessName', 'category', 'description',  'address', 'city', 'pincode', 'phoneNumber', 'email'
   );
 
   foreach ($requiredFields as $field) {
@@ -59,6 +61,8 @@ if (isset($_POST['create_listing'])) {
       $category = sanitize($_POST['category']);
       $description = sanitize($_POST['description']);
       $address = sanitize($_POST['address']);
+      $latitude = sanitize($_POST['latitude']);
+      $longitude = sanitize($_POST['longitude']);
       $city = sanitize($_POST['city']);
       $postal_code = sanitize($_POST['pincode']);
       $phoneNumber = sanitize($_POST['phoneNumber']);
@@ -90,6 +94,25 @@ if (isset($_POST['create_listing'])) {
     $_SESSION['errorsession'] = 'Please enter a valid description (letters, numbers, spaces, and punctuation only)';
     redirect('create-listing.php');
     exit();
+  }
+
+  // validate latitude and longitude only if they are not empty
+  if (!empty($latitude) && !empty($longitude)) {
+    // validate latitude (must be a number between -90 and 90)
+    if (!is_numeric($latitude) || $latitude < -90 || $latitude > 90) {
+      $_SESSION['errorsession'] = 'Enable location permission';
+      redirect('create-listing.php');
+      exit();
+    }
+    // validate longitude (must be a number between -180 and 180)
+    if (!is_numeric($longitude) || $longitude < -180 || $longitude > 180) {
+      $_SESSION['errorsession'] = 'Enable location permission';
+      redirect('create-listing.php');
+      exit();
+    }
+  } else {
+    // null
+    $latitude = $longitude = NULL;
   }
 
   // validate the address (letters, numbers, spaces, and punctuation only)
@@ -213,7 +236,7 @@ if (isset($_POST['create_listing'])) {
 
   // insert data into the database
   try {
-    $sql = 'INSERT INTO listings (user_id, businessName, category, description, address, city, pincode, phoneNumber, email, whatsapp, facebookId, instagramId, website, displayImage, reviewsCount, rating, createdAt, updatedAt) VALUES (:user_id, :businessName, :category, :description, :address, :city, :pincode, :phoneNumber, :email, :whatsapp, :facebookId, :instagramId, :website, :displayImage, :reviewsCount, :rating, :createdAt, :updatedAt)';
+    $sql = 'INSERT INTO listings (user_id, businessName, category, description, latitude, longitude, address, city, pincode, phoneNumber, email, whatsapp, facebookId, instagramId, website, displayImage, reviewsCount, rating, createdAt, updatedAt) VALUES (:user_id, :businessName, :category, :description, :latitude, :longitude, :address, :city, :pincode, :phoneNumber, :email, :whatsapp, :facebookId, :instagramId, :website, :displayImage, :reviewsCount, :rating, :createdAt, :updatedAt)';
 
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);
@@ -223,6 +246,8 @@ if (isset($_POST['create_listing'])) {
       ':description',
       $description
     );
+    $stmt->bindParam(':latitude', $latitude);
+    $stmt->bindParam(':longitude', $longitude);
     $stmt->bindParam(':address', $address);
     $stmt->bindParam(':city', $city);
     $stmt->bindParam(':pincode', $pincode);

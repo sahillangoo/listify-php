@@ -17,6 +17,8 @@ CREATE TABLE listings (
     businessName VARCHAR(50) NOT NULL UNIQUE DEFAULT 'No business name provided',
     description TEXT NOT NULL DEFAULT 'No description provided',
     category VARCHAR(50) NOT NULL DEFAULT 'other',
+    latitude FLOAT NOT NULL DEFAULT 0,
+    longitude FLOAT NOT NULL DEFAULT 0,
     address VARCHAR(255) NOT NULL DEFAULT 'No address provided',
     city VARCHAR(50) NOT NULL DEFAULT 'No city provided',
     pincode INT(6) NOT NULL DEFAULT 0,
@@ -27,14 +29,13 @@ CREATE TABLE listings (
     instagramId VARCHAR(50),
     website VARCHAR(50),
     displayImage VARCHAR(255) NOT NULL DEFAULT 'default.jpg',
-    latitude FLOAT NOT NULL DEFAULT 0,
-    longitude FLOAT NOT NULL DEFAULT 0,
     reviewsCount INT DEFAULT 0,
     rating FLOAT DEFAULT 0,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+-- values
 INSERT INTO users (
         username,
         email,
@@ -52,6 +53,52 @@ VALUES (
         'https://api.dicebear.com/6.x/micah/svg?seed=sahillangoo&flip=true&background=%230000ff&radius=50&margin=10&baseColor=f9c9b6',
         'admin',
         '2023-08-07 16:16:11'
+    );
+INSERT INTO `listings` (
+        `id`,
+        `user_id`,
+        `businessName`,
+        `description`,
+        `category`,
+        `address`,
+        `latitude`,
+        `longitude`,
+        `city`,
+        `pincode`,
+        `phoneNumber`,
+        `email`,
+        `whatsapp`,
+        `facebookId`,
+        `instagramId`,
+        `website`,
+        `displayImage`,
+        `reviewsCount`,
+        `rating`,
+        `createdAt`,
+        `updatedAt`
+    )
+VALUES (
+        1,
+        1,
+        'Winterfell Cafe',
+        'Best Place to Enjoy your time with friends and family in Srinagar Kashmir with a beautiful view of Dal Lake and Zabarwan Hills. We serve the best food in town. We have a wide range of food items to choose from.  ',
+        'restaurants',
+        '74.8765',
+        '34.8765',
+        'Boulevard Road Dal lake',
+        'srinagar',
+        190001,
+        9876543210,
+        'demo@demo.com',
+        9876543210,
+        'winterfell',
+        'winterfell',
+        'https://winterfell.com',
+        'Winterfell.jpg',
+        0,
+        0,
+        '2023-08-15 13:31:37',
+        '2023-08-15 13:31:37'
     );
 --@block
 CREATE TABLE reviews (
