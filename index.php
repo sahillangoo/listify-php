@@ -45,7 +45,8 @@
             <h1 class="text-gradient text-primary">~ Listify is the answer.</h1>
             <p class="lead pe-5 me-5">Say goodbye to mundane lists and hello to Listify – the dynamic web app that turns your everyday lists into engaging narratives. </p>
             <div class="buttons">
-              <button type="button" class="btn bg-gradient-primary mt-4">Get Started</button>
+              <a href="signin.php">
+                <button type="button" class="btn bg-gradient-primary mt-4">Get Started</button></a>
               <button type="button" class="btn text-primary shadow-none mt-4">Read more</button>
             </div>
           </div>

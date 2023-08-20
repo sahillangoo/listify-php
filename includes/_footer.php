@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-lg-4 me-auto mb-lg-0 mb-4 text-lg-start text-center">
           <h6 class="text-white font-weight-bolder text-uppercase mb-lg-4 mb-3">Listify</h6>
-          <ul class="nav flex-row ms-n3 justify-content-lg-start justify-content-center mb-4 mt-sm-0">
+          <!-- <ul class="nav flex-row ms-n3 justify-content-lg-start justify-content-center mb-4 mt-sm-0">
             <li class="nav-item">
               <a class="nav-link text-white opacity-8" href="https://www.creative-tim.com/presentation" target="_blank">
                 Home
@@ -26,7 +26,7 @@
                 Services
               </a>
             </li>
-          </ul>
+          </ul> -->
           <p class="text-sm text-white opacity-8 mb-0">
             Copyright © <script>
               document.write(new Date().getFullYear())
