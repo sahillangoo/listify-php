@@ -35,6 +35,16 @@ CREATE TABLE listings (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+CREATE TABLE reviews (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    rating FLOAT NOT NULL,
+    comment TEXT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    listing_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (listing_id) REFERENCES listings(id)
+);
 -- values
 INSERT INTO users (
         username,
@@ -100,14 +110,26 @@ VALUES (
         '2023-08-15 13:31:37',
         '2023-08-15 13:31:37'
     );
+INSERT INTO `reviews`(
+        `id`,
+        `rating`,
+        `comment`,
+        `createdAt`,
+        `user_id`,
+        `listing_id`
+    )
+VALUES (
+        1,
+        4,
+        'This is a good place to hangout with friends and family. The food is good and the service is also good. The view is amazing. I would recommend this place to everyone.',
+        '2023-08-15 13:31:37',
+        1,
+        1
+    );
+
 --@block
-CREATE TABLE reviews (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    rating FLOAT,
-    comment TEXT,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_id INT NOT NULL,
-    listing_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (listing_id) REFERENCES listings(id)
-);
+-- clean dev db : clean all TABLEs
+--@block
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS listings;
+DROP TABLE IF EXISTS users;

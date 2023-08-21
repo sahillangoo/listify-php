@@ -59,10 +59,49 @@
         <p>Contact: <?php echo $result['phoneNumber']; ?></p>
         <p>Address: <?php echo $result['address']; ?></p>
         <p>City: <?php echo $result['city']; ?></p>
-        
+
       </div>
     </div>
   </div>
+  <?php
+  // Check if the user is signed in
+  if (isset($_SESSION['user_id'])) {
+    // Display the reviews
+    $stmt = $db->prepare('SELECT * FROM reviews WHERE listing_id = ?');
+    $stmt->execute([$result['id']]);
+    $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($reviews) > 0) {
+      echo '<h2>Reviews</h2>';
+      foreach ($reviews as $review) {
+        echo '<p>';
+        for ($i = 0; $i < $review['rating']; $i++) {
+          echo '<i class="fa fa-star" style="color: #ffc800;"></i>';
+        }
+        echo ' ' . $review['rating'] . '-Stars';
+        echo '</p>';
+        echo '<p>' . $review['comment'] . '</p>';
+        echo '<p>' . $review['createdAt'] . '</p>';
+        // Get the user details who posted the review
+        $stmt = $db->prepare('SELECT * FROM users WHERE id = ?');
+        $stmt->execute([$review['user_id']]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo '<p>Posted by: ' . $user['username'] . '</p>';
+      }
+    } else {
+      echo '<p>No reviews yet.</p>';
+    }
+    // Display the review form
+    echo '<h2>Leave a review</h2>';
+    echo '<form method="post" action="./functions/review/submit_review.php">';
+    echo '<input type="hidden" name="listing_id" value="' . $result['id'] . '">';
+    echo '<textarea name="text"></textarea>';
+    echo '<input class="btn btn-sm btn-primary" type="submit" value="Submit">';
+    echo '</form>';
+  } else {
+    // Display a message telling the user to sign in
+    echo '<p>You must be signed in to leave a review.</p>';
+  }
+  ?>
 
 
 

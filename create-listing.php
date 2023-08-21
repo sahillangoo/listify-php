@@ -114,7 +114,7 @@
 
               <div class="col-md-6 ps-2 mb-3">
                 <input type="text" class="form-control d-none" name="latitude" id="latitude" disabled>
-                <input type="text" class="form-control d-none" name="longitude" id="longitude" longitude>
+                <input type="text" class="form-control d-none" name="longitude" id="longitude" disabled>
                 <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="address" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter address" required>
                 <div class="valid-feedback">
                   Looks good!
