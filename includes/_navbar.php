@@ -19,7 +19,7 @@
               <span class="navbar-toggler-bar bar3"></span>
             </span>
           </button>
-          <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
+          <!-- <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
             <ul class="navbar-nav navbar-nav-hover ms-lg-12 ps-lg-5 w-100">
               <?php if (isLoggedIn()) : ?>
                 <li class="nav-item ms-lg-auto">
@@ -48,38 +48,56 @@
                   <p class="d-inline text-sm z-index-1 font-weight-bold text-uppercase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">Services</p>
                 </a>
 
-              </li>
-              <li class="nav-item ms-lg-auto">
-                <a class="nav-link nav-link-icon me-2" href="https://github.com/sahillangoo/listify-php" target="_blank">
-                  <i class="fa-brands fa-square-github"></i>
-                  <p class="d-inline text-sm z-index-1 font-weight-bold text-uppercase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Star us on Github">Github</p>
-                </a>
-              </li>
-              <!-- siginout form if user is signed in -->
-              <?php if (isLoggedIn()) : ?>
-                <li class="nav-item my-auto ms-3 ms-lg-0">
+              </li> -->
+          <!-- <li class="nav-item ms-lg-auto">
+            <a class="nav-link nav-link-icon me-2" href="https://github.com/sahillangoo/listify-php" target="_blank">
+              <i class="fa-brands fa-square-github"></i>
+              <p class="d-inline text-sm z-index-1 font-weight-bold text-uppercase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Star us on Github">Github</p>
+            </a>
+          </li> -->
+          <!-- siginout form if user is signed in -->
+          <?php if (isLoggedIn()) : ?>
+            <div class="dropdown text-end">
+              <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="<?php echo $_SESSION['profile_image']; ?>" alt="mdo" width="80" height="50" class="rounded-circle">
+              </a>
+              <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" href="create-listing.php">New Listing...</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="account.php">Profile</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
                   <form action="./../functions/auth/signout_function.php" method="post">
-                    <button href="./signin.php" type="submit" name="signout" value="Sign Out" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign Out">Sign Out</button>
+                    <a class="dropdown-item" href="./signin.php">Sign out</a>
                   </form>
                 </li>
-              <?php endif; ?>
-              <?php if (!isLoggedIn()) : ?>
-                <li class="nav-item my-auto ms-3 ms-lg-0">
-                  <a href="./signin.php" class="btn btn-sm  bg-gradient-primary  btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="SigUp or SignIn to Listify">SignUp / SigIn</a>
-                </li>
+              </ul>
+            </div>
+            <!-- <li class="nav-item my-auto ms-3 ms-lg-0">
+              <form action="./../functions/auth/signout_function.php" method="post">
+                <button href="./signin.php" type="submit" name="signout" value="Sign Out" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign Out">Sign Out</button>
+              </form>
+            </li> -->
+          <?php endif; ?>
+          <?php if (!isLoggedIn()) : ?>
+            <li class="nav-item my-auto ms-3 ms-lg-0">
+              <a href="./signin.php" class="btn btn-sm  bg-gradient-primary  btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="SigUp or SignIn to Listify">SignUp / SigIn</a>
+            </li>
 
 
 
-          </div>
+        </div>
       </nav>
     </div>
   <?php endif; ?>
-  <?php if (isLoggedIn()) : ?>
-    <li class="nav-item my-auto ms-3 ms-lg-0">
-      <!-- user profile pic -->
-      <img src="<?php echo $_SESSION['profile_image']; ?>" class="avatar avatar-sm rounded-circle" alt="user profile pic">
-    </li>
-  <?php endif; ?>
+  <!-- <?php if (isLoggedIn()) : ?>
+      <li class="nav-item my-auto ms-3 ms-lg-0"> -->
+  <!-- user profile pic -->
+  <!-- <img src="<?php echo $_SESSION['profile_image']; ?>" class="avatar avatar-sm rounded-circle" alt="user profile pic">
+      </li>
+    <?php endif; ?> -->
   </ul>
   </div>
 </div>
