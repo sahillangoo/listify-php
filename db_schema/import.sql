@@ -11,6 +11,7 @@ CREATE TABLE users (
     role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE listings (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL UNIQUE,
@@ -34,17 +35,19 @@ CREATE TABLE listings (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
 CREATE TABLE reviews (
     id INT PRIMARY KEY AUTO_INCREMENT,
     rating FLOAT NOT NULL,
-    comment TEXT NOT NULL,
+    review TEXT(200) NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
     listing_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (listing_id) REFERENCES listings(id)
 );
+
 -- values
 INSERT INTO users (
         username,
@@ -113,7 +116,7 @@ VALUES (
 INSERT INTO `reviews`(
         `id`,
         `rating`,
-        `comment`,
+`review`,
         `createdAt`,
         `user_id`,
         `listing_id`

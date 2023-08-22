@@ -63,47 +63,114 @@
       </div>
     </div>
   </div>
-  <?php
-  // Check if the user is signed in
-  if (isset($_SESSION['user_id'])) {
-    // Display the reviews
-    $stmt = $db->prepare('SELECT * FROM reviews WHERE listing_id = ?');
-    $stmt->execute([$result['id']]);
-    $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if (count($reviews) > 0) {
-      echo '<h2>Reviews</h2>';
-      foreach ($reviews as $review) {
-        echo '<p>';
-        for ($i = 0; $i < $review['rating']; $i++) {
-          echo '<i class="fa fa-star" style="color: #ffc800;"></i>';
+
+  <div class="container">
+    <div class="row">
+      <!-- review cards -->
+      <?php
+      // Display the reviews
+      $stmt = $db->prepare('SELECT * FROM reviews WHERE listing_id = ?');
+      $stmt->execute([$result['id']]);
+      $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      if (count($reviews) > 0) {
+        echo '<h2>Reviews</h2>';
+        foreach ($reviews as $review) {
+          echo '<p>';
+          for ($i = 0; $i < $review['rating']; $i++) {
+            echo '<i class="fa fa-star" style="color: #ffc800;"></i>';
+          }
+          echo ' ' . $review['rating'] . '-Stars';
+          echo '</p>';
+          echo '<p>' . $review['comment'] . '</p>';
+          echo '<p>' . $review['createdAt'] . '</p>';
+          // Get the user details who posted the review
+          $stmt = $db->prepare('SELECT * FROM users WHERE id = ?');
+          $stmt->execute([$review['user_id']]);
+          $user = $stmt->fetch(PDO::FETCH_ASSOC);
+          echo '<p>Posted by: ' . $user['username'] . '</p>';
         }
-        echo ' ' . $review['rating'] . '-Stars';
-        echo '</p>';
-        echo '<p>' . $review['comment'] . '</p>';
-        echo '<p>' . $review['createdAt'] . '</p>';
-        // Get the user details who posted the review
-        $stmt = $db->prepare('SELECT * FROM users WHERE id = ?');
-        $stmt->execute([$review['user_id']]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo '<p>Posted by: ' . $user['username'] . '</p>';
+      } else {
+        echo '<p>No reviews yet.</p>';
       }
+      ?>
+    </div>
+  </div>
+
+  <?php
+  if (isLoggedIn()) {
+    // Check if the user has already posted a review
+    $stmt = $db->prepare('SELECT * FROM reviews WHERE user_id = ? AND listing_id = ?');
+    $stmt->execute([$_SESSION['user_id'], $result['id']]);
+    $review = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($review) {
+      echo '<p class="text-sm text-center">You have already posted a review.</p>';
     } else {
-      echo '<p>No reviews yet.</p>';
+  ?>
+      <div class="container">
+        <div class="row mt-5">
+          <div class="col-md-6 offset-md-3">
+            <?php include_once('./functions/dialog.php'); ?>
+            <h3>Add a Review</h3>
+            <form id="review-form" name="review" action="./functions/review/add_review.php" method="post">
+              <input type="hidden" name="listing_id" value="<?php echo $listing; ?>">
+              <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <select class="form-select" name="rating" id="rating" required>
+                  <option value="">Select a rating</option>
+                  <option value="1">1 star</option>
+                  <option value="2">2 stars</option>
+                  <option value="3">3 stars</option>
+                  <option value="4">4 stars</option>
+                  <option value="5">5 stars</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="review" class="form-label">Review</label>
+                <textarea class="form-control" id="review" name="review" rows="5" maxlength="150" required></textarea>
+              </div>
+              <button id="submit-btn" type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+  <?php
     }
-    // Display the review form
-    echo '<h2>Leave a review</h2>';
-    echo '<form method="post" action="./functions/review/submit_review.php">';
-    echo '<input type="hidden" name="listing_id" value="' . $result['id'] . '">';
-    echo '<textarea name="text"></textarea>';
-    echo '<input class="btn btn-sm btn-primary" type="submit" value="Submit">';
-    echo '</form>';
   } else {
-    // Display a message telling the user to sign in
-    echo '<p>You must be signed in to leave a review.</p>';
+    echo '<p class="text-sm text-center">Please <a href="./signin.php">login</a> to post a review.</p>';
   }
   ?>
 
+  <script>
+    const form = document.getElementById('review-form');
+    const rating = form.elements['rating'];
+    const review = form.elements['review'];
 
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (!rating.value) {
+        alert('Please select a rating.');
+        return;
+      }
+
+      if (rating.value < 1 || rating.value >= 5) {
+        alert('Please select a rating between 1 and 5.');
+        return;
+      }
+
+      if (!review.value) {
+        alert('Please enter a review.');
+        return;
+      }
+
+      if (review.value.length < 10 || review.value.length > 150) {
+        alert('Please enter a review between 10 and 150 characters.');
+        return;
+      }
+
+      form.submit();
+    });
+  </script>
 
   <?php
   // include the footer file
