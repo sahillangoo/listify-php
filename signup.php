@@ -88,6 +88,7 @@
                 </div>
 
                 <div class="form-group text-center">
+                  <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                   <button type="submit" name="signup" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0"> <i class="fa-solid fa-bolt"></i> SignUp</button>
                 </div>
               </form>

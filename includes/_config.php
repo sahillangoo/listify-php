@@ -31,3 +31,8 @@ function isLoggedIn(): bool
     return false;
   }
 }
+
+// Generate a CSRF token and store it in the user's session
+if (!isset($_SESSION['csrf_token'])) {
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}

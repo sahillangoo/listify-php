@@ -2,34 +2,35 @@
 
 /*
 * Authentication file for Signup for the Webapp
-
-    file content
-      include the auth functions file
-      file location variables
-      check if the form is submitted
-      check if all fields are filled
-      get the form data
-      check and process the form data
-      check if the username is valid only letters and numbers
-      check if the email is valid
-      check if the phone is valid
-      check if the password is valid
-      check if the terms is checked
-      check if the email is already registered
-      check if the username is already registered
-      insert the user into the database
-      redirect the user to the signin page
-      catch the exception and show error message
-
   Author: SahilLangoo
-  lastModified: 7/8/2023
-    */
+  lastModified: 23/8/2023
+*/
 
 // Include the auth functions file
 include_once './auth_functions.php';
+// include functions file
+include_once './../functions.php';
 
 // Assuming the form data is submitted via POST
 if (isset($_POST['signup'])) {
+
+  // Use CSRF protection on this form
+  $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
+  try {
+    if (!hash_equals($_SESSION['csrf_token'], $csrf_token)) {
+      // Reset the CSRF token
+      unset($_SESSION['csrf_token']);
+      // send message to form page with error message
+      $_SESSION['errorsession'] = "CSRF token validation failed.";
+      redirect('signup.php');
+      exit();
+    }
+  } catch (Exception $e) {
+    $_SESSION['errorsession'] = $e->getMessage();
+    redirect('signup.php');
+    exit();
+  }
+
   // check if all fields are filled
   if (empty($_POST["username"]) || empty($_POST["email"]) || empty($_POST["phone"]) || empty($_POST["password"]) || empty($_POST["terms"])) {
     $_SESSION['errorsession'] = "All Fields are Necessary.";
@@ -38,11 +39,10 @@ if (isset($_POST['signup'])) {
   }
 
   // Get the form data
-  $username = $_POST['username'];
-  $email = $_POST['email'];
-  $phone = $_POST['phone'];
-  $password = $_POST['password'];
-  $terms = $_POST['terms'];
+  $username = sanitize($_POST['username']);
+  $email = sanitize($_POST['email']);
+  $phone = sanitize($_POST['phone']);
+  $password = sanitize($_POST['password']);
 
   // Check and process the form data
   // Check if the username is valid only letters and numbers
@@ -73,7 +73,6 @@ if (isset($_POST['signup'])) {
     exit();
   }
 
-
   try {
     // Check if the username is already registered
     $stmt = $db->prepare("SELECT COUNT(username) FROM users WHERE username = :username");
@@ -101,14 +100,7 @@ if (isset($_POST['signup'])) {
     if ($phoneCount > 0) {
       throw new Exception('This phone number already exists!');
     }
-  } catch (Exception $e) {
-    // send message to form page with error message
-    $_SESSION['errorsession'] = $e->getMessage();
-    redirect('signin.php');
-    exit();
-  }
 
-  try {
     // profile pic from Dice Bear
     $profile_pic = "https://api.dicebear.com/6.x/micah/svg?seed=$username&flip=true&background=%230000ff&radius=50&margin=10&baseColor=f9c9b6";
     // Set the role
@@ -146,12 +138,18 @@ if (isset($_POST['signup'])) {
     $_SESSION['profile_image'] = $profile_pic;
     $_SESSION['role'] = $role;
     $_SESSION['user_since'] = $created_at;
+
     // Redirect to the home page
     redirect('index.php');
-  } catch (Exception $e) {
+  } catch (PDOException $e) {
     // send message to form page with error message
     $_SESSION['errorsession'] = $e->getMessage();
     redirect('signup.php?clear');
+    exit();
+  } catch (Exception $e) {
+    // send message to form page with error message
+    $_SESSION['errorsession'] = $e->getMessage();
+    redirect('signin.php');
     exit();
   } finally {
     // unset db

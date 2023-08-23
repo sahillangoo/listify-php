@@ -17,6 +17,7 @@
     redirect('index.php');
     exit;
   }
+
   ?>
 </head>
 
@@ -45,7 +46,7 @@
               </div>
             </div>
             <div class="tab-content" id="signin">
-              <div class="tab-pane fade show active" id="signin-tab-pane" role="tabpanel" aria-labelledby="signin-tab" tabindex="0">
+              <div class="tab-pane fade show active" id="signin-tab-panel" role="tabpanel" aria-labelledby="signin-tab" tabindex="0">
                 <div class="card-body">
                   <!--  fix labels and tool tips -->
                   <form action="./functions/auth/signin_function.php" method="post" name="signin" id="signin" class="needs-validation" novalidate autocomplete="on">
@@ -81,6 +82,8 @@
                     </a>
 
                     <div class="form-group text-center">
+                      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+
                       <button type="submit" name="signin" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">
                         <i class="fas fa-lock"></i> SignIn
                       </button>
@@ -98,7 +101,7 @@
 
             <!-- signup -->
             <div class="tab-content" id="signup">
-              <div class="tab-pane fade show" id="signup-tab-pane" role="tabpanel" aria-labelledby="signup-tab" tabindex="0">
+              <div class="tab-pane fade show" id="signup-tab-panel" role="tabpanel" aria-labelledby="signup-tab" tabindex="0">
                 <div class="card-body">
                   <form action="./functions/auth/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation" novalidate autocomplete="on">
                     <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">Enter your details to SignUp</p>

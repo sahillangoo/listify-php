@@ -29,3 +29,12 @@ function sanitize($data): string
   $data = htmlspecialchars($data);
   return strip_tags($data);
 }
+
+// check https function
+function check_https()
+{
+  if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    return false;
+  }
+  return true;
+}
