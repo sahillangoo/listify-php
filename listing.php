@@ -81,7 +81,7 @@
           }
           echo ' ' . $review['rating'] . '-Stars';
           echo '</p>';
-          echo '<p>' . $review['comment'] . '</p>';
+          echo '<p>' . $review['review'] . '</p>';
           echo '<p>' . $review['createdAt'] . '</p>';
           // Get the user details who posted the review
           $stmt = $db->prepare('SELECT * FROM users WHERE id = ?');

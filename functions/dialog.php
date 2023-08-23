@@ -1,38 +1,39 @@
 <?php
-if (isset($_SESSION['successsession'])) {
-    echo ('
-    <div class="alert alert-success text-white font-weight-bold alert-with-icon alert-dismissible fade show">
-        <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-        <i class="tim-icons icon-simple-remove"></i>
+function showAlert($type, $message)
+{
+    $alertTypes = [
+        'success' => 'success',
+        'error' => 'danger',
+        'warning' => 'warning'
+    ];
+    $alertType = $alertTypes[$type] ?? 'info';
+    $alertIcon = [
+        'success' => 'fa-thumbs-up',
+        'error' => 'fa-exclamation-circle',
+        'warning' => ' fa-triangle-exclamation'
+    ][$type] ?? 'fa-bug';
+    echo <<<HTML
+    <div class="alert alert-$alertType alert-dismissible fade show" role="alert">
+        <span class="alert-icon"><i class="fa-solid $alertIcon"></i></span>
+        <span class="alert-text text-sm text-white"><strong>$type - </strong>$message</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
         </button>
-        <span data-notify="icon" class="tim-icons icon-support-17"></span>
-        <span>
-        <b> Success - </b>' . htmlspecialchars($_SESSION['successsession'], ENT_QUOTES, 'UTF-8') .
-        '</span>
-    </div>');
+    </div>
+HTML;
 }
-unset($_SESSION["successsession"]);
+
+if (isset($_SESSION['successsession'])) {
+    showAlert('success', $_SESSION['successsession']);
+    unset($_SESSION['successsession']);
+}
 
 if (isset($_SESSION['errorsession'])) {
-    echo ('
-    <div class="alert alert-danger text-white font-weight-bold alert-with-icon alert-dismissible fade show">
-    <p class="small">
-    <strong>Oh snap!</strong> - ' . htmlspecialchars($_SESSION['errorsession'], ENT_QUOTES, 'UTF-8') . '
-    </p>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    ');
+    showAlert('error', $_SESSION['errorsession']);
+    unset($_SESSION['errorsession']);
 }
-unset($_SESSION["errorsession"]);
 
 if (isset($_SESSION['warningsession'])) {
-    echo '<div class="alert alert-warning text-white font-weight-bold alert-with-icon alert-dismissible fade show">
-        <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-        <i class="tim-icons icon-simple-remove"></i>
-        </button>
-        <span data-notify="icon" class="tim-icons icon-support-17"></span>
-        <span>
-        <b> HOLA! - </b>' . htmlspecialchars($_SESSION['warningsession'], ENT_QUOTES, 'UTF-8') . '</span>
-    </div>';
+    showAlert('warning', $_SESSION['warningsession']);
+    unset($_SESSION['warningsession']);
 }
-unset($_SESSION["warningsession"]);

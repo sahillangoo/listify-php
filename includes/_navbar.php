@@ -4,7 +4,7 @@
     <div class="col-12">
       <nav class="navbar navbar-expand-lg  blur blur-rounded top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
         <div class="container-fluid px-0">
-          <a class="navbar-brand font-weight-bolder ms-sm-3" href="../index.php" rel="tooltip" title="A Comprehensive Listing Web App" data-placement="bottom">
+          <a class="navbar-brand font-weight-bolder ms-sm-3" href="./index.php" rel="tooltip" title="A Comprehensive Listing Web App" data-placement="bottom">
             Listify
           </a>
           <!-- <div class="search-bar">
