@@ -35,7 +35,7 @@
             </div>
             <!-- signup -->
             <div class="card-body pt-2">
-              <form action="./functions/auth/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation" novalidate autocomplete="on">
+              <form action="./functions/account/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation" novalidate autocomplete="on">
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
@@ -69,7 +69,7 @@
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
-                    <input type="password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Password should be atleast 8 letters (including A-Z, a-z, 0-9, special charaters) and should not be a common password">
+                    <input type="password" autocomplete="new-password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Password should be atleast 8 letters (including A-Z, a-z, 0-9, special charaters) and should not be a common password">
                     <div class="valid-feedback">
                       Looks good!
                     </div>
@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="form-group text-center">
-                  <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                  <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
                   <button type="submit" name="signup" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0"> <i class="fa-solid fa-bolt"></i> SignUp</button>
                 </div>
               </form>

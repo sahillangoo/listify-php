@@ -69,14 +69,14 @@
                   <hr class="dropdown-divider">
                 </li>
                 <li>
-                  <form action="./../functions/auth/signout_function.php" method="post">
+                  <form action="./../functions/account/signout_function.php" method="post">
                     <a class="dropdown-item" href="./signin.php">Sign out</a>
                   </form>
                 </li>
               </ul>
             </div>
             <!-- <li class="nav-item my-auto ms-3 ms-lg-0">
-              <form action="./../functions/auth/signout_function.php" method="post">
+              <form action="./../functions/account/signout_function.php" method="post">
                 <button href="./signin.php" type="submit" name="signout" value="Sign Out" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sign Out">Sign Out</button>
               </form>
             </li> -->

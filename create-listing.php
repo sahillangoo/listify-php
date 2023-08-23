@@ -239,6 +239,7 @@
             const longitude = position.coords.longitude;
             document.getElementById("latitude").value = latitude;
             document.getElementById("longitude").value = longitude;
+            console.log(latitude, longitude);
           },
           function(error) {
             if (error.code === error.PERMISSION_DENIED) {

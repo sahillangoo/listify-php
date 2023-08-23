@@ -1,6 +1,5 @@
 -- Date: 2021-03-28 17:00:00
 -- Listify DB Schema
-
 CREATE TABLE IF NOT EXISTS users (
     id INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -8,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone BIGINT(12) UNSIGNED NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     profile_image VARCHAR(255) NOT NULL,
+status ENUM('active', 'inactive') DEFAULT 'active' NOT NULL,
     role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
@@ -58,13 +58,14 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (listing_id) REFERENCES listings(id)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
--- values
+-- insert values
 INSERT INTO users (
         username,
         email,
         phone,
         password,
         profile_image,
+status,
         role,
         user_since
     )
@@ -74,10 +75,10 @@ VALUES (
         7006588022,
         '$argon2id$v=19$m=2048,t=4,p=1$SGg2elliQ2JZbUVYeEpVeA$MtwHADtrs/912gP60PvgfZL+PKExiyN3sCaLF518qpU',
         'https://api.dicebear.com/6.x/micah/svg?seed=sahillangoo&flip=true&background=%230000ff&radius=50&margin=10&baseColor=f9c9b6',
+'active',
         'admin',
         '2023-08-07 16:16:11'
-    );
-
+);
 INSERT INTO listings (
         user_id,
         businessName,
@@ -117,8 +118,7 @@ VALUES (
         'Winterfell.jpg',
         '2023-08-15 13:31:37',
         '2023-08-15 13:31:37'
-    );
-
+);
 INSERT INTO reviews (
         rating,
         review,
