@@ -1,6 +1,7 @@
 <?php
 // include functions file
-include_once './../functions.php';
+require_once __DIR__ . '/../functions.php';
+
 
 // Function to signOut the user
 if (isset($_POST['signout'])) {

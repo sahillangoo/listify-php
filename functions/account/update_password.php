@@ -4,10 +4,9 @@
 
 */
 
-// Include the auth functions file
-include_once './auth_functions.php';
-// Include the functions file
-include_once './../functions.php';
+// include functions file
+require_once __DIR__ . '/../functions.php';
+
 
 // Check if the user is logged in and has a valid session
 if (!isset($_SESSION['user_id'])) {

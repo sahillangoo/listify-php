@@ -136,4 +136,12 @@ VALUES (
 --@block
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS listings;
+DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS users;
+
+--@block
+SELECT l.*, AVG(r.rating) AS rating, u.username
+FROM listings l
+LEFT JOIN reviews r ON l.id = r.listing_id
+LEFT JOIN users u ON l.user_id = u.id
+GROUP BY l.id

@@ -1,22 +1,23 @@
+<?php
+// include functions file
+include_once './functions/functions.php';
+
+//  check if the user is logged in or not
+if (isAuthenticated()) {
+  redirect('index.php');
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
 <head>
   <title>Sign to Listify</title>
   <?php
-
-  //  add terms and conditions & privacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
-
-  // include config file
-  include_once './includes/_config.php';
   // include the head file
   include_once './includes/_head.php';
 
-  //  check if the user is logged in or not
-  if (isLoggedIn()) {
-    redirect('index.php');
-    exit;
-  }
+  // todo add terms and conditions & privacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
 
   ?>
 </head>
@@ -84,18 +85,18 @@
               </p>
             </div>
           </div>
-      <div class="col-7 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-        <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
-          <img src="./assets/img/shapes/pattern-lines.svg" alt="pattern-lines" class="position-absolute opacity-4 start-0">
-          <div class="position-relative">
-            <img class="max-width-500 w-100 position-relative z-index-2" src="./assets/img/illustrations/chat.png" alt="">
+          <div class="col-7 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+            <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
+              <img src="./assets/img/shapes/pattern-lines.svg" alt="pattern-lines" class="position-absolute opacity-4 start-0">
+              <div class="position-relative">
+                <img class="max-width-500 w-100 position-relative z-index-2" src="./assets/img/illustrations/chat.png" alt="">
+              </div>
+              <h4 class="mt-5 text-white font-weight-bolder"> "That's the magic of Listify!""</h4>
+              <p class="text-white">The innovative web app that empowers you to curate, personalize, and share lists effortlessly. </p>
+            </div>
           </div>
-          <h4 class="mt-5 text-white font-weight-bolder"> "That's the magic of Listify!""</h4>
-          <p class="text-white">The innovative web app that empowers you to curate, personalize, and share lists effortlessly. </p>
         </div>
       </div>
-    </div>
-    </div>
     </div>
   </section>
   <!-- Signing Section End -->

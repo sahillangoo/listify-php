@@ -1,3 +1,31 @@
+<?php
+// include functions file
+include_once './functions/functions.php';
+
+//  check if the user is logged in or not
+if (!isAuthenticated()) {
+  redirect('signin.php');
+  exit;
+}
+// get the user id from the session
+$user_id = $_SESSION['user_id'];
+// check users listing
+try {
+  $sql = "SELECT * FROM listings WHERE user_id = :user_id";
+  $stmt = $db->prepare($sql);
+  $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+  $stmt->execute();
+  $listings = $stmt->fetchAll();
+  // check if the user has a listing
+  if (count($listings) > 0) {
+    redirect('account.php');
+    exit;
+  }
+} catch (PDOException $e) {
+  echo $e->getMessage();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
@@ -6,36 +34,9 @@
     Create Listing - Listify
   </title>
   <?php
-  //  fix labels and tooltips add validation
-  // include config file
-  include_once './includes/_config.php';
-  // include the database connection file
-  include_once './functions/db_connect.php';
+  // todo fix labels add validation
   // include the head file
   include_once './includes/_head.php';
-
-  //  check if the user is logged in or not
-  if (!isLoggedIn()) {
-    redirect('signin.php');
-    exit;
-  }
-  // get the user id from the session
-  $user_id = $_SESSION['user_id'];
-  // check users listing
-  try {
-    $sql = "SELECT * FROM listings WHERE user_id = :user_id";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $listings = $stmt->fetchAll();
-    // check if the user has a listing
-    if (count($listings) > 0) {
-      redirect('account.php');
-      exit;
-    }
-  } catch (PDOException $e) {
-    echo $e->getMessage();
-  }
   ?>
 </head>
 

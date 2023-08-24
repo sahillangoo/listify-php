@@ -1,8 +1,7 @@
 <?php
-// include DB file
-include_once '../db_connect.php';
 // include functions file
-include_once '../functions.php';;
+require_once __DIR__ . '/../functions.php';
+
 
 if (isset($_POST['review'])) {
   // get the form data

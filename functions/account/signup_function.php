@@ -6,10 +6,9 @@
   lastModified: 23/8/2023
 */
 
-// Include the auth functions file
-include_once './auth_functions.php';
 // include functions file
-include_once './../functions.php';
+require_once __DIR__ . '/../functions.php';
+
 
 // Assuming the form data is submitted via POST
 if (isset($_POST['signup'])) {
@@ -130,7 +129,7 @@ if (isset($_POST['signup'])) {
     // user id from database
     $user_id = $db->lastInsertId();
     // Set session variables
-    $_SESSION["loggedin"] = true;
+    $_SESSION["authenticated"] = true;
     $_SESSION['user_id'] = $user_id;
     $_SESSION['username'] = $username;
     $_SESSION['email'] = $email;

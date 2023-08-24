@@ -2,11 +2,9 @@
 /*
 * Authentication file for signIn for the Webapp
 */
-
-// Include the auth functions file
-include_once './auth_functions.php';
 // include functions file
-include_once './../functions.php';
+require_once __DIR__ . '/../functions.php';
+
 
 // Assuming the form data is submitted via POST
 if (isset($_POST['signin'])) {
@@ -71,7 +69,7 @@ function signIn($email, $password, $remember_me): void
         // Password is correct, so start a new session
         session_start();
         // Store data in session variables
-        $_SESSION["loggedin"] = true;
+        $_SESSION["authenticated"] = true;
         $_SESSION["user_id"] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION["email"] = $user['email'];

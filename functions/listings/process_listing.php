@@ -3,11 +3,9 @@
   *This file will handle the create listing form data and insert it into the database
 
 */
+// include functions file
+require_once __DIR__ . '/../functions.php';
 
-// Include the database connection file
-include_once './../db_connect.php';
-// Include the functions file
-include_once './../functions.php';
 
 // Recive the data from the create listing form then validate it and If the listing is a new listing then insert it into the database
 if (isset($_POST['create_listing'])) {

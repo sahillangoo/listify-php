@@ -1,27 +1,24 @@
+<?php
+// include functions file
+require_once __DIR__ . '/../functions/functions.php';
+//  check if the user is logged in or not
+if (!isAuthenticated()) {
+  redirect('signin.php');
+  exit;
+}
+// check if user is admin
+if (!isAdmin()) {
+  redirect('index.php');
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <!-- include head file -->
   <?php
-  include_once('../includes/_config.php');
   include_once('./includes/_head.php');
-  include_once('../functions/db_connect.php');
-  //  check if the user is logged in or not
-  if (!isLoggedIn()) {
-    redirect('signin.php');
-    exit;
-  }
-  // function to check if the user role is admin
-  function isAdmin(): bool
-  {
-    return isset($_SESSION["role"]) && $_SESSION["role"] === 'admin';
-  }
-  // check if user is admin
-  if (!isAdmin()) {
-    redirect('index.php');
-    exit;
-  }
   ?>
 </head>
 

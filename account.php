@@ -1,3 +1,27 @@
+<?php
+// include functions file
+include_once './functions/functions.php';
+//  check if the user is logged in or not
+if (!isAuthenticated()) {
+  redirect('signin.php');
+  exit;
+}
+// convert user_since to a readable format
+$user_since = date('d M Y', strtotime($_SESSION['user_since']));
+// get the user id from the session
+$user_id = $_SESSION['user_id'];
+// Fetch user's listings from the database
+try {
+  $sql = "SELECT * FROM listings WHERE user_id = :user_id";
+  $stmt = $db->prepare($sql);
+  $stmt->execute(['user_id' => $user_id]);
+  $listings = $stmt->fetchAll();
+} catch (PDOException $e) {
+  echo $e->getMessage();
+} finally {
+  $stmt = null;
+}
+?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
@@ -6,34 +30,9 @@
     My Account - Listify
   </title>
   <?php
-  //  - remove template code and redesign the page
-  // include config file
-  include_once './includes/_config.php';
-  // include the database connection file
-  include_once './functions/db_connect.php';
+  // todo - remove template code and redesign the page
   // include the head file
   include_once './includes/_head.php';
-
-  //  check if the user is logged in or not
-  if (!isLoggedIn()) {
-    redirect('signin.php');
-    exit;
-  }
-  // convert user_since to a readable format
-  $user_since = date('d M Y', strtotime($_SESSION['user_since']));
-  // get the user id from the session
-  $user_id = $_SESSION['user_id'];
-  // Fetch user's listings from the database
-  try {
-    $sql = "SELECT * FROM listings WHERE user_id = :user_id";
-    $stmt = $db->prepare($sql);
-    $stmt->execute(['user_id' => $user_id]);
-    $listings = $stmt->fetchAll();
-  } catch (PDOException $e) {
-    echo $e->getMessage();
-  } finally {
-    $stmt = null;
-  }
   ?>
 </head>
 
@@ -95,7 +94,7 @@
               <?php endif; ?>
               <?php if (!empty($listings)) : ?>
                 <div class="col-auto">
-                  <button href="#" type="submit"  class="btn btn-sm btn-outline-info text-nowrap mb-0">Update Listing</button>
+                  <button href="#" type="submit" class="btn btn-sm btn-outline-info text-nowrap mb-0">Update Listing</button>
                 </div>
               <?php endif; ?>
             </div>

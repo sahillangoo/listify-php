@@ -63,8 +63,3 @@ function connectToDB()
 value to the variable ``. */
 $db = connectToDB();
 
-/* The code `//start session` and `if (!isset()) { session_start(); }` is used to start a
-session in PHP. */
-if (!isset($_SESSION)) {
-  session_start();
-}

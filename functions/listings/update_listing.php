@@ -3,11 +3,9 @@
   *This file will handle the update listing form data and update it in the database
 
 */
+// include functions file
+require_once __DIR__ . '/../functions.php';
 
-// Include the database connection file
-include_once './../db_connect.php';
-// Include the functions file
-include_once './../functions.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {

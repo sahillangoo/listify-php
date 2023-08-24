@@ -1,45 +1,35 @@
+<?php
+// include functions file
+include_once './functions/functions.php';
+
+/*
+  Listing Page
+  If this page gets listing id from the url, it will show the listing details to the user else it will redirect to the home page
+  */
+// check if the listing id is set in the url
+if (!isset($_GET['listing'])) {
+  redirect('404.php');
+  exit();
+} else {
+  $listing = $_GET['listing'];
+  $stmt = $db->prepare('SELECT * FROM listings WHERE id = :id');
+  $stmt->bindParam(':id', $_GET['listing'], PDO::PARAM_INT);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  if (!$result) {
+    redirect('404.php');
+    exit();
+  }
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
 <head>
   <title><?php ?> </title>
-  <?php
-  // include DB file
-  include_once './functions/db_connect.php';
-  // include config file
-  include_once './includes/_config.php';
-  // include the head file
-  include_once './includes/_head.php';
-
-  /*
-  Listing Page
-  If this page gets listing id from the url, it will show the listing details to the user else it will redirect to the home page
-  */
-  // check if the listing id is set in the url
-  if (!isset($_GET['listing'])) {
-    redirect('index.php');
-    exit();
-  } else {
-    // Show the listing details to the user
-    $listing = $_GET['listing'];
-    // get the listing details from the database
-    // Prepare the SQL statement
-    $stmt = $db->prepare('SELECT * FROM listings WHERE id = :id');
-    // Bind the parameter
-    $stmt->bindParam(':id', $_GET['listing'], PDO::PARAM_INT);
-    // Execute the query
-    $stmt->execute();
-    // Fetch the result
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    // Check if the listing is found in the database
-    if (!$result) {
-      redirect('404.php');
-      exit();
-    }
-  }
-
-
-  ?>
+  <?php include_once './includes/_head.php'; ?>
 </head>
 
 <body class="index-page">
@@ -97,7 +87,7 @@
   </div>
 
   <?php
-  if (isLoggedIn()) {
+  if (isAuthenticated()) {
     // Check if the user has already posted a review
     $stmt = $db->prepare('SELECT * FROM reviews WHERE user_id = ? AND listing_id = ?');
     $stmt->execute([$_SESSION['user_id'], $result['id']]);

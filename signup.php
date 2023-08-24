@@ -1,3 +1,13 @@
+<?php
+// include functions file
+include_once './functions/functions.php';
+
+//  check if the user is logged in or not
+if (isAuthenticated()) {
+  redirect('index.php');
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
@@ -5,16 +15,8 @@
   <title>Sign Up to Listify</title>
   <?php
   // TODO add terms and conditions & privacy policy link || add google recaptcha
-  // include config file
-  include_once './includes/_config.php';
   // include the head file
   include_once './includes/_head.php';
-  //  check if the user is logged in or not
-  if (isLoggedIn()) {
-    redirect('index.php');
-    exit;
-  }
-
   ?>
 </head>
 
@@ -117,40 +119,25 @@
   </section>
   <!-- Signing Section End -->
   <script type="text/javascript">
-    // Wait for the DOM to finish loading before running the code
-    document.addEventListener('DOMContentLoaded', () => {
-      'use strict';
+    'use strict';
 
-      // Clear the form if the URL query string is '?clear'
-      if (window.location.search === '?clear') {
+    const forms = document.querySelectorAll('.needs-validation');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.location.href.includes('?clear')) {
         document.getElementById('signup').reset();
       }
 
-      // Get all the forms that need validation
-      const forms = document.querySelectorAll('.needs-validation');
-      // Loop over the forms and add a submit event listener to each
-      // Cache the form elements
-      const forms = document.querySelectorAll('form');
-
-      // Add an event listener to the parent element to handle form submissions
       document.addEventListener('submit', event => {
         const form = event.target;
 
-        // Only handle form submissions
-        if (!form || !form.matches('form')) {
-          return;
-        }
-
-        // Prevent the form from submitting if it's invalid
         if (!form.checkValidity()) {
           event.preventDefault();
           event.stopPropagation();
         }
 
-        // Add the 'was-validated' class to the form to show validation feedback
         form.classList.add('was-validated');
       });
-
     });
   </script>
   <?php
