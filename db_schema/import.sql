@@ -24,10 +24,12 @@ CREATE TABLE IF NOT EXISTS sessions (
 
 CREATE TABLE IF NOT EXISTS listings (
     id INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    user_id INT(11) UNSIGNED NOT NULL UNIQUE,
+user_id INT(11) UNSIGNED NOT NULL,
     businessName VARCHAR(50) NOT NULL DEFAULT 'No business name provided',
     description TEXT NOT NULL DEFAULT 'No description provided',
     category VARCHAR(50) NOT NULL DEFAULT 'other',
+featured BOOLEAN NOT NULL DEFAULT 0,
+active BOOLEAN NOT NULL DEFAULT 1,
     latitude FLOAT NOT NULL DEFAULT 0,
     longitude FLOAT NOT NULL DEFAULT 0,
     address VARCHAR(255) NOT NULL DEFAULT 'No address provided',
@@ -51,22 +53,14 @@ CREATE TABLE IF NOT EXISTS reviews (
     id INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     rating FLOAT NOT NULL,
     review TEXT(200) NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     user_id INT(11) UNSIGNED NOT NULL,
     listing_id INT(11) UNSIGNED NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (listing_id) REFERENCES listings(id)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
--- JOIN query to get all listings with their average rating and username
-SELECT l.*,
-    AVG(r.rating) AS rating,
-    u.username
-FROM listings l
-    LEFT JOIN reviews r ON l.id = r.listing_id
-    LEFT JOIN users u ON l.user_id = u.id
-GROUP BY l.id
 
--- insert values
+--@block
 INSERT INTO users (
         username,
         email,
@@ -87,11 +81,14 @@ VALUES (
         'admin',
         '2023-08-07 16:16:11'
 );
+--@block
 INSERT INTO listings (
         user_id,
         businessName,
         description,
         category,
+featured,
+active,
         latitude,
         longitude,
         address,
@@ -112,21 +109,45 @@ VALUES (
         'Winterfell Cafe',
         'Best Place to Enjoy your time with friends and family in Srinagar Kashmir with a beautiful view of Dal Lake and Zabarwan Hills. We serve the best food in town. We have a wide range of food items to choose from.  ',
         'restaurants',
-        74.8765,
-        34.8765,
-        'Boulevard Road Dal lake',
-        'srinagar',
-        190001,
-        9876543210,
-        'demo@demo.com',
-        9876543210,
-        'winterfell',
-        'winterfell',
-        'https://winterfell.com',
-        'Winterfell.jpg',
-        '2023-08-15 13:31:37',
-        '2023-08-15 13:31:37'
-)
+1,
+1,
+74.8765,
+34.8765,
+'Boulevard Road Dal lake',
+'srinagar',
+190001,
+9876543210,
+'demo@demo.com',
+9876543210,
+'winterfell',
+'winterfell',
+'https://winterfell.com',
+'Winterfell.jpg',
+'2023-08-15 13:31:37',
+'2023-08-15 13:31:37'
+),
+(
+    1,
+    'J&K Bank',
+    'J&K Bank functions as a universal bank in Jammu & Kashmir and as a specialised bank in the rest of the country. It is also the only private sector bank designated as RBI’s agent for banking business',
+    'bank',
+    1,
+    1,
+    74.8765,
+    34.8765,
+    'Residency Road',
+    'srinagar',
+    190001,
+    9876543210,
+    'jkbank@demo.com',
+    9876543210,
+    'jkbank',
+    'jkbank',
+    'https://jkbank.com',
+    'jkbank.jpg',
+    '2023-08-15 13:31:37',
+    '2023-08-15 13:31:37'
+);
 INSERT INTO reviews (
         rating,
         review,
@@ -138,7 +159,7 @@ VALUES (
         'This is a good place to hangout with friends and family. The food is good and the service is also good. The view is amazing. I would recommend this place to everyone.',
         1,
         1
-    );
+);
 
 --@block
 DROP TABLE IF EXISTS reviews;
