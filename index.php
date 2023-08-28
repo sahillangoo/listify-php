@@ -25,7 +25,7 @@ include_once './functions/functions.php';
         <div class="card card-frame">
           <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
             <a href="./view-listing.php?listing=${listing.id}" class="d-block">
-              <img src="./uploads/business_images/${listing.displayImage}" class="img-fluid border-radius-lg move-on-hover" alt="${listing.title}">
+              <img src="./uploads/business_images/${listing.displayImage}" class="img-fluid border-radius-lg move-on-hover" alt="${listing.businessName}">
             </a>
           </div>
           <div class="card-body pt-2">
@@ -69,7 +69,7 @@ include_once './functions/functions.php';
   ?>
   <!-- ========== Start Hero ========== -->
   <header class="header-2">
-    <div class="page-header min-vh-90 relative" style="background-image: url('./assets/img/curved-images/curved.jpg')">
+    <div class="page-header min-vh-100 relative" style="background-image: url('./assets/img/curved-images/curved.jpg')">
       <div class="container px-4 text-center">
         <div class="row ">
           <div class="col-lg-2">
@@ -147,17 +147,125 @@ include_once './functions/functions.php';
   </header>
   <!-- ========== End Hero ========== -->
 
-
   <!-- ========== Start featured Listing Grid ========== -->
   <section class="py-5">
     <div class="container my-5">
       <h2 class="text-center">Featured Business Listings</h2>
       <p class="text-center">Listify is a comprehensive business listing app that allows you to list your business and get reviews from your customers.</p>
-      <div class="row" id="listingElement"></div>
+      <div class="row">
+        <?php
+        // Define the maximum number of featured listings per page
+        $maxFeaturedListingsPerPage = 8;
+
+        // Get the current page number from the query string
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+        // Calculate the offset based on the current page number and the number of listings per page
+        $offset = ($currentPage - 1) * $maxFeaturedListingsPerPage;
+
+        // Retrieve the total number of featured listings
+        $stmt = $db->prepare("SELECT COUNT(*) FROM listings WHERE active = 1 AND featured = 1");
+        $stmt->execute();
+        $totalFeaturedListings = $stmt->fetchColumn();
+
+        // Calculate the total number of pages based on the total number of featured listings and the number of listings per page
+        $totalPages = ceil($totalFeaturedListings / $maxFeaturedListingsPerPage);
+
+        // Retrieve the featured listings for the current page from the database
+        $stmt = $db->prepare("SELECT l.id, l.user_id, l.businessName, l.description, l.category, l.featured, l.active, l.city, l.displayImage, COUNT(r.id) AS reviewsCount, AVG(r.rating) AS avg_rating, l.createdAt, l.updatedAt, u.username, COUNT(r.id) AS reviews_count
+        FROM listings l
+        JOIN users u ON l.user_id = u.id
+        LEFT JOIN reviews r ON l.id = r.listing_id
+        WHERE l.active = 1 AND l.featured = 1
+        GROUP BY l.id
+        ORDER BY l.createdAt DESC
+        LIMIT :maxFeaturedListingsPerPage OFFSET :offset");
+        $stmt->bindParam(':maxFeaturedListingsPerPage', $maxFeaturedListingsPerPage, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Loop through the featured listings and display each listing
+        while ($listing = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          displayListing($listing);
+        }
+
+        // Check if there are any listings
+        if ($stmt->rowCount() === 0) {
+          // Display a message if there are no listings
+          echo '<div class="col-md-12 text-center my-5"><h3>No featured listings found</h3></div>';
+        }
+
+        // Display the pagination links
+        if ($totalPages > 1) {
+          echo '<div class="col-md-12 text-center my-5">';
+          echo '<ul class="pagination">';
+          for ($i = 1; $i <= $totalPages; $i++) {
+            $active = $i === $currentPage ? ' active' : '';
+            echo '<li class="page-item' . $active . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+          }
+          echo '</ul>';
+          echo '</div>';
+        }
+        ?>
+      </div>
     </div>
   </section>
   <!-- ========== End featured Listing Grid ========== -->
 
+  <!-- ========== Start Recent Activity ========== -->
+  <section class="py-5">
+    <div class="container my-5">
+      <h2 class="text-center">Recent Activity</h2>
+      <div class="row">
+        <?php
+        function displayListing($listing)
+        {
+          echo <<<HTML
+          <div class="col-md-3 col-lg-3 mb-4">
+            <div class="card card-frame">
+              <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+                <a href="./view-listing.php?listing={$listing['id']}" class="d-block">
+                  <img src="./uploads/business_images/{$listing['displayImage']}" class="img-fluid border-radius-lg move-on-hover" alt="{$listing['businessName']}" loading="lazy">
+                </a>
+              </div>
+              <div class="card-body pt-2">
+                <div class="d-flex justify-content-between align-items-center my-2">
+                  <span class="text-uppercase text-xxs font-weight-bold"><i class="fa-solid fa-shop"></i> {$listing['category']}</span>
+                  <span class="text-uppercase text-xxs font-weight-bold "><i class="fa-solid fa-location-dot"></i> {$listing['city']}</span>
+                </div>
+                <div class="d-flex justify-content-between ">
+                  <a href="./view-listing.php?listing={$listing['id']}" class="card-title h6 d-block text-gradient text-primary font-weight-bold ">{$listing['businessName']}</a>
+                  <span class="text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> {$listing['avg_rating']} ({$listing['reviews_count']})</span>
+                </div>
+                <p class="card-description text-sm mb-3" id="truncate" >{$listing['description']}</p>
+                <p class="mb-2 text-xxs font-weight-bolder text-warning text-gradient text-uppercase"><span>By―</span> {$listing['username']}</p>
+                <div class="d-flex justify-content-start my-2">
+                  <a href="./view-listing.php?listing={$listing['id']}" class="text-primary text-sm icon-move-right">View details <i class="fas fa-arrow-right text-sm" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        HTML;
+        }
+
+        $stmt = $db->prepare("SELECT l.*, COUNT(r.id) AS reviews_count, AVG(r.rating) AS avg_rating, u.username FROM listings l LEFT JOIN reviews r ON l.id = r.listing_id JOIN users u ON l.user_id = u.id WHERE l.active = 1 GROUP BY l.id ORDER BY l.createdAt DESC LIMIT 8");
+        $stmt->execute();
+
+        while ($listing = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          displayListing($listing);
+        }
+
+        // Check if there are any listings
+        if ($stmt->rowCount() === 0) {
+          // Display a message if there are no listings
+          echo '<div class="col-md-12 text-center my-5"><h3>No recent activity found</h3></div>';
+        }
+        ?>
+      </div>
+    </div>
+  </section>
+  <!-- ========== End Recent Activity ========== -->
   <!-- ========== Start Why Choose Listify ========== -->
 
   <section id="why-choose-listify" class="py-5">
@@ -355,6 +463,23 @@ include_once './functions/functions.php';
     </div>
   </div>
   <!-- ========== End CTA ========== -->
+
+  <!-- ========== Start Script ========== -->
+  <script type="text/javascript">
+    // Truncate the description text
+    const truncate = (text, length) => {
+      return text.length > length ? text.slice(0, length) + '...' : text;
+    };
+
+    // Get all the description elements
+    const descriptions = document.querySelectorAll('#truncate');
+
+    // Loop through the description elements and truncate the text
+    descriptions.forEach(description => {
+      description.textContent = truncate(description.textContent, 120);
+    });
+  </script>
+  <!-- ========== End Script ========== -->
 
 
   <!-- ========== Start Footer ========== -->

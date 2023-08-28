@@ -2,9 +2,6 @@
 // include functions file
 require_once __DIR__ . '/../functions.php';
 
-
-// Function to signOut the user
-if (isset($_POST['signout'])) {
   try {
     // Unset the session variables
     session_unset();
@@ -13,11 +10,10 @@ if (isset($_POST['signout'])) {
     // Close the database connection
     unset($db);
     // User signed out successfully
-    redirect('index.php');
+    redirect('index.php'); // Redirect to index page
     exit();
   } catch (Exception $e) {
     $_SESSION['errorsession'] = $e->getMessage();
-    redirect('index.php');
+    redirect('index.php'); // Redirect to index page
     exit();
   }
-}
