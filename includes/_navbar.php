@@ -62,7 +62,7 @@
                 <img src="<?php echo $_SESSION['profile_image']; ?>" alt="mdo" width="80" height="50" class="rounded-circle">
               </a>
               <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="create-listing.php">New Listing...</a></li>
+                <li><a class="dropdown-item" href="add-listing.php">New Listing...</a></li>
                 <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><a class="dropdown-item" href="account.php">Profile</a></li>
                 <li>

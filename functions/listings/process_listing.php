@@ -51,7 +51,7 @@ if (isset($_POST['create_listing'])) {
   foreach ($requiredFields as $field) {
     if (empty($_POST[$field])) {
       $_SESSION['errorsession'] = "Please fill all the required fields";
-      redirect('create-listing.php');
+      redirect('add-listing.php');
     }
   }
 
@@ -75,35 +75,35 @@ if (isset($_POST['create_listing'])) {
   switch (true) {
     case !preg_match('/^[a-zA-Z0-9\s-]+$/', $businessName):
       $_SESSION['errorsession'] = 'Please enter a valid business name (letters, numbers, spaces, and hyphens only)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case !preg_match('/^[a-zA-Z0-9\s-]+$/', $category):
       $_SESSION['errorsession'] = 'Please enter a valid category';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case !preg_match('/^[a-zA-Z0-9\s.,!?]+$/', $description):
       $_SESSION['errorsession'] = 'Please enter a valid description (letters, numbers, spaces, and punctuation only)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case !empty($latitude) && (!is_numeric($latitude) || $latitude < -90 || $latitude > 90):
       $_SESSION['errorsession'] = 'Enable location permission';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case !empty($longitude) && (!is_numeric($longitude) || $longitude < -180 || $longitude > 180):
       $_SESSION['errorsession'] = 'Enable location permission';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case !preg_match('/^[a-zA-Z0-9\s.,-]+$/', $address):
       $_SESSION['errorsession'] = 'Please enter a valid address (letters, numbers, spaces, and punctuation only)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case !preg_match('/^[a-zA-Z0-9\s-]+$/', $city):
       $_SESSION['errorsession'] = 'Please enter a valid city (letters, numbers, spaces, and hyphens only)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case !preg_match('/^\d{6}$/', $pincode):
       $_SESSION['errorsession'] = 'Please enter a valid pincode (6 digits only)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case !preg_match('/^\d{10,}$/', $phoneNumber):
       $_SESSION['errorsession'] = "Invalid phone number. Please enter a 10-digit phone number.";
@@ -111,23 +111,23 @@ if (isset($_POST['create_listing'])) {
       break;
     case !filter_var($email, FILTER_VALIDATE_EMAIL):
       $_SESSION['errorsession'] = "Check your email address";
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case $whatsapp && !preg_match('/^\d{10}$/', $whatsapp):
       $_SESSION['errorsession'] = 'Please enter a valid WhatsApp number (10 digits only)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case $facebookId && !preg_match('/^[a-zA-Z0-9.]+$/', $facebookId):
       $_SESSION['errorsession'] = 'Please enter a valid Facebook ID (letters, numbers, and periods only)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case $instagramId && !preg_match('/^[a-zA-Z0-9_]+$/', $instagramId):
       $_SESSION['errorsession'] = 'Please enter a valid Instagram ID (letters, numbers, and underscores only)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     case $website && !filter_var($website, FILTER_VALIDATE_URL):
       $_SESSION['errorsession'] = 'Please enter a valid website URL (e.g. example.com)';
-      redirect('create-listing.php');
+      redirect('add-listing.php');
       break;
     default:
       // check the image is empty and less than 2MB and the image type is jpg, jpeg or png then rename the image to business name and move it to the uploads/business_images/ folder
@@ -148,17 +148,17 @@ if (isset($_POST['create_listing'])) {
               }
             } else {
               $_SESSION['errorsession'] = "Please upload an image less than 2MB";
-              redirect('create-listing.php');
+              redirect('add-listing.php');
             }
             break;
           default:
             $_SESSION['errorsession'] = "The image you uploaded is not a jpg, jpeg or png image";
-            redirect('create-listing.php');
+            redirect('add-listing.php');
             break;
         }
       } else {
         $_SESSION['errorsession'] = "Please upload an image of your business";
-        redirect('create-listing.php');
+        redirect('add-listing.php');
       }
 
       // check if the business name already exists in the database
@@ -204,7 +204,7 @@ if (isset($_POST['create_listing'])) {
             redirect('account.php');
           } catch (PDOException $e) {
             $_SESSION['errorsession'] = $e->getMessage();
-            redirect('create-listing.php');
+            redirect('add-listing.php');
           } finally {
             $stmt = null;
             $db = null;
@@ -212,7 +212,7 @@ if (isset($_POST['create_listing'])) {
         }
       } catch (PDOException $e) {
         $_SESSION['errorsession'] = $e->getMessage();
-        redirect('create-listing.php');
+        redirect('add-listing.php');
       } finally {
         $stmt = null;
       }
@@ -220,5 +220,5 @@ if (isset($_POST['create_listing'])) {
   }
 } else {
   $_SESSION['errorsession'] = "Please fill all the required fields else";
-  redirect('create-listing.php');
+  redirect('add-listing.php');
 }

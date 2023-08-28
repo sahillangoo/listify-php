@@ -89,7 +89,7 @@ try {
             <div class="row">
               <?php if (empty($listings)) : ?>
                 <div class="col-auto">
-                  <a href="./create-listing.php" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</a>
+                  <a href="./add-listing.php" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</a>
                 </div>
               <?php endif; ?>
               <?php if (!empty($listings)) : ?>
@@ -113,7 +113,7 @@ try {
       <!-- if the user has no listings, display a message -->
       <?php if (empty($listings)) : ?>
         <div class="alert alert-info" role="alert">
-          You have no listings yet. <a href="./create-listing.php">Create a listing</a>
+          You have no listings yet. <a href="./add-listing.php">Create a listing</a>
         </div>
       <?php else : ?>
         <!-- if the user has listings  -->

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="480" height="480">
+  <path fill="#3949ab" d="M13,17h22v19H13V17z" />
+  <rect width="44" height="2" x="2" y="40" fill="#d7ccc8" />
+  <rect width="5" height="17" x="34" y="19" fill="#d7ccc8" />
+  <rect width="5" height="17" x="9" y="19" fill="#d7ccc8" />
+  <polygon fill="#d7ccc8" points="43,17 5,17 5,14 24,5 43,14" />
+  <rect width="36" height="2" x="6" y="36" fill="#d7ccc8" />
+  <path fill="#bcaaa4" d="M32,17h9v2h-9V17z M7,17h9v2H7V17z M4,38h40v2H4V38z M24,10c-1.105,0-2,0.895-2,2s0.895,2,2,2s2-0.895,2-2S25.105,10,24,10z" />
+  <path fill="#303f9f" d="M16,17h16v2H16V17z" />
+  <path fill="#fdd835" d="M26,32h-1c-1.344,0-2.427-0.819-2.826-2H26v-2h-4v-1h4v-2h-3.826c0.399-1.181,1.482-2,2.826-2h1c0.699,0,1.301,0.199,1.801,0.602l0.598-1.902c-0.699-0.398-1.5-0.699-2.398-0.699h-1c-2.447,0-4.434,1.756-4.897,4H18v2h2v1h-2v2h2.102c0.47,2.307,2.53,4,4.898,4h1c0.898,0,1.699-0.301,2.398-0.699L27.8,31.4C27.301,31.801,26.699,32,26,32z" />
+</svg>
