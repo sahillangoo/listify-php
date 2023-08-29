@@ -91,13 +91,12 @@ try {
               <div class="col-md-6 ps-2 mb-3">
                 <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="right" title="Which category suits your business" required>
                   <option value="">Select a category</option>
-                  <option value="restaurants">Restaurants</option>
-                  <option value="Bank">Bank</option>
-                  <option value="healthcare">Healthcare</option>
-                  <option value="retail-store">Retail Store</option>
-                  <option value="Travel">Travel</option>
-                  <option value="Education">Education</option>
-                  <option value="Others">Others</option>
+                  <option value="restaurant">Restaurant</option>
+                  <option value="hospital">Hospital</option>
+                  <option value="pharmacy">Pharmacy Store</option>
+                  <option value="education">Education</option>
+                  <option value="bank">Bank</option>
+                  <option value="atm">ATM</option>
                 </select>
                 <div class="valid-feedback">
                   Looks good!

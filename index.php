@@ -1,6 +1,52 @@
 <?php
 // include functions file
 include_once './functions/functions.php';
+
+/**
+ * Retrieves the featured listings for the current page and the total number of featured listings from the database.
+ *
+ * @param PDO $db The database connection.
+ * @param int $maxPerPage The maximum number of listings per page.
+ * @param int $offset The offset of the current page.
+ * @return array An array containing the featured listings for the current page and the total number of featured listings.
+ */
+function getFeaturedListings(PDO $db, int $maxPerPage, int $offset): array
+{
+  $stmt = $db->prepare("SELECT SQL_CALC_FOUND_ROWS l.id, l.user_id, l.businessName, l.description, l.category, l.featured, l.active, l.city, l.displayImage, COUNT(r.id) AS reviewsCount, AVG(r.rating) AS avg_rating, l.createdAt, l.updatedAt, u.username, COUNT(r.id) AS reviews_count
+      FROM listings l
+      JOIN users u ON l.user_id = u.id
+      LEFT JOIN reviews r ON l.id = r.listing_id
+      WHERE l.active = 1 AND l.featured = 1
+      GROUP BY l.id
+      ORDER BY l.createdAt DESC
+      LIMIT :maxPerPage OFFSET :offset");
+  $stmt->bindParam(':maxPerPage', $maxPerPage, PDO::PARAM_INT);
+  $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+  $stmt->execute();
+  $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $stmt = $db->prepare("SELECT FOUND_ROWS()");
+  $stmt->execute();
+  $total = $stmt->fetchColumn();
+
+  return ['listings' => $listings, 'total' => $total];
+}
+
+/**
+ * Retrieves the recent activity listings from the database.
+ *
+ * @param PDO $db The database connection.
+ * @return array An array containing the recent activity listings.
+ */
+function getRecentListings(PDO $db): array
+{
+  $stmt = $db->prepare("SELECT l.*, COUNT(r.id) AS reviews_count, AVG(r.rating) AS avg_rating, u.username FROM listings l LEFT JOIN reviews r ON l.id = r.listing_id JOIN users u ON l.user_id = u.id WHERE l.active = 1 GROUP BY l.id ORDER BY l.createdAt DESC LIMIT 8");
+  $stmt->execute();
+  $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  return $listings;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
@@ -8,61 +54,12 @@ include_once './functions/functions.php';
 <head>
   <title>Listify - Comprehansive Listing App</title>
   <?php include_once './includes/_head.php'; ?>
-  <!-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> -->
-  <script async type="text/javascript">
-    fetch('api/featured-listings.php')
-      .then(response => response.json())
-      .then(listings => {
-        // Loop through the listings and display them on the page
-        listings.forEach(listing => {
-          // Create a new element to display the listing
-          const listingElement = document.createElement('div');
-          listingElement.classList.add('col-md-3', 'p-3', 'listing');
-
-          // Add the listing details to the element
-          listingElement.innerHTML = `
-        <div class="card card-frame">
-          <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
-            <a href="./view-listing.php?listing=${listing.id}" class="d-block">
-              <img src="./uploads/business_images/${listing.displayImage}" class="img-fluid border-radius-lg move-on-hover" alt="${listing.businessName}">
-            </a>
-          </div>
-          <div class="card-body pt-2">
-            <div class="d-flex justify-content-between align-items-center my-2">
-              <span class="text-uppercase text-xxs font-weight-bold"><i class="fa-solid fa-shop"></i> ${listing.category}</span>
-              <span class="text-uppercase text-xxs font-weight-bold "><i class="fa-solid fa-location-dot"></i> ${listing.city}</span>
-            </div>
-            <div class="d-flex justify-content-between ">
-              <a href="./view-listing.php?listing=${listing.id}" class="card-title h6 d-block text-gradient text-primary font-weight-bold ">${listing.businessName.slice(0, 120)}${listing.businessName.length > 15 ? '...' : ''}
-
-              </a>
-              <span class="text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> ${listing.avg_rating ?? 0} (${listing.reviews_count})</span>
-            </div>
-            <p class="card-description text-sm mb-3">${listing.description.slice(0, 120)}${listing.description.length > 150 ? '...' : ''}</p>
-            <p class="mb-2 text-xxs font-weight-bolder text-warning text-gradient text-uppercase"><span>By―</span> ${listing.username}</p>
-            <div class="d-flex justify-content-start my-2">
-              <a href="/view-listing.php?listing=${listing.id}" class="text-primary text-sm icon-move-right">View details <i class="fas fa-arrow-right text-sm" aria-hidden="true"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-          `;
-
-          // Add the listing element to the listingElement class
-          document.getElementById('listingElement').appendChild(listingElement);
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching listings:', error);
-      });
-  </script>
 </head>
 
 <body class="index-page">
   <?php
   /*
-  Todo - Remove template code create home page for listing site
+  Todo - fix text and add images
   */
   // include the header file
   include_once './includes/_navbar.php';
@@ -91,40 +88,52 @@ include_once './functions/functions.php';
           <p class="lead text-white text-capitalize font-weight-light my-3">Browse our top categories</p>
 
           <div class="col-auto text-center move-on-hover">
-            <div class="bg-white rounded-3 p-3">
-              <img src="assets/img/svgs/icons8_restaurant.svg" alt="Restaurants" height="50px">
-              <p class="text-primary font-weight-bold text-xs">Restaurants</p>
-            </div>
+            <a href="./category.php?slug=restaurant">
+              <div class="bg-white rounded-3 p-3">
+                <img src="assets/img/svgs/icons8_restaurant.svg" alt="Restaurants" height="50px">
+                <p class="text-primary font-weight-bold text-xs">Restaurants</p>
+              </div>
+            </a>
           </div>
           <div class="col-auto text-center move-on-hover">
-            <div class="bg-white rounded-3 p-3">
-              <img src="assets/img/svgs/icons8_hospital_3.svg" alt="Hospitals" height="50px">
-              <p class="text-primary font-weight-bold text-xs">Hospitals</p>
-            </div>
+            <a href="./category.php?slug=hospital">
+              <div class=" bg-white rounded-3 p-3">
+                <img src="assets/img/svgs/icons8_hospital_3.svg" alt="Hospitals" height="50px">
+                <p class="text-primary font-weight-bold text-xs">Hospitals</p>
+              </div>
+            </a>
           </div>
           <div class="col-auto text-center move-on-hover">
-            <div class="bg-white rounded-3 p-3">
-              <img src="assets/img/svgs/icons8_pharmacy_shop.svg" alt="Pharmacy" height="50px">
-              <p class="text-primary font-weight-bold text-xs">Pharmacy</p>
-            </div>
+            <a href="./category.php?slug=pharmacy">
+              <div class="bg-white rounded-3 p-3">
+                <img src="assets/img/svgs/icons8_pharmacy_shop.svg" alt="Pharmacy" height="50px">
+                <p class="text-primary font-weight-bold text-xs">Pharmacys</p>
+              </div>
+            </a>
           </div>
           <div class="col-auto text-center move-on-hover">
-            <div class="bg-white rounded-3 p-3">
-              <img src="assets/img/svgs/icons8_school.svg" alt="Schools" height="50px">
-              <p class="text-primary font-weight-bold text-xs">Schools</p>
-            </div>
+            <a href="./category.php?slug=education">
+              <div class="bg-white rounded-3 p-3">
+                <img src="assets/img/svgs/icons8_school.svg" alt="Education" height="50px">
+                <p class="text-primary font-weight-bold text-xs">Education</p>
+              </div>
+            </a>
           </div>
           <div class="col-auto text-center move-on-hover">
-            <div class="bg-white rounded-3 p-3">
-              <img src="assets/img/svgs/icons8_atm.svg" alt="ATMs" height="50px">
-              <p class="text-primary font-weight-bold text-xs">ATMs</p>
-            </div>
+            <a href="./category.php?slug=atm">
+              <div class="bg-white rounded-3 p-3">
+                <img src="assets/img/svgs/icons8_atm.svg" alt="ATMs" height="50px">
+                <p class="text-primary font-weight-bold text-xs">ATMs</p>
+              </div>
+            </a>
           </div>
           <div class="col-auto text-center move-on-hover">
-            <div class="bg-white rounded-3 p-3">
-              <img src="assets/img/svgs/icons8_euro_bank_building_2.svg" alt="Banks" height="50px">
-              <p class="text-primary font-weight-bold text-xs">Banks</p>
-            </div>
+            <a href="./category.php?slug=bank">
+              <div class="bg-white rounded-3 p-3">
+                <img src="assets/img/svgs/icons8_euro_bank_building_2.svg" alt="Banks" height="50px">
+                <p class="text-primary font-weight-bold text-xs">Banks</p>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -163,36 +172,23 @@ include_once './functions/functions.php';
         // Calculate the offset based on the current page number and the number of listings per page
         $offset = ($currentPage - 1) * $maxFeaturedListingsPerPage;
 
-        // Retrieve the total number of featured listings
-        $stmt = $db->prepare("SELECT COUNT(*) FROM listings WHERE active = 1 AND featured = 1");
-        $stmt->execute();
-        $totalFeaturedListings = $stmt->fetchColumn();
+        // Retrieve the featured listings for the current page and the total number of featured listings from the database
+        $featuredListings = getFeaturedListings($db, $maxFeaturedListingsPerPage, $offset);
+        $totalFeaturedListings = $featuredListings['total'];
 
         // Calculate the total number of pages based on the total number of featured listings and the number of listings per page
         $totalPages = ceil($totalFeaturedListings / $maxFeaturedListingsPerPage);
 
-        // Retrieve the featured listings for the current page from the database
-        $stmt = $db->prepare("SELECT l.id, l.user_id, l.businessName, l.description, l.category, l.featured, l.active, l.city, l.displayImage, COUNT(r.id) AS reviewsCount, AVG(r.rating) AS avg_rating, l.createdAt, l.updatedAt, u.username, COUNT(r.id) AS reviews_count
-        FROM listings l
-        JOIN users u ON l.user_id = u.id
-        LEFT JOIN reviews r ON l.id = r.listing_id
-        WHERE l.active = 1 AND l.featured = 1
-        GROUP BY l.id
-        ORDER BY l.createdAt DESC
-        LIMIT :maxFeaturedListingsPerPage OFFSET :offset");
-        $stmt->bindParam(':maxFeaturedListingsPerPage', $maxFeaturedListingsPerPage, PDO::PARAM_INT);
-        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
-
         // Loop through the featured listings and display each listing
-        while ($listing = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        foreach ($featuredListings['listings'] as $listing) {
           displayListing($listing);
         }
 
         // Check if there are any listings
-        if ($stmt->rowCount() === 0) {
+        $hasListings = !empty($featuredListings['listings']);
+        if (!$hasListings) {
           // Display a message if there are no listings
-          echo '<div class="col-md-12 text-center my-5"><h3>No featured listings found</h3></div>';
+          echo '<div class="col-md-12 text-center my-5"><p class="lead text-muted">No featured listings found</p></div>';
         }
 
         // Display the pagination links
@@ -218,54 +214,26 @@ include_once './functions/functions.php';
       <h2 class="text-center">Recent Activity</h2>
       <div class="row">
         <?php
-        function displayListing($listing)
-        {
-          echo <<<HTML
-          <div class="col-md-3 col-lg-3 mb-4">
-            <div class="card card-frame">
-              <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
-                <a href="./view-listing.php?listing={$listing['id']}" class="d-block">
-                  <img src="./uploads/business_images/{$listing['displayImage']}" class="img-fluid border-radius-lg move-on-hover" alt="{$listing['businessName']}" loading="lazy">
-                </a>
-              </div>
-              <div class="card-body pt-2">
-                <div class="d-flex justify-content-between align-items-center my-2">
-                  <span class="text-uppercase text-xxs font-weight-bold"><i class="fa-solid fa-shop"></i> {$listing['category']}</span>
-                  <span class="text-uppercase text-xxs font-weight-bold "><i class="fa-solid fa-location-dot"></i> {$listing['city']}</span>
-                </div>
-                <div class="d-flex justify-content-between ">
-                  <a href="./view-listing.php?listing={$listing['id']}" class="card-title h6 d-block text-gradient text-primary font-weight-bold ">{$listing['businessName']}</a>
-                  <span class="text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> {$listing['avg_rating']} ({$listing['reviews_count']})</span>
-                </div>
-                <p class="card-description text-sm mb-3" id="truncate" >{$listing['description']}</p>
-                <p class="mb-2 text-xxs font-weight-bolder text-warning text-gradient text-uppercase"><span>By―</span> {$listing['username']}</p>
-                <div class="d-flex justify-content-start my-2">
-                  <a href="./view-listing.php?listing={$listing['id']}" class="text-primary text-sm icon-move-right">View details <i class="fas fa-arrow-right text-sm" aria-hidden="true"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        HTML;
-        }
+        // Retrieve the recent activity listings from the database
+        $recentListings = getRecentListings($db);
 
-        $stmt = $db->prepare("SELECT l.*, COUNT(r.id) AS reviews_count, AVG(r.rating) AS avg_rating, u.username FROM listings l LEFT JOIN reviews r ON l.id = r.listing_id JOIN users u ON l.user_id = u.id WHERE l.active = 1 GROUP BY l.id ORDER BY l.createdAt DESC LIMIT 8");
-        $stmt->execute();
-
-        while ($listing = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // Loop through the recent activity listings and display each listing
+        foreach ($recentListings as $listing) {
           displayListing($listing);
         }
 
         // Check if there are any listings
-        if ($stmt->rowCount() === 0) {
+        $hasListings = !empty($recentListings);
+        if (!$hasListings) {
           // Display a message if there are no listings
-          echo '<div class="col-md-12 text-center my-5"><h3>No recent activity found</h3></div>';
+          echo '<div class="col-md-12 text-center my-5"><p class="lead text-muted">No recent activity found</p></div>';
         }
         ?>
       </div>
     </div>
   </section>
   <!-- ========== End Recent Activity ========== -->
+
   <!-- ========== Start Why Choose Listify ========== -->
 
   <section id="why-choose-listify" class="py-5">

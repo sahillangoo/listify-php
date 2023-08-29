@@ -144,7 +144,7 @@ VALUES (
     'jkbank',
     'jkbank',
     'https://jkbank.com',
-    'jkbank.jpg',
+'default.jpg',
     '2023-08-15 13:31:37',
     '2023-08-15 13:31:37'
 );
