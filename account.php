@@ -6,20 +6,23 @@ if (!isAuthenticated()) {
   redirect('signin.php');
   exit;
 }
+// get the user id from the session
+$user_id = sanitize($_SESSION['user_id']);
+// Fetch user from the database
+try {
+  $user = get_user($db, $user_id);
+} catch (PDOException $e) {
+  error_log($e->getMessage());
+  echo "An error occurred while fetching your account details. Please try again later.";
+}
 // convert user_since to a readable format
 $user_since = date('d M Y', strtotime($_SESSION['user_since']));
-// get the user id from the session
-$user_id = $_SESSION['user_id'];
 // Fetch user's listings from the database
 try {
-  $sql = "SELECT * FROM listings WHERE user_id = :user_id";
-  $stmt = $db->prepare($sql);
-  $stmt->execute(['user_id' => $user_id]);
-  $listings = $stmt->fetchAll();
+  $listings = get_user_listings($db, $user_id);
 } catch (PDOException $e) {
-  echo $e->getMessage();
-} finally {
-  $stmt = null;
+  error_log($e->getMessage());
+  echo "An error occurred while fetching your listings. Please try again later.";
 }
 ?>
 <!DOCTYPE html>
@@ -30,7 +33,6 @@ try {
     My Account - Listify
   </title>
   <?php
-  // todo - remove template code and redesign the page
   // include the head file
   include_once './includes/_head.php';
   ?>
@@ -42,7 +44,8 @@ try {
   // include the header file
   include_once './includes/_navbar.php';  ?>
   <!-- End Navbar -->
-  <section class="py-sm-7 py-2 position-relative">
+  <!-- Header -->
+  <section class="py-2 position-relative">
     <div class="container">
       <div class="row">
         <!-- breadcrumb -->
@@ -103,37 +106,68 @@ try {
       </div>
     </div>
   </section>
+  <!-- End Header -->
+
+  <!-- Listings -->
   <section class="py-3">
-    <div class="container">
+    <div class="container my-5">
       <div class="row">
-        <div class="col-lg-6">
-          <h3 class="mb-5">Listing</h3>
+        <div class="col-lg-12">
+          <h3 class="h3 text-center text-primary text-gradient">Your Business Listings</h3>
+          <p class="text-center">Listify is a comprehensive business listing app that allows you to list your business and get reviews from your customers.</p>
         </div>
+
+        <!-- if the user has no listings, display a message -->
+        <?php if (empty($listings)) : ?>
+          <div class="alert alert-info" role="alert">
+            You have no listings yet. <a href="./add-listing.php">Create a listing</a>
+          </div>
+
+        <?php else : ?>
+          <!-- if the user has listings  -->
+          <?php
+          foreach ($listings as $listing) {
+            displayListing($listing);
+          }
+          ?>
+        <?php endif; ?>
       </div>
-      <!-- if the user has no listings, display a message -->
-      <?php if (empty($listings)) : ?>
-        <div class="alert alert-info" role="alert">
-          You have no listings yet. <a href="./add-listing.php">Create a listing</a>
-        </div>
-      <?php else : ?>
-        <!-- if the user has listings  -->
-        <div class="row">
-          <?php foreach ($listings as $listing) : ?>
-            <div class="col-lg-3 col-sm-6">
-              <div class="card mb-4">
-                <img src="./uploads/business_images/<?php echo $listing['displayImage']; ?>" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title"><?php echo $listing['businessName']; ?></h5>
-                  <p class="card-text"><?php echo $listing['description']; ?></p>
-                  <a href="#" class="btn btn-primary">Read More</a>
-                </div>
-              </div>
+  </section>
+  <!-- End Listings -->
+  <!-- Reviews -->
+  <section>
+    <div class="container">
+      <h3 class="h3 text-center text-primary text-gradient">Your Reviews</h3>
+      <?php
+      // Get user reviews
+      $reviews = get_user_reviews($db, $user_id);
+
+      // If the user has no reviews, display a message
+      if (empty($reviews)) {
+        echo '<p class="text-center">You have no reviews yet.</p>';
+      } else {
+        // If the user has reviews, display them
+        foreach ($reviews as $review) {
+          // Display review data
+          echo <<<HTML
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">$review[rating]</h5>
+              <p class="card-text">$review[review]</p>
+              <p class="card-text">$review[businessName]</p>
+              <p class="card-text">$review[createdAt]</p>
+              <p class="card-text">$review[user_id]</p>
             </div>
-          <?php endforeach; ?>
-        </div>
-      <?php endif; ?>
+          </div>
+          HTML;
+        }
+      }
+      ?>
     </div>
   </section>
+
+
+  <!-- Footer -->
   <?php
   // include the footer file
   include_once './includes/_footer.php';

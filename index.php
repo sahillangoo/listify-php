@@ -69,20 +69,17 @@ function getRecentListings(PDO $db): array
     <div class="page-header min-vh-100 relative" style="background-image: url('./assets/img/curved-images/curved.jpg')">
       <div class="container px-4 text-center">
         <div class="row">
-          <div class="col-lg-2">
-          </div>
-          <div class="col-lg-8 text-center mx-auto">
-            <p class="text-white text-sm mb-5">Search for a business by name, city, or category</p>
-            <h2 class="text-white pt-3 mt-n5">Search Across Various Business</h2>
-            <p class="lead text-white text-sm mt-3">"Bringing order to the digital chaos"</p>
+
+          <div class="col-lg-7 text-center mx-auto">
+            <h2 class="text-white">Search Across Various Business</h2>
+            <p class="lead text-white text-sm">"Bringing order to the digital chaos"</p>
             <div class="input-group my-4">
               <span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
               <label for="search-input" class="visually-hidden">Search for Business</label>
-              <input class="form-control" id="search-input" name="search" placeholder="Search for Business" type="text">
-              <button class="btn btn-outline-secondary" type="button" id="clear-search-input">
-                <i class="fas fa-times" aria-hidden="true"></i>
-                <span class="visually-hidden">Clear search input</span>
-              </button>
+              <input class="form-control" id="search-input" name="search" placeholder="Search for a business by name" type="text">
+              <button class="btn btn-bg-outline-while mb-0" id="clear-search-input" type="button"><i class="fas fa-times text" aria-hidden="true"></i></button>
+              <div class="invalid-feedback" id="search-feedback">ok</div>
+
             </div>
             <div class="list-group text-center align-items-center" id="search-results">
               <div id="search-spinner" class="spinner-border text-primary d-none" role="status">
@@ -90,57 +87,56 @@ function getRecentListings(PDO $db): array
               </div>
             </div>
           </div>
-          <div class="col-lg-2"></div>
         </div>
-
         <div class="row justify-content-center">
-          <p class="lead text-white text-capitalize font-weight-light my-3">Browse our top categories</p>
 
+          <p class="col-12 lead text-white text-capitalize font-font-weight-normal my-2">Browse our top categories</p>
           <div class="col-auto text-center move-on-hover">
             <a href="./category.php?slug=restaurant">
-              <div class="bg-white rounded-3 p-3">
+              <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_restaurant.svg" alt="Restaurants" height="50px">
-                <p class="text-primary font-weight-bold text-xs">Restaurants</p>
+                <p class="text-white font-weight-bold text-xs">Restaurants</p>
               </div>
             </a>
           </div>
           <div class="col-auto text-center move-on-hover">
             <a href="./category.php?slug=hospital">
-              <div class=" bg-white rounded-3 p-3">
+              <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_hospital_3.svg" alt="Hospitals" height="50px">
-                <p class="text-primary font-weight-bold text-xs">Hospitals</p>
+                <p class="text-white font-weight-bold text-xs">Hospitals</p>
               </div>
             </a>
           </div>
+
           <div class="col-auto text-center move-on-hover">
             <a href="./category.php?slug=pharmacy">
-              <div class="bg-white rounded-3 p-3">
+              <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_pharmacy_shop.svg" alt="Pharmacy" height="50px">
-                <p class="text-primary font-weight-bold text-xs">Pharmacys</p>
+                <span class="text-white font-weight-bold text-xs">Pharmacys</p>
               </div>
             </a>
           </div>
           <div class="col-auto text-center move-on-hover">
             <a href="./category.php?slug=education">
-              <div class="bg-white rounded-3 p-3">
+              <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_school.svg" alt="Education" height="50px">
-                <p class="text-primary font-weight-bold text-xs">Education</p>
+                <p class="text-white font-weight-bold text-xs">Education</p>
               </div>
             </a>
           </div>
           <div class="col-auto text-center move-on-hover">
             <a href="./category.php?slug=atm">
-              <div class="bg-white rounded-3 p-3">
+              <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_atm.svg" alt="ATMs" height="50px">
-                <p class="text-primary font-weight-bold text-xs">ATMs</p>
+                <p class="text-white font-weight-bold text-xs">ATMs</p>
               </div>
             </a>
           </div>
           <div class="col-auto text-center move-on-hover">
             <a href="./category.php?slug=bank">
-              <div class="bg-white rounded-3 p-3">
+              <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_euro_bank_building_2.svg" alt="Banks" height="50px">
-                <p class="text-primary font-weight-bold text-xs">Banks</p>
+                <p class="text-white font-weight-bold text-xs">Banks</p>
               </div>
             </a>
           </div>
@@ -221,6 +217,7 @@ function getRecentListings(PDO $db): array
   <section class="py-5">
     <div class="container my-5">
       <h2 class="text-center">Recent Activity</h2>
+      <p class="text-center">The are some of our latest listings </p>
       <div class="row">
         <?php
         // Retrieve the recent activity listings from the database
@@ -254,34 +251,34 @@ function getRecentListings(PDO $db): array
       </div>
       <div class="row">
         <div class="col-lg-3">
-          <div class="card mb-4">
+          <div class="card mb-4 move-on-hover">
             <div class="card-body">
-              <h5 class="card-title">Easy to Use</h5>
-              <p class="card-text">Listify is designed to be user-friendly and easy to navigate, so you can quickly and easily find what you're looking for.</p>
+              <h5 class="card-title text-center text-gradient text-primary text-bolder">Easy to Use</h5>
+              <p class="card-text text-center">Listify is designed to be user-friendly and easy to navigate, so you can quickly and easily find what you're looking for.</p>
             </div>
           </div>
         </div>
         <div class="col-lg-3">
-          <div class="card mb-4">
+          <div class="card mb-4 move-on-hover">
             <div class="card-body">
-              <h5 class="card-title">Detailed Listings</h5>
-              <p class="card-text">Our listings are comprehensive and detailed, so you can get all the information you need about a business before making a decision.</p>
+              <h5 class="card-title text-center text-gradient text-primary text-bolder">Detailed Listings</h5>
+              <p class="card-text text-center">Our listings are comprehensive and detailed, so you can get all the information you need about a business before making a decision.</p>
             </div>
           </div>
         </div>
         <div class="col-lg-3">
-          <div class="card mb-4">
+          <div class="card mb-4 move-on-hover">
             <div class="card-body">
-              <h5 class="card-title">Free to Use</h5>
-              <p class="card-text">Listify is completely free to use, so you can save money while finding the best businesses in your area.</p>
+              <h5 class="card-title text-center text-gradient text-primary text-bolder">Free to Use</h5>
+              <p class="card-text text-center">Listify is completely free to use, so you can save money while finding the best businesses in your area.</p>
             </div>
           </div>
         </div>
         <div class="col-lg-3">
-          <div class="card mb-4">
+          <div class="card mb-4 move-on-hover">
             <div class="card-body">
-              <h5 class="card-title">Support</h5>
-              <p class="card-text">Our support team is available 24/7 to help you with any questions or issues you may have while using Listify.</p>
+              <h5 class="card-title text-center text-gradient text-primary text-bolder">Support</h5>
+              <p class="card-text text-center">Our support team is available 24/7 to help you with any questions or issues you may have while using Listify.</p>
             </div>
           </div>
         </div>
@@ -300,31 +297,74 @@ function getRecentListings(PDO $db): array
           <h2 class="mb-4">What Our Customers Say</h2>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-4">
-          <div class="card mb-4">
+      <div class="row mt-6">
+
+
+        <div class="col-lg-4 col-md-8">
+          <div class="card card-plain move-on-hover">
             <div class="card-body">
-              <p class="card-text">"Listify has helped me grow my business by reaching more customers and getting more reviews. Highly recommended!"</p>
-              <h5 class="card-title">John Doe</h5>
-              <p class="card-subtitle">Owner, John's Pizza</p>
+              <div class="author">
+                <div class="name">
+                  <h6 class="mb-0 font-weight-bolder">Nick Willever</h6>
+                  <div class="stats">
+                    <i class="far fa-clock" aria-hidden="true"></i> 1 day ago
+                  </div>
+                </div>
+              </div>
+              <p class="mt-4">"Listify has helped me grow my business by reaching more customers and getting more reviews. Highly recommended!"</p>
+              <div class="rating mt-3">
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <i class="fas fa-star" aria-hidden="true"></i>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-4">
-          <div class="card mb-4">
+
+        <div class="col-lg-4 col-md-8 ms-md-auto">
+          <div class="card bg-gradient-primary move-on-hover">
             <div class="card-body">
-              <p class="card-text">"Listify is the best business listing app out there. It's easy to use, affordable, and has helped me get more customers."</p>
-              <h5 class="card-title">Jane Smith</h5>
-              <p class="card-subtitle">Owner, Jane's Flowers</p>
+              <div class="author align-items-center">
+                <div class="name">
+                  <h6 class="text-white mb-0 font-weight-bolder">Shailesh Kushwaha</h6>
+                  <div class="stats text-white">
+                    <i class="far fa-clock" aria-hidden="true"></i> 1 week ago
+                  </div>
+                </div>
+              </div>
+              <p class="mt-4 text-white">"Listify is the best business listing app out there. It's easy to use, affordable, and has helped me get more customers."</p>
+              <div class="rating mt-3">
+                <i class="fas fa-star text-white" aria-hidden="true"></i>
+                <i class="fas fa-star text-white" aria-hidden="true"></i>
+                <i class="fas fa-star text-white" aria-hidden="true"></i>
+                <i class="fas fa-star text-white" aria-hidden="true"></i>
+                <i class="fas fa-star text-white" aria-hidden="true"></i>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-4">
-          <div class="card mb-4">
+
+        <div class="col-lg-4 col-md-8">
+          <div class="card card-plain move-on-hover">
             <div class="card-body">
-              <p class="card-text">"Listify has been a game-changer for my business. I've seen a significant increase in traffic and sales since I started using it."</p>
-              <h5 class="card-title">Mike Johnson</h5>
-              <p class="card-subtitle">Owner, Mike's Auto Repair</p>
+              <div class="author">
+                <div class="name">
+                  <h6 class="mb-0 font-weight-bolder">Samuel Kamuli</h6>
+                  <div class="stats">
+                    <i class="far fa-clock" aria-hidden="true"></i> 3 weeks ago
+                  </div>
+                </div>
+              </div>
+              <p class="mt-4">"Listify has been a game-changer for my business. I've seen a significant increase in traffic and sales since I started using it."</p>
+              <div class="rating mt-3">
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <i class="fas fa-star" aria-hidden="true"></i>
+              </div>
             </div>
           </div>
         </div>
@@ -385,20 +425,18 @@ function getRecentListings(PDO $db): array
       </div>
       <div class="row">
         <div class="col-lg-6">
-          <div class="card mb-4">
-            <img class="card-img-top" src="https://via.placeholder.com/350x200" alt="Sahil Ahmad">
+          <div class="card mb-4 bg-gradient-primary move-on-hover">
             <div class="card-body">
-              <h5 class="card-title">Sahil Ahmad</h5>
-              <p class="card-text">Lead Developer</p>
+              <h5 class="card-title text-white text-center">Sahil Ahmad</h5>
+              <p class="card-text text-white text-center">Lead Developer</p>
             </div>
           </div>
         </div>
         <div class="col-lg-6">
-          <div class="card mb-4">
-            <img class="card-img-top placeholder-glow" src="https://via.placeholder.com/350x200" alt="Farah Niyazi">
+          <div class="card mb-4  bg-gradient-info move-on-hover">
             <div class="card-body">
-              <h5 class="card-title">Farah Niyazi</h5>
-              <p class="card-text">UI/UX Designer</p>
+              <h5 class="card-title text-white text-center">Farah Niyazi</h5>
+              <p class="card-text text-white text-center">Lead Designer</p>
             </div>
           </div>
         </div>
@@ -419,7 +457,7 @@ function getRecentListings(PDO $db): array
           <p>With Listify, you can create a business listing in just a few minutes and start getting reviews from your customers. Our app is easy to use and comes with a range of features to help you manage your business listing and engage with your customers.</p>
         </div>
         <div class="col-lg-6">
-          <img src="about.jpg" alt="About Listify" class="img-fluid">
+          <img src="assets/img/john-schnobrich-2FPjlAyMQTA-unsplash.jpg" alt="About Listify" class="img-fluid rounded-3">
         </div>
       </div>
     </div>
@@ -451,8 +489,10 @@ function getRecentListings(PDO $db): array
   <!-- ========== Start Scripts ========== -->
   <script type="text/javascript" async>
     const searchInput = document.getElementById('search-input');
+    const searchFeedback = document.getElementById('search-feedback');
     const searchResults = document.getElementById('search-results');
     const searchSpinner = document.getElementById('search-spinner');
+
 
     function debounce(func, delay) {
       let timeoutId;
@@ -466,12 +506,12 @@ function getRecentListings(PDO $db): array
 
     function displaySearchResults(results) {
       searchResults.innerHTML = '';
+      searchFeedback.innerHTML = '';
       if (Array.isArray(results) && results.length === 0 && searchInput.value.length >= 3) {
-        searchResults.innerHTML = `<div class="bg-gradient-white rounded mt-n3">
-                  <p class="text-bolder lead text-sm text-info text-center p-2">No results found for this query</p>
-                </div>`;
+        searchFeedback.innerHTML = `No results found for this query`;
+        searchInput.classList.add('is-invalid');
       } else if (Array.isArray(results)) {
-        results.slice(0, 8).forEach(result => {
+        results.slice(0, 6).forEach(result => {
           const resultElement = document.createElement('a');
           resultElement.href = `./listing.php?listing=${result.id}`;
           resultElement.classList.add('list-group-item', 'list-group-item-action');
@@ -486,9 +526,10 @@ function getRecentListings(PDO $db): array
           searchResults.appendChild(resultElement);
         });
       } else if (results.error) {
-        searchResults.innerHTML = `<div class="bg-gradient-white rounded mt-n3">
-                <p class="text-bolder lead text-sm text-info text-center p-2">${results.error}</p>
-                </div>`;
+        searchFeedback.innerHTML = `${results.error}`;
+        searchInput.classList.add('is-invalid');
+
+
       }
       searchResults.classList.toggle('d-none', results.length === 0);
       searchSpinner.classList.add('d-none');
@@ -505,10 +546,12 @@ function getRecentListings(PDO $db): array
 
     searchInput.addEventListener('input', debounce(search, 500));
 
-    const clearSearchInputButton = document.getElementById('clear-search-input');
 
-    clearSearchInputButton.addEventListener('click', () => {
+    // Clear search input
+    document.getElementById('clear-search-input').addEventListener('click', () => {
       searchInput.value = '';
+      searchResults.innerHTML = '';
+      searchResults.classList.add('d-none');
     });
   </script>
   <!-- ========== End Scripts ========== -->

@@ -53,6 +53,7 @@ function isAdmin(): bool
 {
   return isset($_SESSION["role"]) && $_SESSION["role"] === 'admin';
 }
+// Listing display function
 function displayListing($listing)
 {
   echo <<<HTML
@@ -83,4 +84,42 @@ function displayListing($listing)
           </div>
         HTML;
 }
+// Function to display user listings
+function get_user_listings($db, $user_id)
+{
+  $listings_sql = "SELECT l.*, u.username FROM listings l JOIN users u ON l.user_id = u.id WHERE l.active = 1 AND user_id = :user_id ORDER BY l.createdAt DESC";
+  $reviews_sql = "SELECT listing_id, COUNT(id) AS reviews_count, AVG(rating) AS avg_rating FROM reviews WHERE listing_id IN (SELECT id FROM listings WHERE user_id = :user_id) GROUP BY listing_id";
 
+  $listings_stmt = $db->prepare($listings_sql);
+  $listings_stmt->execute(['user_id' => $user_id]);
+  $listings = $listings_stmt->fetchAll();
+
+  $reviews_stmt = $db->prepare($reviews_sql);
+  $reviews_stmt->execute(['user_id' => $user_id]);
+  $reviews = $reviews_stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
+
+  foreach ($listings as &$listing) {
+    $listing['reviews_count'] = $reviews[$listing['id']]['reviews_count'] ?? 0;
+    $listing['avg_rating'] = $reviews[$listing['id']]['avg_rating'] ?? null;
+  }
+
+  return $listings;
+}
+
+// Function to get_user
+function get_user($db, $user_id)
+{
+  $sql = "SELECT * FROM users WHERE id = :user_id";
+  $stmt = $db->prepare($sql);
+  $stmt->execute(['user_id' => $user_id]);
+  return $stmt->fetch();
+}
+
+// Function to get reviews for user listings
+function get_user_reviews($db, $user_id)
+{
+  $sql = "SELECT r.*, l.businessName, l.displayImage FROM reviews r JOIN listings l ON r.listing_id = l.id WHERE l.user_id = :user_id ORDER BY r.createdAt DESC";
+  $stmt = $db->prepare($sql);
+  $stmt->execute(['user_id' => $user_id]);
+  return $stmt->fetchAll();
+}

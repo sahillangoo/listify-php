@@ -38,7 +38,7 @@ try {
   LEFT JOIN reviews r ON l.id = r.listing_id
   WHERE l.businessName LIKE :searchQuery
   GROUP BY l.id
-  LIMIT 8');
+  LIMIT 6');
 
   // Bind search query parameter
   $stmt->bindValue(':searchQuery', '%' . $searchQuery . '%', PDO::PARAM_STR);
