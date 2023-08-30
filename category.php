@@ -39,11 +39,11 @@ function getSlugListings(PDO $db, string $slug, int $maxPerPage, int $offset): a
   If this page gets slug id from the url, it will show the slug details to the user else it will redirect to the home page
 */
 // check if the slug id is set in the url
-if (!isset($_GET['slug'])) {
+if (!isset($_GET['slug']) || empty($_GET['slug']) || !is_string($_GET['slug']) || strlen($_GET['slug']) > 255 || !preg_match('/^[a-zA-Z0-9-]+$/', $_GET['slug'])) {
   redirect('404.php');
   exit();
 } else {
-  $slug = $_GET['slug'];
+  $slug = sanitize($_GET['slug']);
   $stmt = $db->prepare('SELECT COUNT(*) as count FROM listings WHERE category = :slug');
   $stmt->bindParam(':slug', $_GET['slug'], PDO::PARAM_STR);
   $stmt->execute();

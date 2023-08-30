@@ -7,11 +7,11 @@ include_once './functions/functions.php';
   If this page gets listing id from the url, it will show the listing details to the user else it will redirect to the home page
   */
 // check if the listing id is set in the url
-if (!isset($_GET['listing'])) {
+if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing']) > 255 || !preg_match('/^[0-9]+$/', $_GET['listing'])) {
   redirect('404.php');
   exit();
 } else {
-  $listing = $_GET['listing'];
+  $listing = sanitize($_GET['listing']);
   $stmt = $db->prepare('SELECT * FROM listings WHERE id = :id');
   $stmt->bindParam(':id', $_GET['listing'], PDO::PARAM_INT);
   $stmt->execute();

@@ -68,17 +68,26 @@ function getRecentListings(PDO $db): array
   <header class="header-2">
     <div class="page-header min-vh-100 relative" style="background-image: url('./assets/img/curved-images/curved.jpg')">
       <div class="container px-4 text-center">
-        <div class="row ">
+        <div class="row">
           <div class="col-lg-2">
           </div>
           <div class="col-lg-8 text-center mx-auto">
+            <p class="text-white text-sm mb-5">Search for a business by name, city, or category</p>
             <h2 class="text-white pt-3 mt-n5">Search Across Various Business</h2>
             <p class="lead text-white text-sm mt-3">"Bringing order to the digital chaos"</p>
             <div class="input-group my-4">
               <span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
               <label for="search-input" class="visually-hidden">Search for Business</label>
               <input class="form-control" id="search-input" name="search" placeholder="Search for Business" type="text">
-              <button type="button" class="btn bg-gradient-primary mb-0" data-bs-toggle="tooltip" data-bs-placement="right" title="Go" aria-label="Search">Search <i class="fa-solid fa-arrow-right"></i></button> </span>
+              <button class="btn btn-outline-secondary" type="button" id="clear-search-input">
+                <i class="fas fa-times" aria-hidden="true"></i>
+                <span class="visually-hidden">Clear search input</span>
+              </button>
+            </div>
+            <div class="list-group text-center align-items-center" id="search-results">
+              <div id="search-spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
           </div>
           <div class="col-lg-2"></div>
@@ -432,30 +441,77 @@ function getRecentListings(PDO $db): array
   </div>
   <!-- ========== End CTA ========== -->
 
-  <!-- ========== Start Script ========== -->
-  <script type="text/javascript">
-    // Truncate the description text
-    const truncate = (text, length) => {
-      return text.length > length ? text.slice(0, length) + '...' : text;
-    };
-
-    // Get all the description elements
-    const descriptions = document.querySelectorAll('#truncate');
-
-    // Loop through the description elements and truncate the text
-    descriptions.forEach(description => {
-      description.textContent = truncate(description.textContent, 120);
-    });
-  </script>
-  <!-- ========== End Script ========== -->
-
-
   <!-- ========== Start Footer ========== -->
   <?php
   // include the footer file
   include_once './includes/_footer.php';
   ?>
   <!-- ========== End Footer ========== -->
+
+  <!-- ========== Start Scripts ========== -->
+  <script type="text/javascript" async>
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    const searchSpinner = document.getElementById('search-spinner');
+
+    function debounce(func, delay) {
+      let timeoutId;
+      return function(...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(null, args);
+        }, delay);
+      };
+    }
+
+    function displaySearchResults(results) {
+      searchResults.innerHTML = '';
+      if (Array.isArray(results) && results.length === 0 && searchInput.value.length >= 3) {
+        searchResults.innerHTML = `<div class="bg-gradient-white rounded mt-n3">
+                  <p class="text-bolder lead text-sm text-info text-center p-2">No results found for this query</p>
+                </div>`;
+      } else if (Array.isArray(results)) {
+        results.slice(0, 8).forEach(result => {
+          const resultElement = document.createElement('a');
+          resultElement.href = `./listing.php?listing=${result.id}`;
+          resultElement.classList.add('list-group-item', 'list-group-item-action');
+          resultElement.innerHTML = `
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                      <h5 class="text-gradient text-primary font-weight-bold h5 mb-1">${result.businessName}</h5>
+                      <span class="text-body-secondary text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> ${result.avg_rating ?? 0} (${result.reviews_count})</span>
+                      <span class="text-body-secondary text-capitalize text-xs font-weight-bold"><i class="fa-solid fa-shop"></i> ${result.category}</span>
+                      <span class="text-body-secondary text-capitalize text-xs font-weight-bold "><i class="fa-solid fa-location-dot"></i> ${result.address}, ${result.city}</span>
+                    </div>
+                  `;
+          searchResults.appendChild(resultElement);
+        });
+      } else if (results.error) {
+        searchResults.innerHTML = `<div class="bg-gradient-white rounded mt-n3">
+                <p class="text-bolder lead text-sm text-info text-center p-2">${results.error}</p>
+                </div>`;
+      }
+      searchResults.classList.toggle('d-none', results.length === 0);
+      searchSpinner.classList.add('d-none');
+    }
+
+    function search() {
+      const searchQuery = searchInput.value;
+      searchSpinner.classList.remove('d-none');
+      fetch(`search.php?q=${searchQuery}`)
+        .then(response => response.json())
+        .then(data => displaySearchResults(data))
+        .catch(error => console.error(error));
+    }
+
+    searchInput.addEventListener('input', debounce(search, 500));
+
+    const clearSearchInputButton = document.getElementById('clear-search-input');
+
+    clearSearchInputButton.addEventListener('click', () => {
+      searchInput.value = '';
+    });
+  </script>
+  <!-- ========== End Scripts ========== -->
 
 </body>
 

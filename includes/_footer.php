@@ -64,3 +64,19 @@
   <!--  Google Maps Plugin    -->
   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script> -->
   <script src="./assets/js/soft-design-system.min.js?v=1.0.9" type="text/javascript"></script>
+  <!-- ========== Start Script ========== -->
+  <script type="text/javascript">
+    // Truncate the description text
+    const truncate = (text, length) => {
+      return text.length > length ? text.slice(0, length) + '...' : text;
+    };
+
+    // Get all the description elements
+    const descriptions = document.querySelectorAll('#truncate');
+
+    // Loop through the description elements and truncate the text
+    descriptions.forEach(description => {
+      description.textContent = truncate(description.textContent, 120);
+    });
+  </script>
+  <!-- ========== End Script ========== -->

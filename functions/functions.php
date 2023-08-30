@@ -83,3 +83,4 @@ function displayListing($listing)
           </div>
         HTML;
 }
+
