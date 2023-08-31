@@ -53,6 +53,51 @@ function isAdmin(): bool
 {
   return isset($_SESSION["role"]) && $_SESSION["role"] === 'admin';
 }
+
+/**
+ * Retrieves the featured listings for the current page and the total number of featured listings from the database.
+ *
+ * @param PDO $db The database connection.
+ * @param int $maxPerPage The maximum number of listings per page.
+ * @param int $offset The offset of the current page.
+ * @return array An array containing the featured listings for the current page and the total number of featured listings.
+ */
+function getFeaturedListings(PDO $db, int $maxPerPage, int $offset): array
+{
+  $stmt = $db->prepare("SELECT SQL_CALC_FOUND_ROWS l.id, l.user_id, l.businessName, l.description, l.category, l.featured, l.active, l.city, l.displayImage, COUNT(r.id) AS reviewsCount, AVG(r.rating) AS avg_rating, l.createdAt, l.updatedAt, u.username, COUNT(r.id) AS reviews_count
+      FROM listings l
+      JOIN users u ON l.user_id = u.id
+      LEFT JOIN reviews r ON l.id = r.listing_id
+      WHERE l.active = 1 AND l.featured = 1
+      GROUP BY l.id
+      ORDER BY l.createdAt DESC
+      LIMIT :maxPerPage OFFSET :offset");
+  $stmt->bindParam(':maxPerPage', $maxPerPage, PDO::PARAM_INT);
+  $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+  $stmt->execute();
+  $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $stmt = $db->prepare("SELECT FOUND_ROWS()");
+  $stmt->execute();
+  $total = $stmt->fetchColumn();
+
+  return ['listings' => $listings, 'total' => $total];
+}
+
+/**
+ * Retrieves the recent activity listings from the database.
+ *
+ * @param PDO $db The database connection.
+ * @return array An array containing the recent activity listings.
+ */
+function getRecentListings(PDO $db): array
+{
+  $stmt = $db->prepare("SELECT l.*, COUNT(r.id) AS reviews_count, AVG(r.rating) AS avg_rating, u.username FROM listings l LEFT JOIN reviews r ON l.id = r.listing_id JOIN users u ON l.user_id = u.id WHERE l.active = 1 GROUP BY l.id ORDER BY l.createdAt DESC LIMIT 8");
+  $stmt->execute();
+  $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  return $listings;
+}
 // Listing display function
 function displayListing($listing)
 {

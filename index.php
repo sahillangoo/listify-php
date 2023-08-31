@@ -2,51 +2,6 @@
 // include functions file
 include_once './functions/functions.php';
 
-/**
- * Retrieves the featured listings for the current page and the total number of featured listings from the database.
- *
- * @param PDO $db The database connection.
- * @param int $maxPerPage The maximum number of listings per page.
- * @param int $offset The offset of the current page.
- * @return array An array containing the featured listings for the current page and the total number of featured listings.
- */
-function getFeaturedListings(PDO $db, int $maxPerPage, int $offset): array
-{
-  $stmt = $db->prepare("SELECT SQL_CALC_FOUND_ROWS l.id, l.user_id, l.businessName, l.description, l.category, l.featured, l.active, l.city, l.displayImage, COUNT(r.id) AS reviewsCount, AVG(r.rating) AS avg_rating, l.createdAt, l.updatedAt, u.username, COUNT(r.id) AS reviews_count
-      FROM listings l
-      JOIN users u ON l.user_id = u.id
-      LEFT JOIN reviews r ON l.id = r.listing_id
-      WHERE l.active = 1 AND l.featured = 1
-      GROUP BY l.id
-      ORDER BY l.createdAt DESC
-      LIMIT :maxPerPage OFFSET :offset");
-  $stmt->bindParam(':maxPerPage', $maxPerPage, PDO::PARAM_INT);
-  $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-  $stmt->execute();
-  $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-  $stmt = $db->prepare("SELECT FOUND_ROWS()");
-  $stmt->execute();
-  $total = $stmt->fetchColumn();
-
-  return ['listings' => $listings, 'total' => $total];
-}
-
-/**
- * Retrieves the recent activity listings from the database.
- *
- * @param PDO $db The database connection.
- * @return array An array containing the recent activity listings.
- */
-function getRecentListings(PDO $db): array
-{
-  $stmt = $db->prepare("SELECT l.*, COUNT(r.id) AS reviews_count, AVG(r.rating) AS avg_rating, u.username FROM listings l LEFT JOIN reviews r ON l.id = r.listing_id JOIN users u ON l.user_id = u.id WHERE l.active = 1 GROUP BY l.id ORDER BY l.createdAt DESC LIMIT 8");
-  $stmt->execute();
-  $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-  return $listings;
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
@@ -241,7 +196,6 @@ function getRecentListings(PDO $db): array
   <!-- ========== End Recent Activity ========== -->
 
   <!-- ========== Start Why Choose Listify ========== -->
-
   <section id="why-choose-listify" class="py-5">
     <div class="container">
       <div class="row">
@@ -285,11 +239,9 @@ function getRecentListings(PDO $db): array
       </div>
     </div>
   </section>
-
   <!-- ========== End Why Choose Listify ========== -->
 
   <!-- ========== Start Testimonials ========== -->
-
   <section id="testimonials" class="py-5">
     <div class="container">
       <div class="row">
@@ -298,8 +250,6 @@ function getRecentListings(PDO $db): array
         </div>
       </div>
       <div class="row mt-6">
-
-
         <div class="col-lg-4 col-md-8">
           <div class="card card-plain move-on-hover">
             <div class="card-body">
@@ -371,11 +321,9 @@ function getRecentListings(PDO $db): array
       </div>
     </div>
   </section>
-
   <!-- ========== End Testimonials ========== -->
 
   <!-- ========== Start How to List ========== -->
-
   <section id="how-to-list" class="py-5">
     <div class="container">
       <div class="row">
@@ -411,11 +359,9 @@ function getRecentListings(PDO $db): array
       </div>
     </div>
   </section>
-
   <!-- ========== End How to List ========== -->
 
   <!-- ========== Start Team ========== -->
-
   <section id="team" class="bg-light">
     <div class="container py-5">
       <div class="row">
@@ -443,11 +389,9 @@ function getRecentListings(PDO $db): array
       </div>
     </div>
   </section>
-
   <!-- ========== End Team ========== -->
 
   <!-- ========== Start About ========== -->
-
   <section id="about" class="py-5">
     <div class="container">
       <div class="row">
@@ -462,10 +406,9 @@ function getRecentListings(PDO $db): array
       </div>
     </div>
   </section>
-
   <!-- ========== End About ========== -->
-  <!-- ========== Start CTA ========== -->
 
+  <!-- ========== Start CTA ========== -->
   <div class="container-fluid bg-gradient-primary">
     <div class="container py-5">
       <div class="row justify-content-center">
@@ -480,81 +423,12 @@ function getRecentListings(PDO $db): array
   <!-- ========== End CTA ========== -->
 
   <!-- ========== Start Footer ========== -->
-  <?php
-  // include the footer file
-  include_once './includes/_footer.php';
-  ?>
+  <?php include_once './includes/_footer.php';  ?>
   <!-- ========== End Footer ========== -->
 
-  <!-- ========== Start Scripts ========== -->
-  <script type="text/javascript" async>
-    const searchInput = document.getElementById('search-input');
-    const searchFeedback = document.getElementById('search-feedback');
-    const searchResults = document.getElementById('search-results');
-    const searchSpinner = document.getElementById('search-spinner');
-
-
-    function debounce(func, delay) {
-      let timeoutId;
-      return function(...args) {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          func.apply(null, args);
-        }, delay);
-      };
-    }
-
-    function displaySearchResults(results) {
-      searchResults.innerHTML = '';
-      searchFeedback.innerHTML = '';
-      if (Array.isArray(results) && results.length === 0 && searchInput.value.length >= 3) {
-        searchFeedback.innerHTML = `No results found for this query`;
-        searchInput.classList.add('is-invalid');
-      } else if (Array.isArray(results)) {
-        results.slice(0, 6).forEach(result => {
-          const resultElement = document.createElement('a');
-          resultElement.href = `./listing.php?listing=${result.id}`;
-          resultElement.classList.add('list-group-item', 'list-group-item-action');
-          resultElement.innerHTML = `
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                      <h5 class="text-gradient text-primary font-weight-bold h5 mb-1">${result.businessName}</h5>
-                      <span class="text-body-secondary text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> ${result.avg_rating ?? 0} (${result.reviews_count})</span>
-                      <span class="text-body-secondary text-capitalize text-xs font-weight-bold"><i class="fa-solid fa-shop"></i> ${result.category}</span>
-                      <span class="text-body-secondary text-capitalize text-xs font-weight-bold "><i class="fa-solid fa-location-dot"></i> ${result.address}, ${result.city}</span>
-                    </div>
-                  `;
-          searchResults.appendChild(resultElement);
-        });
-      } else if (results.error) {
-        searchFeedback.innerHTML = `${results.error}`;
-        searchInput.classList.add('is-invalid');
-
-
-      }
-      searchResults.classList.toggle('d-none', results.length === 0);
-      searchSpinner.classList.add('d-none');
-    }
-
-    function search() {
-      const searchQuery = searchInput.value;
-      searchSpinner.classList.remove('d-none');
-      fetch(`search.php?q=${searchQuery}`)
-        .then(response => response.json())
-        .then(data => displaySearchResults(data))
-        .catch(error => console.error(error));
-    }
-
-    searchInput.addEventListener('input', debounce(search, 500));
-
-
-    // Clear search input
-    document.getElementById('clear-search-input').addEventListener('click', () => {
-      searchInput.value = '';
-      searchResults.innerHTML = '';
-      searchResults.classList.add('d-none');
-    });
-  </script>
-  <!-- ========== End Scripts ========== -->
+  <!-- ========== Start Search Scripts ========== -->
+  <script src="./assets/js/search.js" type="text/javascript"></script>
+  <!-- ========== End Search Scripts ========== -->
 
 </body>
 

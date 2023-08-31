@@ -4,29 +4,8 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-4 me-auto mb-lg-0 mb-4 text-lg-start text-center">
-          <h6 class="text-white font-weight-bolder text-uppercase mb-lg-4 mb-3">Listify</h6>
-          <!-- <ul class="nav flex-row ms-n3 justify-content-lg-start justify-content-center mb-4 mt-sm-0">
-            <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="https://www.creative-tim.com/presentation" target="_blank">
-                Home
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="https://www.creative-tim.com/presentation" target="_blank">
-                About
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="https://www.creative-tim.com/blog" target="_blank">
-                Blog
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white opacity-8" href="https://www.creative-tim.com" target="_blank">
-                Services
-              </a>
-            </li>
-          </ul> -->
+          <h6 class="text-white font-weight-bolder text-uppercase mb-lg-4 mb-2">Listify</h6>
+          <p class="text-sm opacity-8 mb-0 text-white mb-2">Listify is a business listing app that allows you to list your business.</p>
           <p class="text-sm text-white opacity-8 mb-0">
             Copyright © <script>
               document.write(new Date().getFullYear())
@@ -34,49 +13,13 @@
           </p>
         </div>
         <div class="col-lg-6 ms-auto text-lg-end text-center">
-          <p class="mb-5 text-lg text-white font-weight-bold">
-            Join the list-making revolution – Listify, the canvas for your digital thoughts.
-          </p>
-          <a href="javascript:;" target="_blank" class="text-white me-xl-4 me-4 opacity-5">
-            <span class="fab fa-dribbble"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-white me-xl-4 me-4 opacity-5">
-            <span class="fab fa-twitter"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-white me-xl-4 me-4 opacity-5">
-            <span class="fab fa-pinterest"></span>
-          </a>
-          <a href="javascript:;" target="_blank" class="text-white opacity-5">
-            <span class="fab fa-github"></span>
-          </a>
+        
         </div>
       </div>
     </div>
   </footer>
 
-  <!--   Core JS Files   -->
-  <script src="./assets/js/core/popper.min.js" type="text/javascript"></script>
-  <script src="./assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-  <!-- <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script> -->
-  <!--  Plugin for Parallax, full documentation here: https://github.com/wagerfield/parallax  -->
-  <!-- <script src="./assets/js/plugins/parallax.min.js"></script> -->
-  <!-- Control Center for Soft UI Kit: parallax effects, scripts for the example pages etc -->
-  <!--  Google Maps Plugin    -->
-  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTTfWur0PDbZWPr7Pmq8K3jiDp0_xUziI"></script> -->
-  <script src="./assets/js/soft-design-system.min.js?v=1.0.9" type="text/javascript"></script>
-  <!-- ========== Start Script ========== -->
-  <script type="text/javascript">
-    // Truncate the description text
-    const truncate = (text, length) => {
-      return text.length > length ? text.slice(0, length) + '...' : text;
-    };
-
-    // Get all the description elements
-    const descriptions = document.querySelectorAll('#truncate');
-
-    // Loop through the description elements and truncate the text
-    descriptions.forEach(description => {
-      description.textContent = truncate(description.textContent, 120);
-    });
-  </script>
-  <!-- ========== End Script ========== -->
+  <!-- ========== Start Script files ========== -->
+  <script  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script src="./assets/js/main.js" type="text/javascript"></script>
+  <!-- ========== End Script files ========== -->
