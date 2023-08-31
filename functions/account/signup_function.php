@@ -45,8 +45,8 @@ if (isset($_POST['signup'])) {
 
     // Check and process the form data
     // Check if the username is valid only letters and numbers
-    if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
-      $_SESSION['errorsession'] = "Username must contain only letters or numbers.";
+    if (!preg_match("/^[a-zA-Z0-9]{3,20}$/", $username)) {
+      $_SESSION['errorsession'] = "Username must contain only letters or numbers and be between 3 to 20 characters long.";
       redirect('signup.php?clear');
       exit();
     }
@@ -56,6 +56,13 @@ if (isset($_POST['signup'])) {
       FILTER_VALIDATE_EMAIL
     )) {
       $_SESSION['errorsession'] = "Invalid email. Please enter a valid email.";
+      redirect('signup.php?clear');
+      exit();
+    }
+
+    // Check if the phone number is valid (You can add more specific checks if needed)
+    if (!preg_match('/^\d{10,}$/', $phone)) {
+      $_SESSION['errorsession'] = "Invalid phone number. Please enter a 10-digit phone number.";
       redirect('signup.php?clear');
       exit();
     }

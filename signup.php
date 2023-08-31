@@ -14,7 +14,7 @@ if (isAuthenticated()) {
 <head>
   <title>Sign Up to Listify</title>
   <?php
-  // TODO add terms and conditions & privacy policy link || add google recaptcha
+  // TODO add terms and conditions & privacy policy link || add google recaptcha || validation
   // include the head file
   include_once './includes/_head.php';
   ?>
@@ -37,7 +37,7 @@ if (isAuthenticated()) {
             </div>
             <!-- signup -->
             <div class="card-body pt-2">
-              <form action="./functions/account/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation" novalidate autocomplete="on">
+              <form action="./functions/account/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation" autocomplete="on">
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
@@ -45,7 +45,7 @@ if (isAuthenticated()) {
                     <div class="valid-feedback">
                       Looks good!
                     </div>
-                    <div class="invalid-feedback">Please choose a unique and valid username.</div>
+                    <div class="invalid-feedback">Username must contain only letters or numbers and be between 3 to 20 characters long.</div>
                   </div>
                 </div>
 
@@ -118,32 +118,13 @@ if (isAuthenticated()) {
     </div>
   </section>
   <!-- Signing Section End -->
-  <script type="text/javascript">
-    'use strict';
-
-    const forms = document.querySelectorAll('.needs-validation');
-
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.location.href.includes('?clear')) {
-        document.getElementById('signup').reset();
-      }
-
-      document.addEventListener('submit', event => {
-        const form = event.target;
-
-        if (!form.checkValidity()) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-
-        form.classList.add('was-validated');
-      });
-    });
-  </script>
   <?php
   // include the footer file
   include_once './includes/_footer.php';
   ?>
+
+
+
 
 </body>
 
