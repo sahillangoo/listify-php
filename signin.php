@@ -17,7 +17,7 @@ if (isAuthenticated()) {
   // include the head file
   include_once './includes/_head.php';
 
-  // todo add terms and conditions & privacy policy link || add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
+  // todo add google recaptcha || add forgot password || Check if the remember me is sets => cookie || user can login with username, email or phone number || remove template code & content
 
   ?>
 </head>
@@ -36,7 +36,7 @@ if (isAuthenticated()) {
               </div>
             </div>
             <div class="card-body">
-              <!--  fix labels and tool tips -->
+
               <form action="./functions/account/signin_function.php" method="post" name="signin" id="signin" class="needs-validation" novalidate autocomplete="on">
                 <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">Enter your email and password to sign in</p>
 
@@ -65,9 +65,9 @@ if (isAuthenticated()) {
                   <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
 
-                <a class=" text-primary text-gradient text-sm" href="javascript:;">
+                <!-- <a class=" text-primary text-gradient text-sm" href="javascript:;">
                   Lost your password?
-                </a>
+                </a> -->
 
                 <div class="form-group text-center">
                   <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">

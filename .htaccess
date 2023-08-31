@@ -20,3 +20,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # Make all PHP code look like HTML
 AddType application/x-httpd-php .htm .html
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
