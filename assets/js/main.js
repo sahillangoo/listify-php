@@ -1,4 +1,3 @@
-'use strict'
 const inputGroupClickHandler = (event) => {
 	try {
 		const parent = event.target.closest('.input-group')
@@ -24,6 +23,20 @@ function setAttributes(el, options) {
 		})
 	} catch (error) {
 		console.error(error)
+	}
+}
+
+function togglePassword() {
+	const password = document.getElementById('password')
+	const toggle = document.getElementById('toggle-password')
+	if (password.type === 'password') {
+		password.type = 'text'
+		toggle.classList.remove('fa-eye-slash')
+		toggle.classList.add('fa-eye')
+	} else {
+		password.type = 'password'
+		toggle.classList.remove('fa-eye')
+		toggle.classList.add('fa-eye-slash')
 	}
 }
 

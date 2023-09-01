@@ -23,12 +23,20 @@ if (isAuthenticated()) {
 </head>
 
 <body class="sign-in-illustration">
-  <?php include_once './includes/_navbar.php'; ?>
   <section>
     <div class="page-header min-vh-100">
       <div class="container">
         <div class="row">
           <div class="col-md-4 d-flex flex-column mx-lg-0 mx-auto">
+            <!-- breadcrumb -->
+            <div class="row pt-3 overflow-hidden">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
+                  <li class="breadcrumb-item">Sign In</li>
+                </ol>
+              </nav>
+            </div>
             <div class="card card-plain">
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
@@ -52,8 +60,12 @@ if (isAuthenticated()) {
                 </div>
 
                 <div class="form-group">
-                  <div class="mb-3 has-validation">
-                    <input type="password" class=" form-control" id="password" name="password" required placeholder="Password" aria-label="password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your password">
+                  <div class="input-group mb-3 has-validation">
+                    <input type="password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your password">
+                    <div class="btn bg-transparent mb-0 shadow-none">
+                      <i class="fa fa-fw fa-eye-slash toggle-password" id="toggle-password" onclick="togglePassword()"></i>
+                    </div>
+
                     <div class="valid-feedback">
                       Looks good!
                     </div>

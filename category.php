@@ -68,10 +68,19 @@ if (!isset($_GET['slug']) || empty($_GET['slug']) || !is_string($_GET['slug']) |
   // include the header file
   include_once './includes/_navbar.php';
   ?>
-  <div class="wrapper">
     <!-- ========== Start slug Listing Grid ========== -->
     <section class="py-5">
-      <div class="container my-5">
+      <div class="container">
+        <!-- breadcrumb -->
+      <div class="row py-5 overflow-hidden">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
+            <li class="breadcrumb-item"><a href="./categories.php">Categories</a></li>
+            <li class="breadcrumb-item active text-capitalize" aria-current="page"><?php echo $slug; ?></li>
+          </ol>
+        </nav>
+      </div>
         <h2 class="text-center text-capitalize"><?php echo $slug; ?> Business Listings</h2>
         <p class="text-center ">
           Here are the list of all the Businesses in <span class="text-primary text-capitalize"><?php echo $slug; ?></span> category.
@@ -122,7 +131,7 @@ if (!isset($_GET['slug']) || empty($_GET['slug']) || !is_string($_GET['slug']) |
       </div>
     </section>
     <!-- ========== End slug Listing Grid ========== -->
-  </div>
+
 
   <?php
   // include the footer file

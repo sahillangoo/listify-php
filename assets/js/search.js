@@ -25,23 +25,16 @@ function displaySearchResults(results) {
 			resultElement.href = `./listing.php?listing=${result.id}`
 			resultElement.classList.add('list-group-item', 'list-group-item-action')
 			resultElement.innerHTML = `
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                      <h5 class="text-gradient text-primary font-weight-bold h5 mb-1">${
-												result.businessName
-											}</h5>
-                      <span class="text-body-secondary text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> ${
-												result.avg_rating ?? 0
-											} (${result.reviews_count})</span>
-                      <span class="text-body-secondary text-capitalize text-xs font-weight-bold"><i class="fa-solid fa-shop"></i> ${
-												result.category
-											}</span>
-                      <span class="text-body-secondary text-capitalize text-xs font-weight-bold "><i class="fa-solid fa-location-dot"></i> ${
-												result.address
-											}, ${result.city}</span>
-                    </div>
-                  `
+				<div class="d-flex w-100 justify-content-between align-items-center">
+					<h5 class="text-gradient text-primary font-weight-bold h5 mb-1">${result.businessName}</h5>
+					<span class="text-body-secondary text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> ${result.avg_rating?.toFixed(2) || 0} (${result.reviews_count})</span>
+					<span class="text-body-secondary text-capitalize text-xs font-weight-bold"><i class="fa-solid fa-shop"></i> ${result.category}</span>
+					<span class="text-body-secondary text-capitalize text-xs font-weight-bold "><i class="fa-solid fa-location-dot"></i> ${result.address}, ${result.city}</span>
+				</div>
+			`
 			searchResults.appendChild(resultElement)
 		})
+		searchInput.classList.remove('is-invalid')
 	} else if (results.error) {
 		searchFeedback.innerHTML = `${results.error}`
 		searchInput.classList.add('is-invalid')
@@ -64,9 +57,8 @@ document.getElementById('search-input').addEventListener('input', debounce(searc
 document.addEventListener('click', inputGroupClickHandler, false)
 
 document.getElementById('clear-search-input').addEventListener('click', () => {
-  const searchInput = document.getElementById('search-input')
-  searchInput.value = ''
-  searchInput.classList.remove('is-invalid')
-  searchResults.innerHTML = ''
-  searchResults.classList.add('d-none')
+	searchInput.value = ''
+	searchInput.classList.remove('is-invalid')
+	searchResults.innerHTML = ''
+	searchResults.classList.add('d-none')
 })

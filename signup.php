@@ -21,12 +21,20 @@ if (isAuthenticated()) {
 </head>
 
 <body class="sign-in-illustration">
-  <?php include_once './includes/_navbar.php'; ?>
   <section>
     <div class="page-header min-vh-100">
       <div class="container">
         <div class="row">
           <div class="col-md-4 d-flex flex-column mx-lg-0 mx-auto">
+            <!-- breadcrumb -->
+            <div class="row pt-3 overflow-hidden">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
+                  <li class="breadcrumb-item">Sign Up</li>
+                </ol>
+              </nav>
+            </div>
             <div class="card card-plain">
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
@@ -38,11 +46,11 @@ if (isAuthenticated()) {
             </div>
             <!-- signup -->
             <div class="card-body pt-2">
-              <form action="./functions/account/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation" autocomplete="on">
+              <form action="./functions/account/signup_function.php" method="POST" name="signup" id="signup" class="needs-validation">
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
-                    <input type="text" autocomplete="username" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username" data-bs-toggle="tooltip" data-bs-placement="right" title="Username should only contain letters & numbers.">
+                    <input type="text" autocomplete="off" required class="form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username" data-bs-toggle="tooltip" data-bs-placement="right" title="Username should only contain letters & numbers, 3-20 Characters">
                     <div class="valid-feedback">
                       Looks good!
                     </div>
@@ -71,8 +79,11 @@ if (isAuthenticated()) {
                 </div>
 
                 <div class="form-group">
-                  <div class="mb-3 has-validation">
+                  <div class="input-group mb-3 has-validation">
                     <input type="password" autocomplete="new-password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Password should be atleast 8 letters (including A-Z, a-z, 0-9, special charaters) and should not be a common password">
+                    <div class="btn bg-transparent mb-0 shadow-none">
+                      <i class="fa fa-fw fa-eye-slash toggle-password" id="toggle-password" onclick="togglePassword()"></i>
+                    </div>
                     <div class="valid-feedback">
                       Looks good!
                     </div>
@@ -119,12 +130,7 @@ if (isAuthenticated()) {
     </div>
   </section>
   <!-- Signing Section End -->
-  <?php
-  // include the footer file
-  include_once './includes/_footer.php';
-  ?>
-  <!-- validate js -->
-  <script src="./assets/js/validation.js" type="text/javascript"></script>
+  <?php include_once './includes/_footer.php';  ?>
 </body>
 
 </html>

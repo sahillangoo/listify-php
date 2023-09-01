@@ -45,8 +45,8 @@ if (isset($_POST['signup'])) {
 
     // Check and process the form data
     // Check if the username is valid only letters and numbers
-    if (!preg_match("/^[a-zA-Z0-9]{3,20}$/", $username)) {
-      $_SESSION['errorsession'] = "Username must contain only letters or numbers and be between 3 to 20 characters long.";
+    if (!preg_match("/^(?=.*[a-z])[a-z0-9]{3,20}$/i", $username)) {
+      $_SESSION['errorsession'] = "Username must contain only letters or numbers and be between 3 to 20 characters long, and must contain at least one letter.";
       redirect('signup.php?clear');
       exit();
     }
