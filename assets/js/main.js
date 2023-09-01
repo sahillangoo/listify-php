@@ -1,22 +1,30 @@
 'use strict'
-// function for focus input-group
 const inputGroupClickHandler = (event) => {
-	const parent = event.target.closest('.input-group')
-	if (event.target.classList.contains('form-control')) {
+	try {
+		const parent = event.target.closest('.input-group')
+		if (event.target.classList.contains('form-control')) {
+			const focus = document.querySelectorAll('.input-group.focused')
+			focus.forEach((el) => el.classList.remove('focused'))
+			parent.classList.add('focused')
+		}
 		const focus = document.querySelectorAll('.input-group.focused')
-		focus.forEach((el) => el.classList.remove('focused'))
-		parent.classList.add('focused')
-	}
-	const focus = document.querySelectorAll('.input-group.focused')
-	if (focus && event.target != parent && event.target.parentNode != parent) {
-		focus.forEach((el) => el.classList.remove('focused'))
+		if (focus && event.target != parent && event.target.parentNode != parent) {
+			focus.forEach((el) => el.classList.remove('focused'))
+		}
+	} catch (error) {
+		console.error(error)
 	}
 }
+
 // helper for adding on all elements multiple attributes
 function setAttributes(el, options) {
-	Object.keys(options).forEach((attr) => {
-		el.setAttribute(attr, options[attr])
-	})
+	try {
+		Object.keys(options).forEach((attr) => {
+			el.setAttribute(attr, options[attr])
+		})
+	} catch (error) {
+		console.error(error)
+	}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,6 +41,4 @@ document.addEventListener('DOMContentLoaded', () => {
 	const tooltipList = tooltipTriggerList.map((tooltipTriggerEl) => {
 		return new bootstrap.Tooltip(tooltipTriggerEl)
 	})
-
-	
 })

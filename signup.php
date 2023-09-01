@@ -21,11 +21,12 @@ if (isAuthenticated()) {
 </head>
 
 <body class="sign-in-illustration">
+  <?php include_once './includes/_navbar.php'; ?>
   <section>
     <div class="page-header min-vh-100">
       <div class="container">
         <div class="row">
-          <div class="col-4 d-flex flex-column mx-lg-0 mx-auto">
+          <div class="col-md-4 d-flex flex-column mx-lg-0 mx-auto">
             <div class="card card-plain">
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
@@ -41,7 +42,7 @@ if (isAuthenticated()) {
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
-                    <input type="text" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username" data-bs-toggle="tooltip" data-bs-placement="right" title="Username should only contain letters & numbers.">
+                    <input type="text" autocomplete="username" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username" data-bs-toggle="tooltip" data-bs-placement="right" title="Username should only contain letters & numbers.">
                     <div class="valid-feedback">
                       Looks good!
                     </div>
@@ -51,7 +52,7 @@ if (isAuthenticated()) {
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
-                    <input type="email" required class=" form-control " placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your email to register.">
+                    <input type="email" required autocomplete="email" class=" form-control " placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your email to register.">
                     <div class="valid-feedback">
                       Looks good!
                     </div>
@@ -61,7 +62,7 @@ if (isAuthenticated()) {
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
-                    <input type="tel" required class=" form-control" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your 10 digit phone number.">
+                    <input type="tel" required autocomplete="tel" class=" form-control" placeholder="Phone" id="phone" name="phone" aria-label="phone" aria-describedby="phone-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your 10 digit phone number.">
                     <div class="valid-feedback">
                       Looks good!
                     </div>
@@ -103,7 +104,7 @@ if (isAuthenticated()) {
             </div>
 
           </div>
-          <div class="col-7 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+          <div class="col-md-7 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
             <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
               <img src="./assets/img/shapes/pattern-lines.svg" alt="pattern-lines" class="position-absolute opacity-4 start-0">
               <div class="position-relative">
@@ -122,10 +123,8 @@ if (isAuthenticated()) {
   // include the footer file
   include_once './includes/_footer.php';
   ?>
-
-
-
-
+  <!-- validate js -->
+  <script src="./assets/js/validation.js" type="text/javascript"></script>
 </body>
 
 </html>

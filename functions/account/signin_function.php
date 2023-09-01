@@ -2,10 +2,8 @@
 /*
 * Authentication file for signIn for the Webapp
 */
-// include functions file
 require_once __DIR__ . '/../functions.php';
 
-// Assuming the form data is submitted via POST
 if (isset($_POST['signin'])) {
   // Use CSRF protection on this form
   $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
@@ -13,60 +11,51 @@ if (isset($_POST['signin'])) {
     if (!hash_equals($_SESSION['csrf_token'], $csrf_token)) {
       // Reset the CSRF token
       unset($_SESSION['csrf_token']);
-      // send message to form page with error message
-      $_SESSION['errorsession'] = "CSRF token validation failed.";
-      redirect('signin.php');
-      exit();
+      throw new Exception('CSRF token validation failed.');
     }
+
+    // Get the form data
+    $username = sanitize($_POST['username']);
+    $password = $_POST['password'];
+    $remember_me = isset($_POST['remember_me']) && $_POST['remember_me'] === 'on';
+
+    // Check if any field is empty
+    if (empty($username) || empty($password)) {
+      throw new Exception('All fields are necessary.');
+    }
+
+    // Check if the username is valid only letters and numbers
+    if (!preg_match("/^[a-zA-Z0-9]{3,20}$/", $username)) {
+      throw new Exception('Invalid username format or length.');
+    }
+
+    // If all checks pass, SignIn
+    signIn($username, $password, $remember_me);
   } catch (Exception $e) {
     $_SESSION['errorsession'] = $e->getMessage();
     redirect('signin.php');
     exit();
   }
-
-  // Get the form data
-  $email = sanitize($_POST['email']);
-  $password = $_POST['password'];
-  $remember_me = isset($_POST['remember_me']) && $_POST['remember_me'] === 'on';
-
-  // Check if any field is empty
-  if (empty($email) || empty($password)) {
-    $_SESSION['errorsession'] = "All Fields are Necessary.";
-    redirect('signin.php');
-    exit();
-  }
-
-  // Check if the email is valid
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $_SESSION['errorsession'] = "Check your email.";
-    redirect('signin.php');
-    exit();
-  }
-
-  // If all checks pass, SignIn
-  signIn($email, $password, $remember_me);
 }
 
-// Function to SignIn the user
-function signIn($email, $password, $remember_me): void
+function signIn($username, $password, $remember_me): void
 {
   try {
     global $db;
-    // Check if the email is registered
-    $sql = "SELECT * FROM users WHERE email = ?";
+
+    // Check if the username is registered
+    $sql = "SELECT * FROM users WHERE username = ?";
     $stmt = $db->prepare($sql);
-    $stmt->execute([$email]);
+    $stmt->execute([$username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-      // Email doesn't exist, display a generic error message
-      throw new Exception('Incorrect Username or Password');
+      throw new Exception('Incorrect username or password.');
     }
 
     // Check if the password matches
     if (!password_verify($password, $user['password'])) {
-      // Password is not valid, display a generic error message
-      throw new Exception('Incorrect Username or Password');
+      throw new Exception('Incorrect username or password.');
     }
 
     // Password is correct, so start a new session
@@ -136,12 +125,10 @@ function signIn($email, $password, $remember_me): void
       redirect('admin/dashboard.php');
     }
   } catch (PDOException $e) {
-    // send message to form page with error message
     $_SESSION['errorsession'] = $e->getMessage();
     redirect('signin.php');
     exit();
   } catch (Exception $e) {
-    // send message to form page with error message
     $_SESSION['errorsession'] = $e->getMessage();
     redirect('signin.php');
     exit();

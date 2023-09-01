@@ -23,11 +23,12 @@ if (isAuthenticated()) {
 </head>
 
 <body class="sign-in-illustration">
+  <?php include_once './includes/_navbar.php'; ?>
   <section>
     <div class="page-header min-vh-100">
       <div class="container">
         <div class="row">
-          <div class="col-4 d-flex flex-column mx-lg-0 mx-auto">
+          <div class="col-md-4 d-flex flex-column mx-lg-0 mx-auto">
             <div class="card card-plain">
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
@@ -37,22 +38,22 @@ if (isAuthenticated()) {
             </div>
             <div class="card-body">
 
-              <form action="./functions/account/signin_function.php" method="post" name="signin" id="signin" class="needs-validation" novalidate autocomplete="on">
-                <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">Enter your email and password to sign in</p>
+              <form action="./functions/account/signin_function.php" method="post" name="signin" id="signin" class="needs-validation" autocomplete="on">
+                <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">Enter your username and password to sign in</p>
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
-                    <input type="email" required class=" form-control" name="email" placeholder="Email" id="signin-email" aria-label="Email" aria-describedby="email-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your Registered Email">
+                    <input type="text" required class=" form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your registered username">
                     <div class="valid-feedback">
                       Looks good!
                     </div>
-                    <div class="invalid-feedback">Please enter valid E-mail.</div>
+                    <div class="invalid-feedback">Please enter your registered username.</div>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
-                    <input type="password" class=" form-control" id="signin-password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your password">
+                    <input type="password" class=" form-control" id="password" name="password" required placeholder="Password" aria-label="password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your password">
                     <div class="valid-feedback">
                       Looks good!
                     </div>
@@ -85,7 +86,7 @@ if (isAuthenticated()) {
               </p>
             </div>
           </div>
-          <div class="col-7 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+          <div class="col-md-7 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
             <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center">
               <img src="./assets/img/shapes/pattern-lines.svg" alt="pattern-lines" class="position-absolute opacity-4 start-0">
               <div class="position-relative">

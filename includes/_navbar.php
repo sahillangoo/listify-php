@@ -22,9 +22,9 @@
                   <p class="d-inline text-sm z-index-1 font-weight-bold text-uppercase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Star us on Github">Github</p>
                 </a>
               </li>
-              <?php if (!isAuthenticated()) : ?>
+              <?php if (!isAuthenticated() && !in_array(basename($_SERVER['PHP_SELF']), ['signin.php', 'signup.php'])) : ?>
                 <li class="nav-item ms-lg-auto my-auto ms-3 ms-lg-0">
-                  <a href="./signin.php" class="btn btn-sm  bg-gradient-primary  btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="SigUp or SignIn to Listify">SignUp / SigIn</a>
+                  <a href="./signin.php" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="SignUp or SignIn to Listify">SignUp / SigIn</a>
                 </li>
               <?php endif; ?>
 
