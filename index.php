@@ -425,10 +425,6 @@ include_once './functions/functions.php';
   <?php include_once './includes/_footer.php';  ?>
   <!-- ========== End Footer ========== -->
 
-  <!-- ========== Start Search Scripts ========== -->
-  <script src="./assets/js/search.js" type="text/javascript"></script>
-  <!-- ========== End Search Scripts ========== -->
-
 </body>
 
 </html>
