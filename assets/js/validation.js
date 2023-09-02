@@ -35,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	function getRegexForInput(input) {
 		switch (input.name) {
 			case 'username':
-				return /^(?=.*[a-z])[a-z0-9]{3,20}$/i // Minimum three characters, maximum 20 characters, letters and numbers only
+				return /^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/ // Minimum three characters, maximum 20 characters, letters and numbers only
 			case 'email':
 				return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ // email
 			case 'phone':
 				return /^[0-9]{10}$/ // 10 digits only
 			case 'password':
-				return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,18}$/ // Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
+				return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#\-_@$!%*?&+~|{}:;<>/])[A-Za-z\d#\-_@$!%*?&+~|{}:;<>/]{8,18}$/ // Minimum eight characters, at least one uppercase letter, one lowercase letter and one number and one special character and maximum 18 characters are allowed in password field. (special characters are $@$!%*?&+~|{}:;<>/) and no white spaces allowed in entire password field (before, in between or after characters) eg : Abcd@123
 			default:
 				return null
 		}

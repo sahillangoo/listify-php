@@ -12,3 +12,6 @@ package-lock.json
 .gitconfig
 
 /vendor/
+/test-results/
+/playwright-report/
+/playwright/.cache/

@@ -38,15 +38,16 @@ if (isset($_POST['signup'])) {
   }
   try {
     // Get the form data
-    $username = sanitize($_POST['username']);
+    $username = trim($_POST['username']);
     $email = sanitize($_POST['email']);
     $phone = sanitize($_POST['phone']);
-    $password = $_POST['password'];
+    $password = trim($_POST['password']);
 
     // Check and process the form data
     // Check if the username is valid only letters and numbers
-    if (!preg_match("/^(?=.*[a-z])[a-z0-9]{3,20}$/i", $username)) {
-      $_SESSION['errorsession'] = "Username must contain only letters or numbers and be between 3 to 20 characters long, and must contain at least one letter.";
+    if (!preg_match('/^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/', $username)) {
+      $_SESSION['errorsession'] = "
+      Username must be 6-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji";
       redirect('signup.php?clear');
       exit();
     }
@@ -68,8 +69,8 @@ if (isset($_POST['signup'])) {
     }
 
     // Check if the password is valid
-    if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,18}$/", $password)) {
-      $_SESSION['errorsession'] = "Password must be 8-18 characters long, contain letters, numbers and special characters.";
+    if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#\-_@$!%*?&+~|{}:;<>\/])[A-Za-z\d#\-_@$!%*?&+~|{}:;<>\/]{8,18}$/', $password)) {
+      $_SESSION['errorsession'] = "Password must be 8-18 characters long, contain letters, numbers, and special characters, and must not contain spaces or emoji." . $password . ";";
       redirect('signup.php?clear');
       exit();
     }

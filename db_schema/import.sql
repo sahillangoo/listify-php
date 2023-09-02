@@ -102,7 +102,7 @@ VALUES (
         1,
         'Winterfell Cafe',
         'Best Place to Enjoy your time with friends and family in Srinagar Kashmir with a beautiful view of Dal Lake and Zabarwan Hills. We serve the best food in town. We have a wide range of food items to choose from.  ',
-        'restaurants',
+        'restaurant',
         1,
         1,
         74.8765,
