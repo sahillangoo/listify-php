@@ -14,9 +14,10 @@
               <span class="navbar-toggler-bar bar3"></span>
             </span>
           </button>
+
           <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0" id="navigation">
             <ul class="navbar-nav navbar-nav-hover ms-lg-12 ps-lg-5 w-100">
-              <li class="nav-item ms-lg-auto">
+              <li class="nav-item ms-lg-auto my-auto">
                 <a class="nav-link nav-link-icon me-2" href="https://github.com/sahillangoo/listify-php" target="_blank">
                   <i class="fa-brands fa-square-github"></i>
                   <p class="d-inline text-sm z-index-1 font-weight-bold text-uppercase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Star us on Github">Github</p>
@@ -29,11 +30,11 @@
               <?php endif; ?>
 
               <?php if (isAuthenticated()) : ?>
-                <li class="nav-item ms-lg-auto my-auto ms-3 ms-lg-0">
-                  <img src="<?php echo $_SESSION['profile_image']; ?>" class="avatar avatar-sm rounded-circle" alt="<?php echo $_SESSION['username']; ?>">
-                </li>
                 <li class="nav-item dropdown dropdown-hover mx-2">
                   <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span>
+                      <img src="<?php echo $_SESSION['profile_image']; ?>" class="avatar avatar-sm rounded-circle" alt="<?php echo $_SESSION['username']; ?>">
+                    </span>
                     <?php echo $_SESSION['username']; ?>
                     <img src="./assets/img/down-arrow-dark.svg" alt="down-arrow" class="arrow ms-1">
                   </a>
@@ -54,16 +55,16 @@
                     </div>
 
                     <div class="d-lg-none">
-                      <a href="javascript:;" class="dropdown-item border-radius-md">
+                      <a href="./account.php" class="dropdown-item border-radius-md">
                         My Profile
                       </a>
-                      <a href="javascript:;" class="dropdown-item border-radius-md">
+                      <a href="./add-listing.php" class="dropdown-item border-radius-md">
                         Create Listing
                       </a>
-                      <a href="javascript:;" class="dropdown-item border-radius-md">
+                      <a href="./update-listing.php" class="dropdown-item border-radius-md">
                         Update Listing
                       </a>
-                      <a href="javascript:;" class="dropdown-item border-radius-md">
+                      <a href="../functions/account/signout_function.php" class="dropdown-item border-radius-md">
                         Sign Out
                       </a>
                     </div>
