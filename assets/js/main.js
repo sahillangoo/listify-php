@@ -4,9 +4,9 @@ Author: Sahil Langoo
 File Content
 - truncate description
 - Tooltips
-- validation for forms
 - helper for adding on all elements multiple attributes
 - toggle password
+- validation for forms
 */
 // debounce function for limiting the number of times a function is called in a given time period
 function debounce(func, delay) {
@@ -29,69 +29,7 @@ function debounce(func, delay) {
   };
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // function for truncate description
-  const descriptions = document.querySelectorAll('#truncate');
-  descriptions.forEach((description) => {
-    description.textContent = description.textContent.slice(0, 120) + '...';
-  });
-
-  // initialization of Tooltips
-  const tooltipTriggerList = [].slice.call(
-    document.querySelectorAll(
-      '[data-bs-toggle="tooltip"], [data-toggle="tooltip"]'
-    )
-  );
-  const tooltipList = tooltipTriggerList.map((tooltipTriggerEl) => {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
-
-  // validation for forms
-  const inputs = [...document.querySelectorAll('input')];
-  inputs.forEach((input) => {
-    input.addEventListener(
-      'input',
-      debounce(async (event) => {
-        const regex = getRegexForInput(input);
-        await validateInput(input, regex);
-      }, 500),
-      false
-    );
-  });
-
-  function validateInput(input, regex) {
-    const value = input.value.trim();
-    return Promise.resolve(regex.test(value))
-      .then((isValid) => {
-        input.classList.toggle('is-valid', isValid);
-        input.classList.toggle('is-invalid', !isValid);
-      })
-      .catch(console.error);
-  }
-  const regexPatterns = {
-    username: /^(?<username>[a-zA-Z0-9._]{6,20})$/,
-    email:
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-    phone: /^[0-9]{10}$/,
-    password:
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#\-_@$!%*?&+~|{}:;<>/])[A-Za-z\d#\-_@$!%*?&+~|{}:;<>/]{8,18}$/,
-    businessName: /^[a-zA-Z0-9 ]{3,20}$/,
-    businessAddress: /^[a-zA-Z0-9 ]{3,20}$/,
-    about: /^[a-zA-Z0-9 .,?!'":;()@#$%&*+-/]{10,200}$/,
-    pincode: /^[0-9]{6}$/,
-    facebookid: /^[a-zA-Z0-9._]{3,20}$/,
-    website:
-      /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z0-9]+([a-zA-Z0-9-]+)?(\.[a-zA-Z0-9-]+)+([\/?].*)?$/,
-    gst: /^[0-9]{15}$/,
-    review: /^[a-zA-Z0-9 .,?!'":;()@#$%&*+-/]{10,150}$/,
-    rating: /^[1-5]{1}$/,
-  };
-
-  function getRegexForInput(input) {
-    return regexPatterns[input.name] || null;
-  }
-});
-
+// helper for adding on all elements multiple attributes
 const inputGroupClickHandler = (event) => {
   try {
     const parent = event.target.closest('.input-group');
@@ -120,6 +58,7 @@ function setAttributes(el, options) {
   }
 }
 
+// toggle password
 function togglePassword() {
   const password = document.querySelector('#password');
   const toggle = document.querySelector('#toggle-password');
@@ -129,5 +68,83 @@ function togglePassword() {
   } else {
     password.type = 'password';
     toggle.classList.replace('fa-eye', 'fa-eye-slash');
+  }
+}
+
+// validation for forms
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form');
+  if (form) {
+    const inputs = [...form.querySelectorAll('input')];
+    inputs.forEach((input) => {
+      input.addEventListener(
+        'input',
+        debounce(async (event) => {
+          const regex = getRegexForInput(input);
+          await validateInput(input, regex);
+        }, 500),
+        false
+      );
+    });
+  }
+
+  // truncate description
+  // function for truncate description
+  const descriptions = document.querySelectorAll('#truncate');
+  descriptions.forEach((description) => {
+    description.textContent = description.textContent.slice(0, 120) + '...';
+  });
+
+  // initialization of Tooltips
+  const tooltipTriggerList = [].slice.call(
+    document.querySelectorAll(
+      '[data-bs-toggle="tooltip"], [data-toggle="tooltip"]'
+    )
+  );
+  const tooltipList = tooltipTriggerList.map((tooltipTriggerEl) => {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+
+async function validateInput(input, regex) {
+  const value = input.value.trim();
+  try {
+    const isValid = await Promise.resolve(regex.test(value));
+    input.classList.toggle('is-valid', isValid);
+    input.classList.toggle('is-invalid', !isValid);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function getRegexForInput(input) {
+  switch (input.name) {
+    case 'username':
+      return /^(?<username>[a-zA-Z0-9._]{6,20})$/;
+    case 'email':
+      return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    case 'phone':
+      return /^[0-9]{10}$/;
+    case 'password':
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#\-_@$!%*?&+~|{}:;<>/])[A-Za-z\d#\-_@$!%*?&+~|{}:;<>/]{8,18}$/;
+    case 'businessName':
+    case 'businessAddress':
+      return /^[a-zA-Z0-9 ]+$/;
+    case 'about':
+      return /^[a-zA-Z0-9 .,?!'":;()@#$%&*+-/]{10,200}$/;
+    case 'pincode':
+      return /^[0-9]{6}$/;
+    case 'facebookid':
+      return /^[a-zA-Z0-9._]{3,20}$/;
+    case 'website':
+      return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z0-9]+([a-zA-Z0-9-]+)?(\.[a-zA-Z0-9-]+)+([\/?].*)?$/;
+    case 'gst':
+      return /^[0-9]{15}$/;
+    case 'review':
+      return /^[a-zA-Z0-9 .,?!'":;()@#$%&*+-/]{10,150}$/;
+    case 'rating':
+      return /^[1-5]{1}$/;
+    default:
+      return null;
   }
 }
