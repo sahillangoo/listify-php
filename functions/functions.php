@@ -7,8 +7,6 @@ if (!$sessionStarted) {
 }
 // Include DB file
 require_once __DIR__ . '/../functions/db_connect.php';
-// Site URL
-const BASE_URL = 'http://localhost:3000/';
 // Function to set location
 function redirect($url)
 {

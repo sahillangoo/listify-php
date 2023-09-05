@@ -28,8 +28,6 @@ try {
     exit;
   }
 
-
-
   // Sanitize search query parameter
   $searchQuery = preg_replace('/[^a-zA-Z0-9\s]/', '', $searchQuery);
 

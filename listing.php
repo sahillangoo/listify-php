@@ -100,7 +100,10 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
     <div class="row">
       <div class="col-md-6">
         <img src="./uploads/business_images/<?php echo $result['displayImage']; ?>" class="img-fluid rounded move-on-hover border " alt="<?php echo $result['businessName']; ?>">
+        <!-- map leaflet -->
+        <div class="my-5" id="mapid"></div>
       </div>
+
       <div class="col-md-6">
         <h2 class="h2 text-gradient text-primary"><?php echo $result['businessName']; ?></h2>
         <!-- rating -->
@@ -112,8 +115,6 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
           <i class="fas fa-star"></i>
           <span class="text-sm">(1)</span>
         </p>
-
-
         <p class="text-muted"><?php echo $result['category']; ?></p>
         <p class="text-muted"><?php echo $result['createdAt']; ?></p>
         <p class="text-muted"><?php echo $result['updatedAt']; ?></p>
@@ -128,21 +129,13 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
         <p class="text-muted"><?php echo $result['phoneNumber']; ?></p>
         <p class="text-muted"><?php echo $result['address']; ?></p>
         <p class="text-muted"><?php echo $result['city']; ?></p>
-        <p class="text-muted"><?php echo $result['state']; ?></p>
-        <p class="text-muted"><?php echo $result['zip']; ?></p>
-        <p class="text-muted"><?php echo $result['country']; ?></p>
+        <p class="text-muted"><?php echo $result['pincode']; ?></p>
         <p class="text-muted"><?php echo $result['website']; ?></p>
-        <p class="text-muted"><?php echo $result['facebook']; ?></p>
-        <p class="text-muted"><?php echo $result['twitter']; ?></p>
-        <p class="text-muted"><?php echo $result['instagram']; ?></p>
+        <p class="text-muted"><?php echo $result['facebookId']; ?></p>
+        <p class="text-muted"><?php echo $result['instagramId']; ?></p>
 
-        <p><?php echo $result['description']; ?></p>
-        <p>Contact: <?php echo $result['phoneNumber']; ?></p>
-        <p>Address: <?php echo $result['address']; ?></p>
-        <p>City: <?php echo $result['city']; ?></p>
 
-        <!-- map leaflet -->
-        <div id="mapid"></div>
+
 
 
       </div>

@@ -11,13 +11,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
 /* The line `date_default_timezone_set('Asia/Kolkata');` is used to set the default timezone for date
 and time functions in PHP. In this case, it sets the timezone to "Asia/Kolkata", which corresponds
 to the Indian Standard Time (IST). This ensures that any date and time operations in the PHP script
 will use the correct timezone. */
 date_default_timezone_set('Asia/Kolkata');
-
+// Site URL
+const BASE_URL = 'http://localhost:3000/';
 /* The code block you provided is used to configure the database connection based on the environment. */
 $ENV = $_ENV['ENV'] ?? 'DEV';
 if ($ENV === 'PROD') {
@@ -62,4 +62,3 @@ function connectToDB()
 /* The line ` = connectToDB();` is calling the `connectToDB()` function and assigning its return
 value to the variable ``. */
 $db = connectToDB();
-
