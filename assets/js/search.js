@@ -1,4 +1,9 @@
-// search bar
+/*
+search.js
+Author: Sahil Langoo
+File Content
+- search function for search bar 
+*/
 
 const searchInput = document.getElementById('search-input');
 const searchFeedback = document.getElementById('search-feedback');
