@@ -88,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // truncate description
   // function for truncate description
   const descriptions = document.querySelectorAll('#truncate');
   descriptions.forEach((description) => {

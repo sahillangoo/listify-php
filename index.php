@@ -42,8 +42,8 @@ include_once './functions/functions.php';
             </div>
           </div>
         </div>
-        <div class="row justify-content-center">
 
+        <div class="row justify-content-center">
           <p class="col-12 lead text-white text-capitalize font-font-weight-normal my-2">Browse our top categories</p>
           <div class="col-auto text-center move-on-hover mb-2">
             <a href="./category.php?slug=restaurant">
@@ -53,6 +53,7 @@ include_once './functions/functions.php';
               </div>
             </a>
           </div>
+
           <div class="col-auto text-center move-on-hover mb-2">
             <a href="./category.php?slug=hospital">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
@@ -70,6 +71,7 @@ include_once './functions/functions.php';
               </div>
             </a>
           </div>
+
           <div class="col-auto text-center move-on-hover mb-2">
             <a href="./category.php?slug=education">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
@@ -78,6 +80,7 @@ include_once './functions/functions.php';
               </div>
             </a>
           </div>
+
           <div class="col-auto text-center move-on-hover mb-2">
             <a href="./category.php?slug=atm">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
@@ -86,6 +89,7 @@ include_once './functions/functions.php';
               </div>
             </a>
           </div>
+
           <div class="col-auto text-center move-on-hover mb-2">
             <a href="./category.php?slug=bank">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
@@ -94,6 +98,7 @@ include_once './functions/functions.php';
               </div>
             </a>
           </div>
+
         </div>
       </div>
       <div class="position-absolute w-100 z-index-1 bottom-0">

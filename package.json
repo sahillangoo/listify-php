@@ -5,16 +5,16 @@
   "scripts": {
     "start": "php -S localhost:8000",
     "test": "playwright test",
-		"test:debug": "playwright test --debug",
-		"test:firefox": "playwright test --browser firefox",
-		"test:chromium": "playwright test --browser chromium",
-		"test:webkit": "playwright test --browser webkit",
-		"test:headful": "playwright test --headed",
-		"test:headless": "playwright test --headless",
-		"test:slow": "playwright test --slow-mo 1000",
-		"test:video": "playwright test --video",
-		"test:trace": "playwright test --trace",
-		"text:ui": "playwright test --ui"
+    "test:debug": "playwright test --debug",
+    "test:firefox": "playwright test --browser firefox",
+    "test:chromium": "playwright test --browser chromium",
+    "test:webkit": "playwright test --browser webkit",
+    "test:headful": "playwright test --headed",
+    "test:headless": "playwright test --headless",
+    "test:slow": "playwright test --slow-mo 1000",
+    "test:video": "playwright test --video",
+    "test:trace": "playwright test --trace",
+    "text:ui": "playwright test --ui"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
     "url": "https://github.com/sahillangoo/listify-php/issues"
   },
   "devDependencies": {
-    "@playwright/test": "^1.37.1"
+    "@playwright/test": "^1.37.1",
+    "playwright": "^1.37.1"
   }
 }

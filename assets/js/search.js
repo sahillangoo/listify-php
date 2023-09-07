@@ -2,7 +2,7 @@
 search.js
 Author: Sahil Langoo
 File Content
-- search function for search bar 
+- search function for search bar
 */
 
 const searchInput = document.getElementById('search-input');

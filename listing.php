@@ -12,7 +12,7 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
   exit();
 } else {
   $listing = sanitize($_GET['listing']);
-  $stmt = $db->prepare('SELECT * FROM listings WHERE id = :id');
+  $stmt = $db->prepare('SELECT l.*, r.review, AVG(r.rating) AS avg_rating, COUNT(r.id) AS reviews_count, u.username FROM listings l LEFT JOIN reviews r ON l.id = r.listing_id LEFT JOIN users u ON l.user_id = u.id WHERE l.id = :id GROUP BY l.id');
   $stmt->bindParam(':id', $_GET['listing'], PDO::PARAM_INT);
   $stmt->execute();
   $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -48,8 +48,8 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
 
   <?php
   // Initialize the test coordinates
-  $lat = 34.08468475517784;
-  $lng = 74.79748543611667;
+  $lat = $result['latitude'];
+  $lng = $result['longitude'];
 
   // Output the JavaScript code using heredoc
   echo <<<EOT
@@ -93,163 +93,134 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
           <li class="breadcrumb-item"><a href="./categories.php">Categories</a></li>
-          <li class="breadcrumb-item active text-capitalize" aria-current="page"><?php echo $result['category']; ?></li>
+          <li class="breadcrumb-item text-capitalize"><a href="./category.php?category=<?php echo $result['category']; ?>"><?php echo $result['category']; ?></a></li>
+          <li class="breadcrumb-item active text-capitalize" aria-current="page"><?php echo $result['businessName']; ?></li>
         </ol>
       </nav>
     </div>
     <div class="row">
       <div class="col-md-6">
         <img src="./uploads/business_images/<?php echo $result['displayImage']; ?>" class="img-fluid rounded move-on-hover border " alt="<?php echo $result['businessName']; ?>">
-        <!-- map leaflet -->
-        <div class="my-5" id="mapid"></div>
+
       </div>
 
       <div class="col-md-6">
-        <h2 class="h2 text-gradient text-primary"><?php echo $result['businessName']; ?></h2>
-        <!-- rating -->
-        <p class="text-gradient text-warning text-3xl animate gradient-animation">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <span class="text-sm">(1)</span>
-        </p>
-        <p class="text-muted"><?php echo $result['category']; ?></p>
-        <p class="text-muted"><?php echo $result['createdAt']; ?></p>
-        <p class="text-muted"><?php echo $result['updatedAt']; ?></p>
-        <p class="text-muted"><?php echo $result['featured']; ?></p>
-        <p class="text-muted"><?php echo $result['active']; ?></p>
-        <p class="text-muted"><?php echo $result['user_id']; ?></p>
+        <div class="card-body pt-2">
+          <h2 class="card-title h2 text-center text-gradient text-primary font-weight-bolder "><?php echo $result['businessName']; ?></h2>
 
-        <p class="text-muted"><?php echo $result['reviews_count']; ?></p>
-        <p class="text-muted"><?php echo $result['username']; ?></p>
-        <p class="text-muted"><?php echo $result['businessName']; ?></p>
-        <p class="text-muted"><?php echo $result['description']; ?></p>
-        <p class="text-muted"><?php echo $result['phoneNumber']; ?></p>
-        <p class="text-muted"><?php echo $result['address']; ?></p>
-        <p class="text-muted"><?php echo $result['city']; ?></p>
-        <p class="text-muted"><?php echo $result['pincode']; ?></p>
-        <p class="text-muted"><?php echo $result['website']; ?></p>
-        <p class="text-muted"><?php echo $result['facebookId']; ?></p>
-        <p class="text-muted"><?php echo $result['instagramId']; ?></p>
+          <div class="d-flex justify-content-between align-items-center my-2">
+            <span class="text-capitalize text-sm font-weight-bold"><i class="fa-solid fa-shop"></i> <?php echo $result['category']; ?></span>
+            <!-- Display the rating stars -->
+            <span class="text-gradient text-warning text-sm">
+              <?php
+              $rating = $result['avg_rating'];
+              for ($i = 0; $i < 5; $i++) {
+                if ($i < $rating) {
+                  echo '<i class="fas fa-star"></i>';
+                } else {
+                  echo '<i class="far fa-star"></i>';
+                }
+              }
+              ?>
+              <!-- Display the average rating -->
+              <span class="text-sm">(<?php echo $result['reviews_count']; ?>)</span>
+            </span>
+            <span class="text-sm font-weight-bold"><i class="fa-regular fa-clock"></i> Since:
+              <?php $createdAt = strtotime($result['createdAt']);
+              $formattedCreatedAt = date('j, F y', $createdAt);
+              echo $formattedCreatedAt; ?>
+            </span>
 
-
-
-
-
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <!-- review cards -->
-      <?php
-      // Display the reviews
-      $stmt = $db->prepare('SELECT * FROM reviews WHERE listing_id = ?');
-      $stmt->execute([$result['id']]);
-      $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      if (count($reviews) > 0) {
-        echo '<h2>Reviews</h2>';
-        foreach ($reviews as $review) {
-          echo '<p>';
-          for ($i = 0; $i < $review['rating']; $i++) {
-            echo '<i class="fa fa-star" style="color: #ffc800;"></i>';
-          }
-          echo ' ' . $review['rating'] . '-Stars';
-          echo '</p>';
-          echo '<p>' . $review['review'] . '</p>';
-          echo '<p>' . $review['createdAt'] . '</p>';
-          // Get the user details who posted the review
-          $stmt = $db->prepare('SELECT * FROM users WHERE id = ?');
-          $stmt->execute([$review['user_id']]);
-          $user = $stmt->fetch(PDO::FETCH_ASSOC);
-          echo '<p>Posted by: ' . $user['username'] . '</p>';
-        }
-      } else {
-        echo '<p>No reviews yet.</p>';
-      }
-      ?>
-    </div>
-  </div>
-
-  <?php
-  if (isAuthenticated()) {
-    // Check if the user has already posted a review
-    $stmt = $db->prepare('SELECT * FROM reviews WHERE user_id = ? AND listing_id = ?');
-    $stmt->execute([$_SESSION['user_id'], $result['id']]);
-    $review = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($review) {
-      echo '<p class="text-sm text-center">You have already posted a review.</p>';
-    } else {
-  ?>
-      <div class="container">
-        <div class="row mt-5">
-          <div class="col-md-6 offset-md-3">
-            <?php include_once('./functions/dialog.php'); ?>
-            <h3>Add a Review</h3>
-            <form id="review-form" name="review" action="./functions/review/add_review.php" method="post">
-              <input type="hidden" name="listing_id" value="<?php echo $listing; ?>">
-              <div class="mb-3">
-                <label for="rating" class="form-label">Rating</label>
-                <select class="form-select" name="rating" id="rating" required>
-                  <option value="">Select a rating</option>
-                  <option value="1">1 star</option>
-                  <option value="2">2 stars</option>
-                  <option value="3">3 stars</option>
-                  <option value="4">4 stars</option>
-                  <option value="5">5 stars</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="review" class="form-label">Review</label>
-                <textarea class="form-control" id="review" name="review" rows="5" maxlength="150" required></textarea>
-              </div>
-              <button id="submit-btn" type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit</button>
-            </form>
           </div>
+          <!-- description -->
+          <p class="card-description mt-3"><?php echo $result['description']; ?></p>
+
+          <h4 class="h4 text-center text-bolder">
+            Contact Details
+          </h4>
+          <!-- contact detailes -->
+          <div class="d-flex flex-wrap justify-content-between mx-4">
+
+            <span class="font-weight-bold text-primary text-gradient mt-3">
+              <i class="fa-regular fa-user"></i> @<?php echo $result['username']; ?>
+            </span>
+
+            <a href="tel:<?php echo $result['phoneNumber']; ?>" class="font-weight-bold mt-3">
+              <i class="fa-solid fa-phone"></i> +91 <?php echo $result['phoneNumber']; ?>
+            </a>
+
+            <a href="mailto:<?php echo $result['email']; ?>" class="font-weight-bold mt-3">
+              <i class="fa-regular fa-envelope"></i> <?php echo $result['email']; ?> </a>
+
+            <span class="text-capitalize font-weight-bold my-3"><i class="fa-solid fa-location-dot"></i> <?php echo $result['address'] . ', ' . $result['city'] . ' - ' . $result['pincode']; ?></span>
+
+
+            <a href="<?php echo $result['website']; ?>" class="btn btn-github btn-simple btn-lg mb-0 mt-2 " target="_blank">
+              <i class="fa-solid fa-globe"></i></a>
+
+            <a href="https://facebook.com/<?php echo $result['facebookId']; ?>" class="btn btn-facebook btn-simple btn-lg mb-0 mt-2 " target="_blank">
+              <i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+
+            <a href="https://instagram.com/<?php echo $result['instagramId']; ?>" class="btn btn-instagram btn-simple btn-lg mb-0 mt-2" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+
+          </div>
+
         </div>
       </div>
-  <?php
-    }
-  } else {
-    echo '<p class="text-sm text-center">Please <a href="./signin.php">login</a> to post a review.</p>';
-  }
-  ?>
 
-  <script>
-    const form = document.getElementById('review-form');
-    const rating = form.elements['rating'];
-    const review = form.elements['review'];
+      <div class="col-md-12">
+        <!-- wide business map -->
+        <h4 class="h3 text-center text-gradient text-primary font-weight-bolder mt-5">Location</h4>
+        <p class="text-center text-sm">The location is approximate and might not be accurate.</p>
+        <!-- map leaflet -->
+        <div class="my-3 rounded" id="mapid"></div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <!-- business reviews -->
+      <h4 class="h3 text-center text-gradient text-primary font-weight-bolder mt-5">Reviews</h4>
+      <p class="text-center text-sm">The reviews are based on the user experience.</p>
+      <!-- reviews with pagination -->
+      <div class="row mt-6">
+        <div class="col-lg-4 col-md-8">
+          <div class="card card-plain move-on-hover">
+            <div class="card-body">
+              <div class="author">
+                <div class="name">
+                  <h6 class="mb-0 font-weight-bolder">Nick Willever</h6>
+                  <div class="stats">
+                    <i class="far fa-clock" aria-hidden="true"></i> 1 day ago
+                  </div>
+                </div>
+              </div>
+              <p class="mt-4">"<?php echo $result['review']; ?>"</p>
+              <div class="rating mt-3">
+                <?php
+                $rating = $result['avg_rating'];
+                for ($i = 0; $i < 5; $i++) {
+                  if ($i < $rating) {
+                    echo '<i class="fas fa-star"></i>';
+                  } else {
+                    echo '<i class="far fa-star"></i>';
+                  }
+                }
+                ?>
+                <!-- Display the average rating -->
+                <span class="text-sm">(<?php echo $result['reviews_count']; ?>)</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
 
-      if (!rating.value) {
-        alert('Please select a rating.');
-        return;
-      }
+      </div>
 
-      if (rating.value < 1 || rating.value >= 5) {
-        alert('Please select a rating between 1 and 5.');
-        return;
-      }
 
-      if (!review.value) {
-        alert('Please enter a review.');
-        return;
-      }
+    </div>
 
-      if (review.value.length < 10 || review.value.length > 150) {
-        alert('Please enter a review between 10 and 150 characters.');
-        return;
-      }
 
-      form.submit();
-    });
-  </script>
 
+  </div>
   <?php
   // include the footer file
   include_once './includes/_footer.php';
