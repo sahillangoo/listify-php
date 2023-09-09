@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(20) NOT NULL UNIQUE,
     phone BIGINT(12) UNSIGNED NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    profile_image VARCHAR(50) NOT NULL,
+    profile_image VARCHAR(255) NOT NULL,
     status ENUM('active', 'inactive') DEFAULT 'active' NOT NULL,
     role ENUM('admin', 'user') DEFAULT 'user' NOT NULL,
     user_since TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -28,8 +28,8 @@ CREATE TABLE IF NOT EXISTS listings (
     category VARCHAR(20) NOT NULL DEFAULT 'other',
     featured BOOLEAN NOT NULL DEFAULT 0,
     active BOOLEAN NOT NULL DEFAULT 1,
-    latitude FLOAT NOT NULL DEFAULT 0,
-    longitude FLOAT NOT NULL DEFAULT 0,
+    latitude DOUBLE NOT NULL DEFAULT 0,
+    longitude DOUBLE NOT NULL DEFAULT 0,
     address VARCHAR(50) NOT NULL DEFAULT 'No address provided',
     city VARCHAR(20) NOT NULL DEFAULT 'No city provided',
     pincode INT(6) UNSIGNED NOT NULL DEFAULT 0,
@@ -105,8 +105,8 @@ VALUES (
         'restaurant',
         1,
         1,
-        74.8765,
-        34.8765,
+        34.082085761211204,
+        74.8334694807386,
         'Boulevard Road Dal lake',
         'srinagar',
         190001,
@@ -127,8 +127,8 @@ VALUES (
         'bank',
         1,
         1,
-        74.8765,
-        34.8765,
+        34.082085761211204,
+        74.8334694807386,
         'Residency Road',
         'srinagar',
         190001,
@@ -160,3 +160,13 @@ DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS listings;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
+-- alter lang & lati to DOUBLE
+--@block
+ALTER TABLE listings
+MODIFY COLUMN latitude DOUBLE NOT NULL DEFAULT 0;
+ALTER TABLE listings
+MODIFY COLUMN longitude DOUBLE NOT NULL DEFAULT 0;
+
+--@block
+ALTER TABLE users
+MODIFY COLUMN profile_image VARCHAR(255) NOT NULL;

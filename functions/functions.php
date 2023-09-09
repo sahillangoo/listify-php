@@ -12,17 +12,26 @@ function redirect($url)
 {
   header('Location: ' . BASE_URL . $url);
 }
+// Function to clean data
+function clean($data): string
+{
+  $data = trim($data); // remove extra spaces
+  $data = stripslashes($data); // remove backslashes
+  return strip_tags($data); // remove HTML tags
+}
+// Function to sanitize data
 function sanitize($data): string
 {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return strip_tags($data);
+  $data = trim($data); // remove extra spaces
+  $data = stripslashes($data); // remove backslashes
+  $data = htmlspecialchars($data); // convert special characters to HTML entities
+  return strip_tags($data); // remove HTML tags
 }
 // Generate a CSRF token and store it in the user's session
 if (!isset($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 }
+// Function to hash password
 function hashPassword($password): string
 {
   $options = [
@@ -50,6 +59,16 @@ function isAuthenticated(): bool
 function isAdmin(): bool
 {
   return isset($_SESSION["role"]) && $_SESSION["role"] === 'admin';
+}
+
+// Main Functions
+// Function to get_user
+function get_user($db, $user_id)
+{
+  $sql = "SELECT * FROM users WHERE id = :user_id";
+  $stmt = $db->prepare($sql);
+  $stmt->execute(['user_id' => $user_id]);
+  return $stmt->fetch();
 }
 
 /**
@@ -149,14 +168,7 @@ function get_user_listings($db, $user_id)
   return $listings;
 }
 
-// Function to get_user
-function get_user($db, $user_id)
-{
-  $sql = "SELECT * FROM users WHERE id = :user_id";
-  $stmt = $db->prepare($sql);
-  $stmt->execute(['user_id' => $user_id]);
-  return $stmt->fetch();
-}
+
 
 // Function to get reviews for user listings
 function get_user_reviews($db, $user_id)

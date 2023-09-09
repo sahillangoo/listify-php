@@ -7,23 +7,23 @@ if (!isAuthenticated()) {
   exit;
 }
 // get the user id from the session
-$user_id = sanitize($_SESSION['user_id']);
-// Fetch user from the database
-try {
-  $user = get_user($db, $user_id);
-} catch (PDOException $e) {
-  error_log($e->getMessage());
-  echo "An error occurred while fetching your account details. Please try again later.";
+if (isset($_SESSION['user_id'])) {
+  $user_id = sanitize($_SESSION['user_id']);
 }
-// convert user_since to a readable format
-$user_since = date('d M Y', strtotime($_SESSION['user_since']));
+
+// If the user is not not active show errorsession : you are not active please contact admin to activate your account
+if ($_SESSION['status'] === 'inactive') {
+  $_SESSION['errorsession'] = 'You are not active. Please contact admin to activate your account.';
+}
+
 // Fetch user's listings from the database
 try {
   $listings = get_user_listings($db, $user_id);
 } catch (PDOException $e) {
   error_log($e->getMessage());
-  echo "An error occurred while fetching your listings. Please try again later.";
 }
+// convert user_since to a readable format
+$user_since = date('d M Y', strtotime($_SESSION['user_since']));
 ?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
@@ -39,11 +39,10 @@ try {
 </head>
 
 <body class="blog-author bg-gray-100">
-  <!-- Navbar Light -->
-  <?php
-  // include the header file
-  include_once './includes/_navbar.php';  ?>
-  <!-- End Navbar -->
+
+  <!-- Navbar -->
+  <?php include_once './includes/_navbar.php'; ?>
+
   <!-- Header -->
   <section class="py-5 position-relative">
     <div class="container">
@@ -87,15 +86,13 @@ try {
                 </div>
               </div>
               <div class="row">
-                <?php if (empty($listings)) : ?>
-                  <div class="col-auto">
-                    <a href="./add-listing.php" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</a>
-                  </div>
-                <?php endif; ?>
+                <div class="col-auto">
+                  <a href="./add-listing.php" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</a>
+                </div>
                 <?php if (!empty($listings)) : ?>
-                  <div class="col-auto">
+                  <!-- <div class="col-auto">
                     <button href="#" type="submit" class="btn btn-sm btn-outline-info text-nowrap mb-0">Update Listing</button>
-                  </div>
+                  </div> -->
                 <?php endif; ?>
               </div>
             </div>

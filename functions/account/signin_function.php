@@ -1,6 +1,8 @@
 <?php
 /*
 * Authentication file for signIn for the Webapp
+  Author: SahilLangoo
+  lastModified: 23/8/2023
 */
 require_once __DIR__ . '/../functions.php';
 
@@ -13,19 +15,16 @@ if (isset($_POST['signin'])) {
       unset($_SESSION['csrf_token']);
       throw new Exception('CSRF token validation failed.');
     }
-
     // Get the form data
-    $username = sanitize($_POST['username']);
-    $password = $_POST['password'];
+    $username = clean($_POST['username']);
+    $password = clean($_POST['password']);
     $remember_me = isset($_POST['remember_me']) && $_POST['remember_me'] === 'on';
-
-    // Check if any field is empty
     if (empty($username) || empty($password)) {
       throw new Exception('All fields are necessary.');
     }
 
     // Check if the username is valid only letters and numbers
-    if (!preg_match("/^[a-zA-Z0-9]{3,20}$/", $username)) {
+    if (!preg_match("/^(?<username>[a-z0-9._]{6,20})$/", $username)) {
       throw new Exception('Invalid username format or length.');
     }
 
@@ -62,6 +61,7 @@ function signIn($username, $password, $remember_me): void
     session_start();
     // Store data in session variables
     $_SESSION["authenticated"] = true;
+    $_SESSION["status"] = $user['status'];
     $_SESSION["user_id"] = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION["email"] = $user['email'];

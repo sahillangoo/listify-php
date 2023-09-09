@@ -119,7 +119,7 @@ async function validateInput(input, regex) {
 function getRegexForInput(input) {
   switch (input.name) {
     case 'username':
-      return /^(?<username>[a-zA-Z0-9._]{6,20})$/;
+      return /^(?<username>[a-z0-9._]{6,20})$/;
     case 'email':
       return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     case 'phone':

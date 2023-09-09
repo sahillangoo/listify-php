@@ -211,15 +211,8 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
             </div>
           </div>
         </div>
-
-
       </div>
-
-
     </div>
-
-
-
   </div>
   <?php
   // include the footer file

@@ -7,6 +7,11 @@ if (isAuthenticated()) {
   redirect('index.php');
   exit;
 }
+// if cookie is present, log the user in automatically
+if (isset($_COOKIE['remember_me'])) {
+  $cookie = json_decode($_COOKIE['remember_me'], true);
+  signIn($cookie['username'], $cookie['password'], true);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
@@ -14,7 +19,7 @@ if (isAuthenticated()) {
 <head>
   <title>Sign Up to Listify</title>
   <?php
-  // TODO add terms and conditions & privacy policy link || add google recaptcha || validation
+  // TODO add google recaptcha
   // include the head file
   include_once './includes/_head.php';
   ?>
@@ -39,8 +44,7 @@ if (isAuthenticated()) {
               <div class="card-header pb-0 text-left">
                 <!-- dialog -->
                 <h3 class="font-weight-bolder text-primary text-gradient text-center">Welcome to Listify</h3>
-                <p class="my-2 text-primary text-gradient text-sm text-center">Enter your details to SignUp</p>
-
+                <p class="my-2 text-primary text-gradient text-sm text-center">Enter your details below to Register | We'll never share your details with anyone else.</p>
               </div>
               <?php include_once('./functions/dialog.php'); ?>
             </div>
@@ -50,11 +54,11 @@ if (isAuthenticated()) {
 
                 <div class="form-group">
                   <div class="mb-3 has-validation">
-                    <input type="text" autocomplete="off" required class="form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username" data-bs-toggle="tooltip" data-bs-placement="right" title="Username should only contain letters & numbers, 3-20 Characters">
+                    <input type="text" autocomplete="off" required class="form-control" placeholder="Username" id="username" name="username" aria-label="username" aria-describedby="username" data-bs-toggle="tooltip" data-bs-placement="right" title="must contain combination of small letters, numbers, . - _ and between 6-20 characters">
                     <div class="valid-feedback">
                       Looks good!
                     </div>
-                    <div class="invalid-feedback">Username must contain only letters or numbers and be between 3 to 20 characters long.</div>
+                    <div class="invalid-feedback">Username must contain only small letters or numbers or . _ - and be between 6 to 20 characters long.</div>
                   </div>
                 </div>
 
@@ -64,7 +68,7 @@ if (isAuthenticated()) {
                     <div class="valid-feedback">
                       Looks good!
                     </div>
-                    <div class="invalid-feedback">Please enter valid E-mail.</div>
+                    <div class="invalid-feedback">Invalid email format or length.</div>
                   </div>
                 </div>
 
@@ -74,27 +78,29 @@ if (isAuthenticated()) {
                     <div class="valid-feedback">
                       Looks good!
                     </div>
-                    <div class="invalid-feedback">Please enter valid Phone.</div>
+                    <div class="invalid-feedback">Invalid phone format or length must be 10 digits.</div>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <div class="input-group mb-3 has-validation">
-                    <input type="password" autocomplete="new-password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="Password should be atleast 8 letters (including A-Z, a-z, 0-9, special charaters) and should not be a common password">
-                    <div class="btn bg-transparent mb-0 shadow-none">
+                    <input type="password" autocomplete="new-password" class="form-control" id="password" name="password" required placeholder="Password" aria-label="Password" aria-describedby="password-addon" data-bs-toggle="tooltip" data-bs-placement="right" title="must be 8-18 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character.">
+                    <span class="btn bg-transparent mb-0 shadow-none">
                       <i class="fa fa-fw fa-eye-slash toggle-password" id="toggle-password" onclick="togglePassword()"></i>
-                    </div>
+                    </span>
                     <div class="valid-feedback">
                       Looks good!
                     </div>
-                    <div class="invalid-feedback">Please check your Password - must be 8-18 characters long, contain letters, numbers & special characters.</div>
+                    <div class="invalid-feedback">Please check your Password - must be 8-18 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character.</div>
                   </div>
                 </div>
 
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="terms" id="terms" name="terms" required>
                   <label class="form-check-label" for="terms">
-                    Agree to terms and conditions
+                    <i class="fa-solid fa-info-circle"></i>
+                    <a href="./privacy.php" class="text-info text-gradient font-weight-bold" target="_blank">Privacy Policy</a> &amp;
+                    <a href="./terms.php" class="text-info text-gradient font-weight-bold" target="_blank">Terms of Use</a>
                   </label>
                   <div class="invalid-feedback">
                     You must agree before submitting.
@@ -121,7 +127,18 @@ if (isAuthenticated()) {
               <div class="position-relative">
                 <img class="max-width-500 w-100 position-relative z-index-2" src="./assets/img/illustrations/chat.png" alt="">
               </div>
-              <h4 class="mt-5 text-white font-weight-bolder">"That's the magic of Listify!"</h4>
+              <h4 class="h4 mt-5 text-white font-weight-bolder"> "
+                <?php
+                $quotes = array(
+                  "The best way to predict the future is to create it.",
+                  "The best preparation for tomorrow is doing your best today.",
+                  "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart.",
+                  "The best thing about the future is that it comes one day at a time.",
+                );
+                $random_quote = array_rand($quotes, 1);
+                echo $quotes[$random_quote];
+                ?>
+                "</h4>
               <p class="text-white">Business Search on Fingertips</p>
             </div>
           </div>
