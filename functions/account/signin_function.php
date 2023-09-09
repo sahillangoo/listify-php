@@ -24,7 +24,7 @@ if (isset($_POST['signin'])) {
     }
 
     // Check if the username is valid only letters and numbers
-    if (!preg_match("/^(?<username>[a-z0-9._]{6,20})$/", $username)) {
+    if (!preg_match("/^(?<username>[a-z0-9._-]{6,20})$/", $username)) {
       throw new Exception('Invalid username format or length.');
     }
 

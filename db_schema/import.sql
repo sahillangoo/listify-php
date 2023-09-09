@@ -2,8 +2,8 @@
 -- Listify DB Schema
 CREATE TABLE IF NOT EXISTS users (
     id INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(20) NOT NULL UNIQUE,
-    email VARCHAR(20) NOT NULL UNIQUE,
+    username VARCHAR(30) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
     phone BIGINT(12) UNSIGNED NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     profile_image VARCHAR(255) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS sessions (
     id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT(11) UNSIGNED NOT NULL,
-    session_token VARCHAR(32) NOT NULL,
+    session_token VARCHAR(255) NOT NULL,
     expires_at DATETIME NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -24,29 +24,29 @@ CREATE TABLE IF NOT EXISTS listings (
     id INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     user_id INT(11) UNSIGNED NOT NULL,
     businessName VARCHAR(50) NOT NULL DEFAULT 'No business name provided',
-    description TEXT NOT NULL DEFAULT 'No description provided',
+    description TEXT(999) NOT NULL DEFAULT 'No description provided',
     category VARCHAR(20) NOT NULL DEFAULT 'other',
-    featured BOOLEAN NOT NULL DEFAULT 0,
-    active BOOLEAN NOT NULL DEFAULT 1,
-    latitude DOUBLE NOT NULL DEFAULT 0,
-    longitude DOUBLE NOT NULL DEFAULT 0,
+    featured BOOLEAN DEFAULT 0,
+    active BOOLEAN DEFAULT 1,
+    latitude DOUBLE(10, 8) NOT NULL DEFAULT 0,
+    longitude DOUBLE(10, 8) NOT NULL DEFAULT 0,
     address VARCHAR(50) NOT NULL DEFAULT 'No address provided',
     city VARCHAR(20) NOT NULL DEFAULT 'No city provided',
     pincode INT(6) UNSIGNED NOT NULL DEFAULT 0,
     phoneNumber BIGINT(10) UNSIGNED NOT NULL DEFAULT 0,
-    email VARCHAR(20) NOT NULL DEFAULT 'No email provided',
+    email VARCHAR(255) NOT NULL DEFAULT 'No email provided',
     whatsapp BIGINT(10) UNSIGNED,
-    facebookId VARCHAR(20),
-    instagramId VARCHAR(20),
-    website VARCHAR(20),
-    displayImage VARCHAR(20) NOT NULL DEFAULT 'default.jpg',
+    facebookId VARCHAR(50),
+    instagramId VARCHAR(50),
+    website VARCHAR(50),
+    displayImage VARCHAR(50) NOT NULL DEFAULT 'default.jpg',
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 CREATE TABLE IF NOT EXISTS reviews (
     id INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    rating FLOAT NOT NULL DEFAULT 0,
+    rating FLOAT(2, 1) NOT NULL DEFAULT 0,
     review TEXT(200) NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     user_id INT(11) UNSIGNED NOT NULL,
@@ -160,13 +160,10 @@ DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS listings;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
--- alter lang & lati to DOUBLE
+ALTER TABLE listings
+MODIFY COLUMN description TEXT(999) NOT NULL DEFAULT 'No description provided';
+--  alter featured and active remove not null
 --@block
 ALTER TABLE listings
-MODIFY COLUMN latitude DOUBLE NOT NULL DEFAULT 0;
-ALTER TABLE listings
-MODIFY COLUMN longitude DOUBLE NOT NULL DEFAULT 0;
-
---@block
-ALTER TABLE users
-MODIFY COLUMN profile_image VARCHAR(255) NOT NULL;
+MODIFY COLUMN featured BOOLEAN DEFAULT 0,
+MODIFY COLUMN active BOOLEAN DEFAULT 1;

@@ -45,7 +45,7 @@ if (isset($_POST['signup'])) {
 
     // Check and process the form data
     // Check if the username is valid only letters and numbers
-    if (!preg_match('/^(?<username>[a-z0-9._]{6,20})$/', $username)) {
+    if (!preg_match('/^(?<username>[a-z0-9._-]{6,20})$/', $username)) {
       $_SESSION['errorsession'] = "
       Username must be 6-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji";
       redirect('signup.php?clear');

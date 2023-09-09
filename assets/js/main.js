@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// validation for forms
 async function validateInput(input, regex) {
   const value = input.value.trim();
   try {
@@ -119,7 +120,7 @@ async function validateInput(input, regex) {
 function getRegexForInput(input) {
   switch (input.name) {
     case 'username':
-      return /^(?<username>[a-z0-9._]{6,20})$/;
+      return /^(?<username>[a-z0-9._-]{6,20})$/;
     case 'email':
       return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     case 'phone':
@@ -127,14 +128,20 @@ function getRegexForInput(input) {
     case 'password':
       return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#\-_@$!%*?&+~|{}:;<>/])[A-Za-z\d#\-_@$!%*?&+~|{}:;<>/]{8,18}$/;
     case 'businessName':
-    case 'businessAddress':
-      return /^[a-zA-Z0-9 ]+$/;
-    case 'about':
-      return /^[a-zA-Z0-9 .,?!'":;()@#$%&*+-/]{10,200}$/;
+      return /^[a-zA-Z0-9 ]{3,30}$/;
+    case 'address':
+      return /^[a-zA-Z0-9 -,_&]{8,30}$/;
+      // puctuation marks are allowed with alphabets and numbers and spaces and min 10 and max 999 characters
+    case 'description':
+      return /^[\w\s!?'"&().:;,-]{10,999}$/;
     case 'pincode':
       return /^[0-9]{6}$/;
-    case 'facebookid':
-      return /^[a-zA-Z0-9._]{3,20}$/;
+    case 'whatsapp':
+      return /^[0-9]{10}$/;
+    case 'instagramId':
+      return /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,30}$/;
+    case 'facebookId':
+      return /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,30}$/;
     case 'website':
       return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-zA-Z0-9]+([a-zA-Z0-9-]+)?(\.[a-zA-Z0-9-]+)+([\/?].*)?$/;
     case 'gst':
@@ -147,3 +154,27 @@ function getRegexForInput(input) {
       return null;
   }
 }
+// textarea validation
+const description = document.getElementById('description');
+const counter = document.getElementById('counter');
+const maxChars = 999;
+
+description.addEventListener('input', () => {
+  const chars = description.value.length;
+  const charsLeft = maxChars - chars;
+  counter.textContent = `${charsLeft} Characters left`;
+
+  if (charsLeft >= 0) {
+    counter.parentElement.classList.remove('d-none');
+    description.classList.add('is-valid');
+    description.classList.remove('is-invalid');
+  } else {
+    counter.parentElement.classList.add('d-none');
+    description.classList.add('is-invalid');
+    description.classList.remove('is-valid');
+  }
+
+  const regex = getRegexForInput(description);
+  validateInput(description, regex);
+});
+

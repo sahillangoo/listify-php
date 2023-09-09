@@ -49,7 +49,7 @@ include_once './functions/functions.php';
             <a href="./category.php?slug=restaurant">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_restaurant.svg" alt="Restaurants" height="50px">
-                <p class="text-white font-weight-bold text-xs">Restaurants</p>
+                <p class="text-white font-weight-bold text-xs">Restaurant's</p>
               </div>
             </a>
           </div>
@@ -58,7 +58,7 @@ include_once './functions/functions.php';
             <a href="./category.php?slug=hospital">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_hospital_3.svg" alt="Hospitals" height="50px">
-                <p class="text-white font-weight-bold text-xs">Hospitals</p>
+                <p class="text-white font-weight-bold text-xs">Hospital's</p>
               </div>
             </a>
           </div>
@@ -67,7 +67,7 @@ include_once './functions/functions.php';
             <a href="./category.php?slug=pharmacy">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_pharmacy_shop.svg" alt="Pharmacy" height="50px">
-                <span class="text-white font-weight-bold text-xs">Pharmacys</p>
+                <span class="text-white font-weight-bold text-xs">Pharmacy's</p>
               </div>
             </a>
           </div>
@@ -76,7 +76,7 @@ include_once './functions/functions.php';
             <a href="./category.php?slug=education">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_school.svg" alt="Education" height="50px">
-                <p class="text-white font-weight-bold text-xs">Education</p>
+                <p class="text-white font-weight-bold text-xs">Education's</p>
               </div>
             </a>
           </div>
@@ -85,7 +85,7 @@ include_once './functions/functions.php';
             <a href="./category.php?slug=atm">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_atm.svg" alt="ATMs" height="50px">
-                <p class="text-white font-weight-bold text-xs">ATMs</p>
+                <p class="text-white font-weight-bold text-xs">ATM's</p>
               </div>
             </a>
           </div>
@@ -94,7 +94,7 @@ include_once './functions/functions.php';
             <a href="./category.php?slug=bank">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_euro_bank_building_2.svg" alt="Banks" height="50px">
-                <p class="text-white font-weight-bold text-xs">Banks</p>
+                <p class="text-white font-weight-bold text-xs">Bank's</p>
               </div>
             </a>
           </div>

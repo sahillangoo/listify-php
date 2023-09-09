@@ -17,10 +17,10 @@ try {
   $stmt->execute();
   $listings = $stmt->fetchAll();
   // check if the user has a listing
-  if (count($listings) > 0) {
-    redirect('account.php');
-    exit;
-  }
+  // if (count($listings) > 0) {
+  //   redirect('account.php');
+  //   exit;
+  // }
 } catch (PDOException $e) {
   echo $e->getMessage();
 }
@@ -43,10 +43,7 @@ try {
 <body class="blog-author bg-gray-100">
   <!-- Navbar Light -->
   <?php
-  // echo session
-  // echo '<pre>';
-  // print_r($_SESSION);
-  // echo '</pre>';
+
 
   // include the header file
   include_once './includes/_navbar.php';  ?>
@@ -66,7 +63,7 @@ try {
         </nav>
       </div>
       <div class="row">
-        <div class="col-lg-8 mx-auto d-flex justify-content-center flex-column">
+        <div class="col-md-8 mx-auto d-flex justify-content-center flex-column">
           <h3 class="font-weight-bolder text-primary text-gradient text-center">Create New Listing</h3>
           <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">
             Enter your business details below to create a new listing.
@@ -75,19 +72,22 @@ try {
           <div class="card-body">
 
             <form role="form" id="create_listing" method="post" autocomplete="on" action="./functions/listings/process_listing.php" enctype="multipart/form-data" name="create_listing" class="needs-validation" novalidate>
+
               <div class="row">
 
                 <div class="col-md-6 ps-2 mb-3 ">
-                  <input type="text" class="form-control has-validation" placeholder="Business Name" name="businessName" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter Business name" required>
+                  <input type="text" class="form-control has-validation" placeholder="Business Name" name="businessName" aria-label="Business Name" aria-describedby="Business Name" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your business name, must contain combination of letters & numbers between 4-30 characters" required>
                   <div class="valid-feedback">
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
+                  <div class="invalid-feedback">
+                    Invalid business name or length must contain combination of letters & numbers between 4-30 characters
+                  </div>
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
-                  <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="right" title="Which category suits your business" required>
-                    <option value="">Select a category</option>
+                  <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="right" title="Which category suits your business?" required>
+                    <option value="">Select a category!</option>
                     <option value="restaurant">Restaurant</option>
                     <option value="hospital">Hospital</option>
                     <option value="pharmacy">Pharmacy Store</option>
@@ -98,29 +98,35 @@ try {
                   <div class="valid-feedback">
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid category.</div>
+                  <div class="invalid-feedback">
+                    Please select a category for your business.
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <textarea name="description" class="form-control has-validation" id="description" placeholder="About your Business" rows="2" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter Business description" required></textarea>
+                  <textarea name="description" class="form-control has-validation" id="description" placeholder="About your Business" rows="3" aria-label="description" aria-describedby="description" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter business description of 999 words" required></textarea>
                   <div class="valid-feedback">
+                    <span id="counter">999 Words left, </span>
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
+                  <div class="invalid-feedback">Invalid description text or length.</div>
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
                   <input type="text" class="form-control d-none" name="latitude" id="latitude" disabled>
                   <input type="text" class="form-control d-none" name="longitude" id="longitude" disabled>
-                  <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="address" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter address" required>
+                  <input type="text" class="form-control has-validation" placeholder="Address" id="address" name="address" aria-label="address" aria-describedby="address" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your business address must contain combination of letters & numbers & -,_between 8-30 characters" required>
                   <div class="valid-feedback">
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
+                  <div class="invalid-feedback">
+                    Invalid address or length must contain combination of letters, numbers, -,_ & between 8-30 characters
+                  </div>
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
-                  <select class="form-control has-validation" id="city" name="city" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter city name" required>
+                  <select class="form-control has-validation" id="city" name="city" aria-label="city" aria-describedby="city" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter city name for your business." required>
+                    <option value="">Select a City!</option>
                     <option value="srinagar">Srinagar</option>
                     <option value="anantnag">Anantnag</option>
                     <option value="bandipora">Bandipora</option>
@@ -135,10 +141,35 @@ try {
                   <div class="valid-feedback">
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
+                  <div class="invalid-feedback">Please select a city for your business.</div>
                 </div>
+
                 <div class="col-md-6 ps-2 mb-3 ">
-                  <input type="text" class="form-control has-validation" placeholder="Pincode" id="pincode" name="pincode" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter pincode" required>
+                  <input type="number" class="form-control has-validation no-arrow" placeholder="Business Pincode" id="pincode" name="pincode" aria-label="pincode" aria-describedby="pincode" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your pincode for your business." required>
+                  <div class="valid-feedback">
+                    Looks good!
+                  </div>
+                  <div class="invalid-feedback">Invalid pincode or length must be 6 digit numbers</div>
+                </div>
+                <style>
+                  .no-arrow::-webkit-inner-spin-button,
+                  .no-arrow::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                  }
+                </style>
+
+                <div class="col-md-6 ps-2 mb-3">
+                  <input type="tel" class="form-control " placeholder="Business Phone +91" id="phone" name="phone" aria-label="phone" aria-describedby="phone" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter 10 digit business phone number " required>
+                  <div class="valid-feedback">
+                    Looks good!
+                  </div>
+                  <div class="invalid-feedback">
+                    Invalid phone number or length must be 10 digit numbers
+                  </div>
+                </div>
+                <div class="col-md-6 ps-2 mb-3">
+                  <input type="email" class="form-control" placeholder="Business Email" id="email" name="email" aria-label="Email" aria-describedby="email" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter your business email" required>
                   <div class="valid-feedback">
                     Looks good!
                   </div>
@@ -146,46 +177,31 @@ try {
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
-                  <input type="text" class="form-control " placeholder="Phone +91" id="phone_number" name="phoneNumber" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter phone number " required>
+                  <input type="tel" class="form-control" placeholder="WhatsApp Number +91" id="whatsapp" name="whatsapp" aria-label="whatsapp" aria-describedby="whatsapp" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter 10 digit business whatsapp number">
                   <div class="valid-feedback">
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
-                </div>
-                <div class="col-md-6 ps-2 mb-3">
-                  <input type="email" class="form-control" placeholder="Email" id="email" name="email" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your Email" required>
-                  <div class="valid-feedback">
-                    Looks good!
-                  </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
+                  <div class="invalid-feedback">Invalid WhatsApp phone number or length must be 10 digit numbers</div>
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
-                  <input type="tel" class="form-control" placeholder="WhatsApp Number" id="whatsapp" name="whatsapp" aria-label="Email" aria-describedby="business_name" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter whatsapp number">
+                  <input type="text" class="form-control" placeholder="Instagram ID" id="instagram_id" name="instagramId" aria-label="instagram_id" aria-describedby="instagram_id" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter business instagram username">
                   <div class="valid-feedback">
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
+                  <div class="invalid-feedback">Please enter valid instagram usernam.</div>
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
-                  <input type="text" class="form-control" placeholder="Instagram ID" id="instagram_id" name="instagramId" aria-label="instagram_id" aria-describedby="instagram_id" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter Instagram ID">
+                  <input type="text" class="form-control" placeholder="Facebook ID" id="facebook_id" name="facebookId" aria-label="facebook_id" aria-describedby="facebook_id" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter business facebook usename">
                   <div class="valid-feedback">
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
+                  <div class="invalid-feedback">Please enter valid facebook usename.</div>
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
-                  <input type="text" class="form-control" placeholder="Facebook ID" id="facebook_id" name="facebookId" aria-label="facebook_id" aria-describedby="facebook_id" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter Facebook ID">
-                  <div class="valid-feedback">
-                    Looks good!
-                  </div>
-                  <div class="invalid-feedback">Please enter valid E-mail.</div>
-                </div>
-
-                <div class="col-md-6 ps-2 mb-3">
-                  <input type="text" class="form-control" placeholder="Your Website Link" id="website" name="website" aria-label="website" aria-describedby="website" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter Link">
+                  <input type="url" class="form-control" placeholder="Your Website Link" id="website" name="website" aria-label="website" aria-describedby="website" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your business website link">
                   <div class="valid-feedback">
                     Looks good!
                   </div>
@@ -203,11 +219,15 @@ try {
                 <div class="mb-3">
                   <div class="form-check form-switch mb-3">
                     <input class="form-check-input" type="checkbox" name="terms" id="terms">
-                    <label class="form-check-label" for="terms">I agree to the <a href="javascript:;" class="text-dark">Privacy Policy</a> and <a href="javascript:;" class="text-dark">Terms and Conditions</a>.</label>
+                    <label class="form-check-label" for="terms">I agree to the
+                      <i class="fa-solid fa-info-circle"></i>
+                      <a href="./privacy.php" class="text-info text-gradient font-weight-bold" target="_blank">Privacy Policy</a> &amp;
+                      <a href="./terms.php" class="text-info text-gradient font-weight-bold" target="_blank">Terms of Use</a>.</label>
                   </div>
                 </div>
 
                 <div class="mb-3">
+                  <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
                   <button type="submit" name="create_listing" class="btn bg-gradient-primary w-100"><i class="fas fa-lock"></i> Create Listing</button>
                 </div>
 
