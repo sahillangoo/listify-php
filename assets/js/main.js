@@ -7,6 +7,9 @@ File Content
 - helper for adding on all elements multiple attributes
 - toggle password
 - validation for forms
+- textarea validation
+- textarea size adjustment on window resize
+- file validation
 */
 // debounce function for limiting the number of times a function is called in a given time period
 function debounce(func, delay) {
@@ -154,15 +157,16 @@ function getRegexForInput(input) {
       return null;
   }
 }
+
 // textarea validation
 const description = document.getElementById('description');
 const counter = document.getElementById('counter');
 const maxChars = 999;
 
-description.addEventListener('input', () => {
+const validateDescription = () => {
   const chars = description.value.length;
   const charsLeft = maxChars - chars;
-  counter.textContent = `${charsLeft} Characters left`;
+  counter.textContent = `${charsLeft} Characters left!`;
 
   if (charsLeft >= 0) {
     counter.parentElement.classList.remove('d-none');
@@ -176,5 +180,47 @@ description.addEventListener('input', () => {
 
   const regex = getRegexForInput(description);
   validateInput(description, regex);
+
+  // textarea size adjustment on input
+  description.style.height = 'auto';
+  description.style.height = `${description.scrollHeight}px`;
+};
+
+description.addEventListener('input', debounce(validateDescription, 500));
+
+// textarea size adjustment on window resize
+window.addEventListener('resize', () => {
+  description.style.height = 'auto';
+  description.style.height = `${description.scrollHeight}px`;
 });
 
+const fileInput = document.getElementById('business_image');
+const validExtensions = ['jpg', 'jpeg', 'png'];
+const maxSize = 2 * 1024 * 1024; // 2MB
+const minWidth = 500;
+const minHeight = 500;
+
+fileInput.addEventListener('change', function () {
+  const file = fileInput.files[0];
+  const extension = file.name.split('.').pop().toLowerCase();
+
+  if (!validExtensions.includes(extension)) {
+    fileInput.setCustomValidity('Only PNG, JPG, and JPEG files are allowed.');
+  } else if (file.size > maxSize) {
+    fileInput.setCustomValidity('File size must be less than 2MB.');
+  } else {
+    const img = new Image();
+    img.onload = function () {
+      if (img.width < minWidth || img.height < minHeight) {
+        fileInput.setCustomValidity(
+          `Image dimensions must be at least ${minWidth}x${minHeight}px.`
+        );
+      } else {
+        fileInput.setCustomValidity('');
+      }
+    };
+    img.src = URL.createObjectURL(file);
+  }
+
+  fileInput.reportValidity();
+});

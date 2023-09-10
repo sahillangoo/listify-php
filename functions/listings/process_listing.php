@@ -7,6 +7,14 @@
 require_once __DIR__ . '/../functions.php';
 
 try {
+  // Use CSRF protection on this form
+  $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
+  if (!hash_equals($_SESSION['csrf_token'], $csrf_token)) {
+    // Reset the CSRF token
+    unset($_SESSION['csrf_token']);
+    throw new Exception('CSRF token validation failed.');
+  }
+
   // Recive the data from the create listing form then validate it and If the listing is a new listing then insert it into the database
   if (isset($_POST['create_listing'])) {
     $user_id = sanitize($_SESSION['user_id']);
@@ -18,7 +26,7 @@ try {
     $address = clean($_POST['address']);
     $city = sanitize($_POST['city']);
     $pincode = sanitize($_POST['pincode']);
-    $phoneNumber = sanitize($_POST['phoneNumber']);
+    $phone = sanitize($_POST['phone']);
     $email = clean($_POST['email']);
     $whatsapp = sanitize($_POST['whatsapp']);
     $instagramId = sanitize($_POST['instagramId']);
@@ -35,120 +43,210 @@ try {
 
     // check the data empty and sanitize it
     $requiredFields = array(
-      'businessName', 'category', 'description',  'address', 'city', 'pincode', 'phoneNumber', 'email'
+      'businessName', 'category', 'description',  'address', 'city', 'pincode', 'phone', 'email'
     );
 
     foreach ($requiredFields as $field) {
       if (empty($_POST[$field])) {
-        throw new Exception("Please fill all the required fields");
+        throw new Exception("Please fill in the $field field");
       }
     }
 
     // validate the data
-    switch (true) {
-      case !preg_match('/^[a-zA-Z0-9 ]{3,30}$/', $businessName):
-        throw new Exception('Please enter a valid business name (letters, numbers, spaces, and hyphens only)');
-      case !preg_match('/^[a-zA-Z0-9\s-]+$/', $category):
-        throw new Exception('Please enter a valid category');
-      case !preg_match('/^[\w\s!?"\'&().:;,-]{10,999}$/', $description):
-        throw new Exception('Please enter a valid description (letters, numbers, spaces, and punctuation only)');
-      case !empty($latitude) && (!is_numeric($latitude) || $latitude < -90 || $latitude > 90):
-        throw new Exception('Enable location permission');
-      case !empty($longitude) && (!is_numeric($longitude) || $longitude < -180 || $longitude > 180):
-        throw new Exception('Enable location permission');
-      case !preg_match('/^[a-zA-Z0-9 -,_&]{8,30}$/', $address):
-        throw new Exception('Please enter a valid address (letters, numbers, spaces, and punctuation only)');
-      case !preg_match('/^[a-zA-Z\s-]+$/', $city):
-        throw new Exception('Please enter a valid city (letters, numbers, spaces, and hyphens only)');
-      case !preg_match('/^[0-9]{6}$/', $pincode):
-        throw new Exception('Please enter a valid pincode (6 digits only)');
-      case preg_match('/^[0-9]{10}$/', $phoneNumber):
-        throw new Exception("Invalid phone number. Please enter a 10-digit phone number.");
-      case !filter_var($email, FILTER_VALIDATE_EMAIL):
-        throw new Exception("Check your email address");
-      case $whatsapp && !preg_match('/^[0-9]{10}$/', $whatsapp):
-        throw new Exception('Please enter a valid WhatsApp number (10 digits only)');
-      case $facebookId && !preg_match('/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,30}$/', $facebookId):
-        throw new Exception('Please enter a valid Facebook ID (letters, numbers, and periods only)');
-      case $instagramId && !preg_match('/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,30}$/', $instagramId):
-        throw new Exception('Please enter a valid Instagram ID (letters, numbers, and underscores only)');
-      case $website && !filter_var($website, FILTER_VALIDATE_URL):
-        throw new Exception('Please enter a valid website URL (e.g. example.com)');
-      default:
-        // check the image is empty and less than 2MB and the image type is jpg, jpeg or png then rename the image to business name and move it to the uploads/business_images/ folder
-        $displayImage = $_FILES['displayImage'];
-        if (empty($displayImage)) {
-          throw new Exception("Please upload an image of your business");
-        }
-        $max_file_size = 2000000; // 2mb
-        $file_extension = pathinfo($displayImage['name'], PATHINFO_EXTENSION);
-        $file_extension = strtolower($file_extension);
-        switch ($file_extension) {
-          case 'jpg':
-          case 'jpeg':
-          case 'png':
-            if ($displayImage['size'] >= $max_file_size) {
-              throw new Exception("Please upload an image less than 2MB");
-            }
-            break;
-          default:
-            throw new Exception("The image you uploaded is not a jpg, jpeg or png image");
-        }
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime_type = finfo_file($finfo, $displayImage['tmp_name']);
-        if (!in_array($mime_type, ['image/jpeg', 'image/png'])) {
-          throw new Exception("Invalid file type. Please upload a JPEG or PNG image.");
-        }
-        $displayImage_name = $businessName . '.jpg';
-        $displayImage_path = '../../uploads/business_images/' . $displayImage_name;
-        if (!move_uploaded_file($displayImage['tmp_name'], $displayImage_path)) {
-          throw new Exception("Failed to upload image.");
-        }
+    validateFields($_POST);
 
-        // check if the business name already exists in the database
-        $sql = 'SELECT * FROM listings WHERE businessName = :businessName';
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':businessName', $businessName);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result) {
-          throw new Exception('The business name already exists');
-        }
+    // check if the business name already exists in the database
+    checkBusinessExists($businessName, $city, $phone);
 
-        // insert data into the database
-        $sql = 'INSERT INTO listings (user_id, businessName, category, description, featured, active, latitude, longitude, address, city, pincode, phoneNumber, email, whatsapp, facebookId, instagramId, website, displayImage) VALUES (:user_id, :businessName, :category, :description, :featured, :active, :latitude, :longitude, :address, :city, :pincode, :phoneNumber, :email, :whatsapp, :facebookId, :instagramId, :website, :displayImage)';
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->bindParam(':businessName', $businessName);
-        $stmt->bindParam(':category', $category);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':featured', $featured);
-        $stmt->bindParam(':active', $active);
-        $stmt->bindParam(':latitude', $latitude);
-        $stmt->bindParam(':longitude', $longitude);
-        $stmt->bindParam(':address', $address);
-        $stmt->bindParam(':city', $city);
-        $stmt->bindParam(':pincode', $pincode);
-        $stmt->bindParam(':phoneNumber', $phoneNumber);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':whatsapp', $whatsapp);
-        $stmt->bindParam(':facebookId', $facebookId);
-        $stmt->bindParam(':instagramId', $instagramId);
-        $stmt->bindParam(':website', $website);
-        $stmt->bindParam(':displayImage', $displayImage_name);
-        $stmt->execute();
+    // validate the image
+    $displayImage_name = validateImage($_FILES['displayImage'], $businessName);
 
-        // redirect to the account page
-        $_SESSION['successsession'] = 'Your listing has been created successfully';
-        redirect('account.php');
-    }
+    // insert data into the database
+    insertListing($user_id, $businessName, $category, $description, $featured, $active, $latitude, $longitude, $address, $city, $pincode, $phone, $email, $whatsapp, $facebookId, $instagramId, $website, $displayImage_name);
+
+    // redirect to the account page
+    $_SESSION['successsession'] = 'Your listing has been created successfully';
+    redirect('account.php');
   } else {
     throw new Exception("Please fill all the required fields else");
   }
+} catch (PDOException $e) {
+  $_SESSION['errorsession'] = 'Database error: ' . $e->getMessage();
+  redirect('add-listing.php');
 } catch (Exception $e) {
   $_SESSION['errorsession'] = $e->getMessage();
   redirect('add-listing.php');
-} finally {
-  $stmt = null;
-  $db = null;
+}
+
+function validateFields($fields)
+{
+  foreach ($fields as $field => $value) {
+    switch ($field) {
+      case 'businessName':
+        if (!preg_match('/^[a-zA-Z0-9 ]{3,30}$/', $value)) {
+          throw new Exception('Please enter a valid business name (letters, numbers, spaces, and hyphens only)');
+        }
+        break;
+      case 'category':
+        if (!preg_match('/^[a-zA-Z0-9\s-]+$/', $value)) {
+          throw new Exception('Please enter a valid category');
+        }
+        break;
+      case 'description':
+        if (!preg_match('/^[\w\s!?"\'&().:;,-]{10,999}$/', $value)) {
+          throw new Exception('Please enter a valid description (letters, numbers, spaces, and punctuation only)');
+        }
+        break;
+      case 'latitude':
+        if (!empty($value) && (!is_numeric($value) || $value < -90 || $value > 90)) {
+          throw new Exception('Enable location permission');
+        }
+        break;
+      case 'longitude':
+        if (!empty($value) && (!is_numeric($value) || $value < -180 || $value > 180)) {
+          throw new Exception('Enable location permission');
+        }
+        break;
+      case 'address':
+        if (!preg_match('/^[a-zA-Z0-9 -,_&]{8,30}$/', $value)) {
+          throw new Exception('Please enter a valid address (letters, numbers, spaces, and punctuation only)');
+        }
+        break;
+      case 'city':
+        if (!preg_match('/^[a-zA-Z\s-]+$/', $value)) {
+          throw new Exception('Please enter a valid city (letters, numbers, spaces, and hyphens only)');
+        }
+        break;
+      case 'pincode':
+        if (!preg_match('/^[0-9]{6}$/', $value)) {
+          throw new Exception('Please enter a valid pincode (6 digits only)');
+        }
+        break;
+      case 'phone':
+        if (!preg_match('/^[0-9]{10}$/', $value)) {
+          throw new Exception("Invalid phone number. Please enter a 10-digit phone number.");
+        }
+        break;
+      case 'email':
+        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+          throw new Exception("Check your email address");
+        }
+        break;
+      case 'whatsapp':
+        if ($value && !preg_match('/^[0-9]{10}$/', $value)) {
+          throw new Exception('Please enter a valid WhatsApp number (10 digits only)');
+        }
+        break;
+      case 'facebookId':
+        if ($value && !preg_match('/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,30}$/', $value)) {
+          throw new Exception('Please enter a valid Facebook ID (letters, numbers, and periods only)');
+        }
+        break;
+      case 'instagramId':
+        if ($value && !preg_match('/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,30}$/', $value)) {
+          throw new Exception('Please enter a valid Instagram ID (letters, numbers, and underscores only)');
+        }
+        break;
+      case 'website':
+        if ($value && !filter_var($value, FILTER_VALIDATE_URL)) {
+          throw new Exception('Please enter a valid website URL (e.g. example.com)');
+        }
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+function sanitizeFields($fields)
+{
+  foreach ($fields as $field => $value) {
+    $fields[$field] = sanitize($value);
+  }
+  return $fields;
+}
+function validateImage($displayImage, $businessName)
+{
+  // Check if file was uploaded
+  if (empty($displayImage)) {
+    throw new Exception("Please upload an image of your business");
+  }
+
+  // Check file size
+  $max_file_size = 2000000; // 2mb
+  if ($displayImage['size'] >= $max_file_size) {
+    throw new Exception("Please upload an image less than 2MB");
+  }
+
+  // Check file type
+  $file_extension = pathinfo($displayImage['name'], PATHINFO_EXTENSION);
+  $file_extension = strtolower($file_extension);
+  if (!in_array($file_extension, ['jpg', 'jpeg', 'png'])) {
+    throw new Exception("The image you uploaded is not a jpg, jpeg or png image");
+  }
+
+  // Check image dimensions
+  list($width, $height) = getimagesize($displayImage['tmp_name']);
+  if ($width < 500 || $height < 500) {
+    throw new Exception("Please upload an image with dimensions of at least 500x500 pixels");
+  }
+
+  // Compress image
+  $quality = 75; // Set JPEG quality
+  $image = imagecreatefromstring(file_get_contents($displayImage['tmp_name']));
+  imagejpeg($image, $displayImage['tmp_name'], $quality);
+
+  // Rename image
+  $displayImage_name = $businessName . '.' . $file_extension;
+
+  // Move image to uploads folder
+  $displayImage_path = '../../uploads/business_images/' . $displayImage_name;
+  if (!move_uploaded_file($displayImage['tmp_name'], $displayImage_path)) {
+    throw new Exception("Failed to upload image.");
+  }
+
+  return $displayImage_name;
+}
+
+function checkBusinessExists($businessName, $city, $phone)
+{
+  global $db;
+
+  $sql = 'SELECT COUNT(*) FROM listings WHERE businessName = :businessName AND city = :city AND phoneNumber = :phone';
+  $stmt = $db->prepare($sql);
+  $stmt->bindParam(':businessName', $businessName);
+  $stmt->bindParam(':city', $city);
+  $stmt->bindParam(':phone', $phone);
+  $stmt->execute();
+  $result = $stmt->fetchColumn();
+  if ($result > 0) {
+    throw new Exception('The business already exists');
+  }
+}
+
+function insertListing($user_id, $businessName, $category, $description, $featured, $active, $latitude, $longitude, $address, $city, $pincode, $phone, $email, $whatsapp, $facebookId, $instagramId, $website, $displayImage_name)
+{
+  global $db;
+
+  $sql = 'INSERT INTO listings (user_id, businessName, category, description, featured, active, latitude, longitude, address, city, pincode, phoneNumber, email, whatsapp, facebookId, instagramId, website, displayImage) VALUES (:user_id, :businessName, :category, :description, :featured, :active, :latitude, :longitude, :address, :city, :pincode, :phone, :email, :whatsapp, :facebookId, :instagramId, :website, :displayImage)';
+  $stmt = $db->prepare($sql);
+  $stmt->bindParam(':user_id', $user_id);
+  $stmt->bindParam(':businessName', $businessName);
+  $stmt->bindParam(':category', $category);
+  $stmt->bindParam(':description', $description);
+  $stmt->bindParam(':featured', $featured);
+  $stmt->bindParam(':active', $active);
+  $stmt->bindParam(':latitude', $latitude);
+  $stmt->bindParam(':longitude', $longitude);
+  $stmt->bindParam(':address', $address);
+  $stmt->bindParam(':city', $city);
+  $stmt->bindParam(':pincode', $pincode);
+  $stmt->bindParam(':phone', $phone);
+  $stmt->bindParam(':email', $email);
+  $stmt->bindParam(':whatsapp', $whatsapp);
+  $stmt->bindParam(':facebookId', $facebookId);
+  $stmt->bindParam(':instagramId', $instagramId);
+  $stmt->bindParam(':website', $website);
+  $stmt->bindParam(':displayImage', $displayImage_name);
+  $stmt->execute();
 }

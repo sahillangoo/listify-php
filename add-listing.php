@@ -106,10 +106,12 @@ try {
                 <div class="mb-3">
                   <textarea name="description" class="form-control has-validation" id="description" placeholder="About your Business" rows="3" aria-label="description" aria-describedby="description" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter business description of 999 words" required></textarea>
                   <div class="valid-feedback">
-                    <span id="counter">999 Words left, </span>
+                    <span id="counter"> </span><br>
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Invalid description text or length.</div>
+                  <div class="invalid-feedback">
+                    Invalid description text or length must be between 10 to 999 words only!
+                  </div>
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
@@ -213,7 +215,7 @@ try {
                   <div class="valid-feedback">
                     Looks good!
                   </div>
-                  <div class="invalid-feedback">Please enter valid display_image.</div>
+                  <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="mb-3">
