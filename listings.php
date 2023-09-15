@@ -58,8 +58,8 @@ include_once './functions/functions.php';
   <section class="pt-5">
     <div class="container">
       <div class="row">
-
         <div class="col-auto d-inline-flex justify-content-center align-items-center mb-3 gap-3 flex-wrap filter-dropdowns">
+
           <!-- filter dropdown -->
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,8 +94,6 @@ include_once './functions/functions.php';
             <span class="text-secondary text-sm">Showing <span id="listings-count">0</span> of <span id="total-listings">0</span> listings</span>
           </span>
         </div>
-        <!-- all listings -->
-
         <div class="col-md-12">
           <div class="row" id="listings">
             <!-- listings will be displayed here -->
@@ -115,9 +113,22 @@ include_once './functions/functions.php';
           </nav>
         </div>
 
+
+
         <script>
-          
-          // listing card
+          const listingsDiv = document.getElementById('listings');
+          const errorMessage = document.getElementById('error-message');
+          const loadingSpinner = document.getElementById('loading-spinner');
+          const listingsPagination = document.getElementById('listings-pagination');
+          const listingsCount = document.getElementById('listings-count');
+          const totalListings = document.getElementById('total-listings');
+
+          const urlParams = new URLSearchParams(window.location.search);
+          const currentPage = parseInt(urlParams.get('page')) || parseInt(localStorage.getItem('currentPage')) || 1;
+          const totalPages = parseInt(localStorage.getItem('totalPages')) || 1;
+
+          loadingSpinner.classList.add('d-flex');
+
           function createListingCard(listing) {
             const card = document.createElement('div');
             card.classList.add('col-md-3', 'col-lg-3', 'mb-4');
@@ -214,24 +225,27 @@ include_once './functions/functions.php';
             return link;
           }
 
-          const listingsDiv = document.getElementById('listings');
-          const errorMessage = document.getElementById('error-message');
-          const loadingSpinner = document.getElementById('loading-spinner');
-          const listingsPagination = document.getElementById('listings-pagination');
-
-          loadingSpinner.classList.add('d-flex');
+          function updateListingsCount(listingsCount, totalListings) {
+            listingsCountElement.textContent = listingsCount;
+            totalListingsElement.textContent = totalListings;
+          }
 
           function fetchListings(page, sortOption) {
             loadingSpinner.classList.remove('d-none');
             listingsDiv.innerHTML = '';
             listingsPagination.innerHTML = '';
             let url = `./api/listingsApi.php?page=${page}`;
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.delete('featured');
+            urlParams.delete('most_rated');
+            urlParams.delete('most_reviewed');
             if (sortOption) {
-              url += `&${sortOption}`;
+              urlParams.set(sortOption, '1');
               localStorage.setItem('sortOption', sortOption); // store sort option in local storage
             } else {
               localStorage.removeItem('sortOption'); // remove sort option from local storage
             }
+            url += `&${urlParams.toString()}`;
             const cachedResponse = localStorage.getItem(url); // check if response is cached
             if (cachedResponse) {
               const data = JSON.parse(cachedResponse);
@@ -252,19 +266,16 @@ include_once './functions/functions.php';
               loadingSpinner.classList.add('d-none');
               localStorage.setItem('currentPage', page);
               localStorage.setItem('totalPages', totalPages);
-              const urlParams = new URLSearchParams(window.location.search);
-              urlParams.set('page', page);
-              if (sortOption) {
-                urlParams.set(sortOption, '1');
-              } else {
-                urlParams.delete('featured');
-                urlParams.delete('most_rated');
-                urlParams.delete('most_reviewed');
-              }
               window.history.replaceState({}, '', `${window.location.pathname}?${urlParams}`);
+              updateListingsCount(data.listings.length, data.total); // update listings count
             } else {
               fetch(url) // fetch listings from the API
-                .then(response => response.json())
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+                })
                 .then(data => {
                   data.listings.forEach(listing => {
                     const card = createListingCard(listing);
@@ -283,17 +294,9 @@ include_once './functions/functions.php';
                   loadingSpinner.classList.add('d-none');
                   localStorage.setItem('currentPage', page);
                   localStorage.setItem('totalPages', totalPages);
-                  const urlParams = new URLSearchParams(window.location.search);
-                  urlParams.set('page', page);
-                  if (sortOption) {
-                    urlParams.set(sortOption, '1');
-                  } else {
-                    urlParams.delete('featured');
-                    urlParams.delete('most_rated');
-                    urlParams.delete('most_reviewed');
-                  }
                   window.history.replaceState({}, '', `${window.location.pathname}?${urlParams}`);
                   localStorage.setItem(url, JSON.stringify(data)); // cache response in local storage
+                  updateListingsCount(data.listings.length, data.total); // update listings count
                 })
                 .catch(error => {
                   console.error(error);
@@ -303,23 +306,22 @@ include_once './functions/functions.php';
             }
           }
 
-          const urlParams = new URLSearchParams(window.location.search);
-          const currentPage = parseInt(urlParams.get('page')) || parseInt(localStorage.getItem('currentPage')) || 1;
-          const totalPages = parseInt(localStorage.getItem('totalPages')) || 1;
+          function handleFilterButtonClick(event) {
+            event.preventDefault();
+            const sortOption = event.target.getAttribute('data-filter');
+            fetchListings(1, sortOption);
+          }
+
+          const filterButtons = document.querySelectorAll('[data-filter]');
+          filterButtons.forEach(button => {
+            button.addEventListener('click', handleFilterButtonClick);
+          });
+
           if (currentPage < 1 || currentPage > totalPages) {
             fetchListings(1);
           } else {
             fetchListings(currentPage);
           }
-
-          const filterButtons = document.querySelectorAll('[data-filter]');
-          filterButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-              event.preventDefault();
-              const sortOption = event.target.getAttribute('data-filter');
-              fetchListings(1, sortOption);
-            });
-          });
         </script>
 
       </div>
@@ -335,6 +337,7 @@ include_once './functions/functions.php';
   // include the footer file
   include_once './includes/_footer.php';
   ?>
+  <script src="./assets/js/search.js"></script>
 </body>
 
 </html>

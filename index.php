@@ -98,8 +98,16 @@ include_once './functions/functions.php';
               </div>
             </a>
           </div>
+          <div class="col-md-12">
+            <!-- button for all listing page -->
+            <a href="./listings.php" class="btn btn-primary btn-sm mt-3">
+              <i class="fas fa-list" aria-hidden="true"></i> View All Listings
 
+            </a>
+          </div>
         </div>
+
+
       </div>
       <div class="position-absolute w-100 z-index-1 bottom-0">
         <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
