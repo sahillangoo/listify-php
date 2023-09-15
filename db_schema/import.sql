@@ -160,10 +160,7 @@ DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS listings;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
-ALTER TABLE listings
-MODIFY COLUMN description TEXT(999) NOT NULL DEFAULT 'No description provided';
---  alter featured and active remove not null
+
 --@block
-ALTER TABLE listings
-MODIFY COLUMN featured BOOLEAN DEFAULT 0,
-MODIFY COLUMN active BOOLEAN DEFAULT 1;
+ALTER TABLE listings ADD INDEX active_idx (active);
+ALTER TABLE listings ADD INDEX id_idx (id);

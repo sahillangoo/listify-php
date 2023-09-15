@@ -93,7 +93,7 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
           <li class="breadcrumb-item"><a href="./categories.php">Categories</a></li>
-          <li class="breadcrumb-item text-capitalize"><a href="./category.php?category=<?php echo $result['category']; ?>"><?php echo $result['category']; ?></a></li>
+          <li class="breadcrumb-item text-capitalize"><a href="./categories.php?slug=<?php echo $result['category']; ?>"><?php echo $result['category']; ?></a></li>
           <li class="breadcrumb-item active text-capitalize" aria-current="page"><?php echo $result['businessName']; ?></li>
         </ol>
       </nav>

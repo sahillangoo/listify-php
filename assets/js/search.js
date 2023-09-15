@@ -70,7 +70,7 @@ async function search() {
   }
   searchSpinner.classList.remove('d-none');
   try {
-    const response = await fetch(`search.php?q=${searchQuery}`);
+    const response = await fetch(`./api/searchApi.php?q=${searchQuery}`);
     const data = await response.json();
     displaySearchResults(data);
   } catch (error) {

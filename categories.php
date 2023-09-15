@@ -68,10 +68,10 @@ if (!isset($_GET['slug']) || empty($_GET['slug']) || !is_string($_GET['slug']) |
   // include the header file
   include_once './includes/_navbar.php';
   ?>
-    <!-- ========== Start slug Listing Grid ========== -->
-    <section class="py-5">
-      <div class="container">
-        <!-- breadcrumb -->
+  <!-- ========== Start slug Listing Grid ========== -->
+  <section class="py-5">
+    <div class="container">
+      <!-- breadcrumb -->
       <div class="row py-5 overflow-hidden">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
@@ -81,11 +81,50 @@ if (!isset($_GET['slug']) || empty($_GET['slug']) || !is_string($_GET['slug']) |
           </ol>
         </nav>
       </div>
-        <h2 class="text-center text-capitalize"><?php echo $slug; ?> Business Listings</h2>
-        <p class="text-center ">
-          Here are the list of all the Businesses in <span class="text-primary text-capitalize"><?php echo $slug; ?></span> category.
-        </p>
+      <h2 class="text-center text-capitalize"><?php echo $slug; ?> Business Listings</h2>
+      <p class="text-center ">
+        Here are the list of all the Businesses in <span class="text-primary text-capitalize"><?php echo $slug; ?></span> category.</p>
+      <div class="row">
+        <div class="col-auto d-inline-flex justify-content-center align-items-center mb-3 gap-3 flex-wrap filter-dropdowns">
+          <!-- filter dropdown -->
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Filter Listings
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+              <li><button class="dropdown-item" type="button">Featured</button></li>
+              <li><button class="dropdown-item" type="button">Most Reviewed</button></li>
+              <li><button class="dropdown-item" type="button">Top Rated</button></li>
+            </ul>
+          </div>
+          <!-- select city dropdown -->
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" id="cityDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Select City
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="cityDropdown">
+              <li><button class="dropdown-item" type="button">Srinagar</button></li>
+              <li><button class="dropdown-item" type="button">Anantnag</button></li>
+              <li><button class="dropdown-item" type="button">Baramulla</button></li>
+              <li><button class="dropdown-item" type="button">Budgam</button></li>
+              <li><button class="dropdown-item" type="button">Bandipora</button></li>
+              <li><button class="dropdown-item" type="button">Pulwama</button></li>
+              <li><button class="dropdown-item" type="button">Kupwara</button></li>
+              <li><button class="dropdown-item" type="button">Kulgam</button></li>
+              <li><button class="dropdown-item" type="button">Shopian</button></li>
+              <li><button class="dropdown-item" type="button">Ganderbal</button></li>
+            </ul>
+          </div>
+        </div>
+
+
+
+
         <div class="row">
+          <?php
+
+          ?>
+          <!--  -->
           <?php
           // Define the maximum number of slug listings per page
           $maxSlugListingsPerPage = 12;
@@ -129,8 +168,8 @@ if (!isset($_GET['slug']) || empty($_GET['slug']) || !is_string($_GET['slug']) |
           ?>
         </div>
       </div>
-    </section>
-    <!-- ========== End slug Listing Grid ========== -->
+  </section>
+  <!-- ========== End slug Listing Grid ========== -->
 
 
   <?php

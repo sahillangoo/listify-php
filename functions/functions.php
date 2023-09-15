@@ -115,6 +115,7 @@ function getRecentListings(PDO $db): array
 
   return $listings;
 }
+
 // Listing display function
 function displayListing($listing)
 {
@@ -146,6 +147,7 @@ function displayListing($listing)
           </div>
         HTML;
 }
+
 // Function to display user listings
 function get_user_listings($db, $user_id)
 {
@@ -167,8 +169,6 @@ function get_user_listings($db, $user_id)
 
   return $listings;
 }
-
-
 
 // Function to get reviews for user listings
 function get_user_reviews($db, $user_id)

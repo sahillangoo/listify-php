@@ -46,7 +46,7 @@ include_once './functions/functions.php';
         <div class="row justify-content-center">
           <p class="col-12 lead text-white text-capitalize font-font-weight-normal my-2">Browse our top categories</p>
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./category.php?slug=restaurant">
+            <a href="./categories.php?slug=restaurant">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_restaurant.svg" alt="Restaurants" height="50px">
                 <p class="text-white font-weight-bold text-xs">Restaurant's</p>
@@ -55,7 +55,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./category.php?slug=hospital">
+            <a href="./categories.php?slug=hospital">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_hospital_3.svg" alt="Hospitals" height="50px">
                 <p class="text-white font-weight-bold text-xs">Hospital's</p>
@@ -64,7 +64,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./category.php?slug=pharmacy">
+            <a href="./categories.php?slug=pharmacy">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_pharmacy_shop.svg" alt="Pharmacy" height="50px">
                 <span class="text-white font-weight-bold text-xs">Pharmacy's</p>
@@ -73,7 +73,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./category.php?slug=education">
+            <a href="./categories.php?slug=education">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_school.svg" alt="Education" height="50px">
                 <p class="text-white font-weight-bold text-xs">Education's</p>
@@ -82,7 +82,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./category.php?slug=atm">
+            <a href="./categories.php?slug=atm">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_atm.svg" alt="ATMs" height="50px">
                 <p class="text-white font-weight-bold text-xs">ATM's</p>
@@ -91,7 +91,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./category.php?slug=bank">
+            <a href="./categories.php?slug=bank">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_euro_bank_building_2.svg" alt="Banks" height="50px">
                 <p class="text-white font-weight-bold text-xs">Bank's</p>
@@ -123,9 +123,9 @@ include_once './functions/functions.php';
   <!-- ========== Start featured Listing Grid ========== -->
   <section class="py-5">
     <div class="container my-5">
-      <h2 class="text-center">Featured Business Listings</h2>
-      <p class="text-center">Listify is a comprehensive business listing app that allows you to list your business and get reviews from your customers.</p>
       <div class="row">
+        <h2 class="text-center">Featured Business Listings</h2>
+        <p class="text-center">Listify is a comprehensive business listing app that allows you to list your business and get reviews from your customers.</p>
         <?php
         // Define the maximum number of featured listings per page
         $maxFeaturedListingsPerPage = 8;

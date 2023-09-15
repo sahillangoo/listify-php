@@ -1,6 +1,6 @@
 <?php
 // include functions file
-include_once './functions/functions.php';
+include_once './../functions/functions.php';
 
 try {
   // Get search query from GET parameter, if it exists
