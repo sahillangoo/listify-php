@@ -18,7 +18,7 @@ if ($_SESSION['status'] === 'inactive') {
 
 // Fetch user's listings from the database
 try {
-  $listings = get_user_listings($db, $user_id);
+  $listings = getUserListings($db, $user_id);
 } catch (PDOException $e) {
   error_log($e->getMessage());
 }
@@ -134,7 +134,7 @@ $user_since = date('d M Y', strtotime($_SESSION['user_since']));
       <h3 class="h3 text-center text-primary text-gradient">Your Reviews</h3>
       <?php
       // Get user reviews
-      $reviews = get_user_reviews($db, $user_id);
+      $reviews = getUserReviews($db, $user_id);
 
       // If the user has no reviews, display a message
       if (empty($reviews)) {

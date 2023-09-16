@@ -1,38 +1,73 @@
 <?php
-// This file contains the functions that will be used in the application
+/*
+functions/functions.php
+File Contents:
+1. redirect()
+2. clean()
+3. sanitize()
+4. hashPassword()
+5. checkHttps()
+6. isAuthenticated()
+7. isAdmin()
+8. getFeaturedListings()
+9. displayListing()
+10. getUserListings()
+11. getUserReviews()
+
+*/
+
 // Start the session if it has not already started
-$sessionStarted = session_start();
-if (!$sessionStarted) {
-  throw new \RuntimeException('Session could not be started');
-}
+session_start();
+
 // Include DB file
 require_once __DIR__ . '/../functions/db_connect.php';
-// Function to set location
-function redirect($url)
+
+/**
+ * Redirects the user to the specified URL.
+ *
+ * @param string $url The URL to redirect to.
+ * @return void
+ */
+function redirect(string $url): void
 {
   header('Location: ' . BASE_URL . $url);
+  exit;
 }
-// Function to clean data
-function clean($data): string
+
+/**
+ * Cleans the specified data by removing extra spaces, backslashes, and HTML tags.
+ *
+ * @param string $data The data to clean.
+ * @return string The cleaned data.
+ */
+function clean(string $data): string
 {
-  $data = trim($data); // remove extra spaces
-  $data = stripslashes($data); // remove backslashes
-  return strip_tags($data); // remove HTML tags
+  return strip_tags(stripslashes(trim($data)));
 }
-// Function to sanitize data
-function sanitize($data): string
+
+/**
+ * Sanitizes the specified data by removing extra spaces, backslashes, and HTML tags, and converting special characters to HTML entities.
+ *
+ * @param string $data The data to sanitize.
+ * @return string The sanitized data.
+ */
+function sanitize(string $data): string
 {
-  $data = trim($data); // remove extra spaces
-  $data = stripslashes($data); // remove backslashes
-  $data = htmlspecialchars($data); // convert special characters to HTML entities
-  return strip_tags($data); // remove HTML tags
+  return htmlspecialchars(clean($data));
 }
+
 // Generate a CSRF token and store it in the user's session
 if (!isset($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 }
-// Function to hash password
-function hashPassword($password): string
+
+/**
+ * Hashes the specified password using the Argon2id algorithm.
+ *
+ * @param string $password The password to hash.
+ * @return string The hashed password.
+ */
+function hashPassword(string $password): string
 {
   $options = [
     'cost' => 12,
@@ -41,34 +76,35 @@ function hashPassword($password): string
   ];
   return password_hash($password, PASSWORD_ARGON2ID, $options);
 }
-// check https function
-function check_https()
+
+/**
+ * Checks if the current request is using HTTPS.
+ *
+ * @return bool True if the request is using HTTPS, false otherwise.
+ */
+function checkHttps(): bool
 {
-  if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
-    return false;
-  }
-  return true;
+  return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
 }
 
-// Function to check if the user is logged in
+/**
+ * Checks if the user is authenticated.
+ *
+ * @return bool True if the user is authenticated, false otherwise.
+ */
 function isAuthenticated(): bool
 {
   return !empty($_SESSION["authenticated"]) && $_SESSION["authenticated"] === true;
 }
-// function to check if the user role is admin
+
+/**
+ * Checks if the user is an admin.
+ *
+ * @return bool True if the user is an admin, false otherwise.
+ */
 function isAdmin(): bool
 {
   return isset($_SESSION["role"]) && $_SESSION["role"] === 'admin';
-}
-
-// Main Functions
-// Function to get_user
-function get_user($db, $user_id)
-{
-  $sql = "SELECT * FROM users WHERE id = :user_id";
-  $stmt = $db->prepare($sql);
-  $stmt->execute(['user_id' => $user_id]);
-  return $stmt->fetch();
 }
 
 /**
@@ -102,22 +138,12 @@ function getFeaturedListings(PDO $db, int $maxPerPage, int $offset): array
 }
 
 /**
- * Retrieves the recent activity listings from the database.
+ * Displays the specified listing.
  *
- * @param PDO $db The database connection.
- * @return array An array containing the recent activity listings.
+ * @param array $listing The listing to display.
+ * @return void
  */
-function getRecentListings(PDO $db): array
-{
-  $stmt = $db->prepare("SELECT l.*, COUNT(r.id) AS reviews_count, AVG(r.rating) AS avg_rating, u.username FROM listings l LEFT JOIN reviews r ON l.id = r.listing_id JOIN users u ON l.user_id = u.id WHERE l.active = 1 GROUP BY l.id ORDER BY l.createdAt DESC LIMIT 8");
-  $stmt->execute();
-  $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-  return $listings;
-}
-
-// Listing display function
-function displayListing($listing)
+function displayListing(array $listing): void
 {
   echo <<<HTML
           <div class="col-md-3 col-lg-3 mb-4">
@@ -148,8 +174,14 @@ function displayListing($listing)
         HTML;
 }
 
-// Function to display user listings
-function get_user_listings($db, $user_id)
+/**
+ * Retrieves the listings for the specified user.
+ *
+ * @param PDO $db The database connection.
+ * @param int $user_id The ID of the user.
+ * @return array The listings for the specified user.
+ */
+function getUserListings(PDO $db, int $user_id): array
 {
   $listings_sql = "SELECT l.*, u.username FROM listings l JOIN users u ON l.user_id = u.id WHERE l.active = 1 AND user_id = :user_id ORDER BY l.createdAt DESC";
   $reviews_sql = "SELECT listing_id, COUNT(id) AS reviews_count, AVG(rating) AS avg_rating FROM reviews WHERE listing_id IN (SELECT id FROM listings WHERE user_id = :user_id) GROUP BY listing_id";
@@ -170,8 +202,14 @@ function get_user_listings($db, $user_id)
   return $listings;
 }
 
-// Function to get reviews for user listings
-function get_user_reviews($db, $user_id)
+/**
+ * Retrieves the reviews for the listings of the specified user.
+ *
+ * @param PDO $db The database connection.
+ * @param int $user_id The ID of the user.
+ * @return array The reviews for the listings of the specified user.
+ */
+function getUserReviews(PDO $db, int $user_id): array
 {
   $sql = "SELECT r.*, l.businessName, l.displayImage FROM reviews r JOIN listings l ON r.listing_id = l.id WHERE l.user_id = :user_id ORDER BY r.createdAt DESC";
   $stmt = $db->prepare($sql);

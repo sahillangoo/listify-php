@@ -1,21 +1,23 @@
 <?php
-/*
-  *This file will handle the create listing form data and insert it into the database
+/**
+ * This file handles the create listing form data and inserts it into the database.
+ *
+ * Author: SahilLangoo
+ * Last modified: 23/8/2023
+ */
 
-*/
-// include functions file
 require_once __DIR__ . '/../functions.php';
 
 try {
   // Use CSRF protection on this form
-  $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
+  $csrf_token = $_POST['csrf_token'] ?? '';
   if (!hash_equals($_SESSION['csrf_token'], $csrf_token)) {
     // Reset the CSRF token
     unset($_SESSION['csrf_token']);
     throw new Exception('CSRF token validation failed.');
   }
 
-  // Recive the data from the create listing form then validate it and If the listing is a new listing then insert it into the database
+  // Receive the data from the create listing form, validate it, and insert it into the database
   if (isset($_POST['create_listing'])) {
     $user_id = sanitize($_SESSION['user_id']);
     $businessName = sanitize($_POST['businessName']);
@@ -35,40 +37,37 @@ try {
     $featured = 0;
     $active = 1;
 
-    // if non required fields whatsapp, facebookId, instagramId, website are empty then set it to NULL
+    // If non-required fields (whatsapp, facebookId, instagramId, website) are empty, set them to NULL
     $whatsapp = empty($whatsapp) ? null : $whatsapp;
     $facebookId = empty($facebookId) ? null : $facebookId;
     $instagramId = empty($instagramId) ? null : $instagramId;
     $website = empty($website) ? null : $website;
 
-    // check the data empty and sanitize it
-    $requiredFields = array(
-      'businessName', 'category', 'description',  'address', 'city', 'pincode', 'phone', 'email'
-    );
-
+    // Check if required fields are empty and sanitize them
+    $requiredFields = ['businessName', 'category', 'description', 'address', 'city', 'pincode', 'phone', 'email'];
     foreach ($requiredFields as $field) {
       if (empty($_POST[$field])) {
         throw new Exception("Please fill in the $field field");
       }
     }
 
-    // validate the data
+    // Validate the data
     validateFields($_POST);
 
-    // check if the business name already exists in the database
+    // Check if the business name already exists in the database
     checkBusinessExists($businessName, $city, $phone);
 
-    // validate the image
-    $displayImage_name = validateImage($_FILES['displayImage'], $businessName);
+    // Validate the image
+    $displayImage_name = validateImage($_FILES['displayImage'], $businessName, $city);
 
-    // insert data into the database
+    // Insert data into the database
     insertListing($user_id, $businessName, $category, $description, $featured, $active, $latitude, $longitude, $address, $city, $pincode, $phone, $email, $whatsapp, $facebookId, $instagramId, $website, $displayImage_name);
 
-    // redirect to the account page
+    // Redirect to the account page
     $_SESSION['successsession'] = 'Your listing has been created successfully';
     redirect('account.php');
   } else {
-    throw new Exception("Please fill all the required fields else");
+    throw new Exception("Please fill all the required fields");
   }
 } catch (PDOException $e) {
   $_SESSION['errorsession'] = 'Database error: ' . $e->getMessage();
@@ -158,14 +157,7 @@ function validateFields($fields)
   }
 }
 
-function sanitizeFields($fields)
-{
-  foreach ($fields as $field => $value) {
-    $fields[$field] = sanitize($value);
-  }
-  return $fields;
-}
-function validateImage($displayImage, $businessName)
+function validateImage($displayImage, $businessName, $city)
 {
   // Check if file was uploaded
   if (empty($displayImage)) {
@@ -197,7 +189,14 @@ function validateImage($displayImage, $businessName)
   imagejpeg($image, $displayImage['tmp_name'], $quality);
 
   // Rename image
-  $displayImage_name = $businessName . '.' . $file_extension;
+  $displayImage_name = sanitize($businessName) . '_' . sanitize($city) . '.' . $file_extension;
+
+  // Check if image already exists in directory
+  $i = 1;
+  while (file_exists('../../uploads/business_images/' . $displayImage_name)) {
+    $displayImage_name = sanitize($businessName) . '_' . sanitize($city) . '_' . $i . '.' . $file_extension;
+    $i++;
+  }
 
   // Move image to uploads folder
   $displayImage_path = '../../uploads/business_images/' . $displayImage_name;
@@ -207,7 +206,6 @@ function validateImage($displayImage, $businessName)
 
   return $displayImage_name;
 }
-
 function checkBusinessExists($businessName, $city, $phone)
 {
   global $db;

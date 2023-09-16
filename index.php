@@ -180,33 +180,6 @@ include_once './functions/functions.php';
   </section>
   <!-- ========== End featured Listing Grid ========== -->
 
-  <!-- ========== Start Recent Activity ========== -->
-  <section class="py-5">
-    <div class="container my-5">
-      <h2 class="text-center">Recent Activity</h2>
-      <p class="text-center">The are some of our latest listings </p>
-      <div class="row">
-        <?php
-        // Retrieve the recent activity listings from the database
-        $recentListings = getRecentListings($db);
-
-        // Loop through the recent activity listings and display each listing
-        foreach ($recentListings as $listing) {
-          displayListing($listing);
-        }
-
-        // Check if there are any listings
-        $hasListings = !empty($recentListings);
-        if (!$hasListings) {
-          // Display a message if there are no listings
-          echo '<div class="col-md-12 text-center my-5"><p class="lead text-muted">No recent activity found</p></div>';
-        }
-        ?>
-      </div>
-    </div>
-  </section>
-  <!-- ========== End Recent Activity ========== -->
-
   <!-- ========== Start Why Choose Listify ========== -->
   <section id="why-choose-listify" class="py-5">
     <div class="container">

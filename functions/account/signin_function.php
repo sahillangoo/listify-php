@@ -1,23 +1,26 @@
 <?php
-/*
-* Authentication file for signIn for the Webapp
-  Author: SahilLangoo
-  lastModified: 23/8/2023
-*/
+/**
+ * Authentication file for signIn for the Webapp
+ *
+ * Author: SahilLangoo
+ * Last modified: 23/8/2023
+ */
+
 require_once __DIR__ . '/../functions.php';
 
 if (isset($_POST['signin'])) {
   // Use CSRF protection on this form
-  $csrf_token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
+  $csrf_token = $_POST['csrf_token'] ?? '';
   try {
     if (!hash_equals($_SESSION['csrf_token'], $csrf_token)) {
       // Reset the CSRF token
       unset($_SESSION['csrf_token']);
       throw new Exception('CSRF token validation failed.');
     }
+
     // Get the form data
-    $username = clean($_POST['username']);
-    $password = clean($_POST['password']);
+    $username = clean($_POST['username'] ?? '');
+    $password = clean($_POST['password'] ?? '');
     $remember_me = isset($_POST['remember_me']) && $_POST['remember_me'] === 'on';
     if (empty($username) || empty($password)) {
       throw new Exception('All fields are necessary.');
@@ -37,7 +40,15 @@ if (isset($_POST['signin'])) {
   }
 }
 
-function signIn($username, $password, $remember_me): void
+/**
+ * Signs in a user with the given username and password.
+ *
+ * @param string $username The username of the user to sign in.
+ * @param string $password The password of the user to sign in.
+ * @param bool $remember_me Whether to remember the user's session.
+ * @return void
+ */
+function signIn(string $username, string $password, bool $remember_me): void
 {
   try {
     global $db;
@@ -92,13 +103,13 @@ function signIn($username, $password, $remember_me): void
     }
 
     // Set the session token cookie securely
-    $cookie_options = array(
+    $cookie_options = [
       'expires' => strtotime($expires_at),
       'path' => '/',
       'secure' => true, // Only send cookie over HTTPS
       'httponly' => true, // Prevent JavaScript from accessing the cookie
       'samesite' => 'Strict' // Prevent cross-site request forgery attacks
-    );
+    ];
     setcookie('session_token', $session_token, $cookie_options);
 
     // Set a long-lived cookie if "Remember Me" is checked
