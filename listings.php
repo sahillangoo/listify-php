@@ -8,6 +8,7 @@ include_once './functions/functions.php';
 <head>
   <title>All Listings</title>
   <?php include_once './includes/_head.php'; ?>
+  <script src="./assets/js/listings.js" type="module"></script>
 </head>
 
 <body class="index-page">
@@ -93,6 +94,7 @@ include_once './functions/functions.php';
             <!-- no of listings  -->
             <span class="text-secondary text-sm">Showing <span id="listings-count">0</span> of <span id="total-listings">0</span> listings</span>
           </span>
+          
         </div>
         <div class="col-md-12">
           <div class="row" id="listings">
@@ -112,218 +114,6 @@ include_once './functions/functions.php';
             </ul>
           </nav>
         </div>
-
-
-
-        <script>
-          const listingsDiv = document.getElementById('listings');
-          const errorMessage = document.getElementById('error-message');
-          const loadingSpinner = document.getElementById('loading-spinner');
-          const listingsPagination = document.getElementById('listings-pagination');
-          const listingsCount = document.getElementById('listings-count');
-          const totalListings = document.getElementById('total-listings');
-
-          const urlParams = new URLSearchParams(window.location.search);
-          const currentPage = parseInt(urlParams.get('page')) || parseInt(localStorage.getItem('currentPage')) || 1;
-          const totalPages = parseInt(localStorage.getItem('totalPages')) || 1;
-
-          loadingSpinner.classList.add('d-flex');
-
-          function createListingCard(listing) {
-            const card = document.createElement('div');
-            card.classList.add('col-md-3', 'col-lg-3', 'mb-4');
-            card.innerHTML = `
-              <div class="card card-frame">
-                <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
-                  <a href="./listing.php?listing=${listing.id}" class="d-block">
-                    <img src="./uploads/business_images/${listing.displayImage}" class="img-fluid border-radius-lg move-on-hover" alt="${listing.displayImage}" loading="lazy">
-                  </a>
-                </div>
-                <div class="card-body pt-2">
-                  <div class="d-flex justify-content-between align-items-center my-2">
-                    <span class="text-uppercase text-xxs font-weight-bold"><i class="fa-solid fa-shop"></i> ${listing.category}</span>
-                    <span class="text-uppercase text-xxs font-weight-bold "><i class="fa-solid fa-location-dot"></i> ${listing.city}</span>
-                  </div>
-                  <div class="d-flex justify-content-between ">
-                    <a href="./listing.php?listing=${listing.id}" class="card-title h6 d-block text-gradient text-primary font-weight-bold ">${listing.businessName}</a>
-                    <span class="text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> ${listing.avg_rating} (${listing.reviews_count})</span>
-                  </div>
-                  <p class="card-description text-sm mb-3" id="truncate">${listing.description} ...</p>
-                  <p class="mb-2 text-xxs font-weight-bolder text-warning text-gradient text-uppercase"><span>By―</span> ${listing.user}</p>
-                  <div class="d-flex justify-content-start my-2">
-                    <a href="./listing.php?listing=${listing.id}" class="text-primary text-sm icon-move-right">View details <i class="fas fa-arrow-right text-sm" aria-hidden="true"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            `;
-            return card;
-          }
-
-          function createPaginationLink(page, isActive) {
-            const link = document.createElement('li');
-            link.classList.add('page-item');
-            if (isActive) {
-              link.classList.add('active');
-            }
-            const linkContent = document.createElement('a');
-            linkContent.classList.add('page-link');
-            linkContent.href = `#`;
-            linkContent.textContent = page;
-            linkContent.addEventListener('click', (event) => {
-              event.preventDefault();
-              fetchListings(page);
-              localStorage.setItem('currentPage', page);
-            });
-            link.appendChild(linkContent);
-            return link;
-          }
-
-          function createPreviousLink(page) {
-            const link = document.createElement('li');
-            link.classList.add('page-item');
-            if (page === 1) {
-              link.classList.add('disabled');
-            }
-            const linkContent = document.createElement('a');
-            linkContent.classList.add('page-link');
-            linkContent.href = `#`;
-            linkContent.setAttribute('aria-label', 'Previous');
-            const icon = document.createElement('span');
-            icon.setAttribute('aria-hidden', 'true');
-            icon.classList.add('fa-solid', 'fa-angles-left');
-            linkContent.appendChild(icon);
-            linkContent.addEventListener('click', (event) => {
-              event.preventDefault();
-              fetchListings(page - 1);
-              localStorage.setItem('currentPage', page - 1);
-            });
-            link.appendChild(linkContent);
-            return link;
-          }
-
-          function createNextLink(page, totalPages) {
-            const link = document.createElement('li');
-            link.classList.add('page-item');
-            if (page === totalPages) {
-              link.classList.add('disabled');
-            }
-            const linkContent = document.createElement('a');
-            linkContent.classList.add('page-link');
-            linkContent.href = `#`;
-            linkContent.setAttribute('aria-label', 'Next');
-            const icon = document.createElement('span');
-            icon.setAttribute('aria-hidden', 'true');
-            icon.classList.add('fa-solid', 'fa-angles-right');
-            linkContent.appendChild(icon);
-            linkContent.addEventListener('click', (event) => {
-              event.preventDefault();
-              fetchListings(page + 1);
-              localStorage.setItem('currentPage', page + 1);
-            });
-            link.appendChild(linkContent);
-            return link;
-          }
-
-          function updateListingsCount(listingsCount, totalListings) {
-            listingsCountElement.textContent = listingsCount;
-            totalListingsElement.textContent = totalListings;
-          }
-
-          function fetchListings(page, sortOption) {
-            loadingSpinner.classList.remove('d-none');
-            listingsDiv.innerHTML = '';
-            listingsPagination.innerHTML = '';
-            let url = `./api/listingsApi.php?page=${page}`;
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.delete('featured');
-            urlParams.delete('most_rated');
-            urlParams.delete('most_reviewed');
-            if (sortOption) {
-              urlParams.set(sortOption, '1');
-              localStorage.setItem('sortOption', sortOption); // store sort option in local storage
-            } else {
-              localStorage.removeItem('sortOption'); // remove sort option from local storage
-            }
-            url += `&${urlParams.toString()}`;
-            const cachedResponse = localStorage.getItem(url); // check if response is cached
-            if (cachedResponse) {
-              const data = JSON.parse(cachedResponse);
-              data.listings.forEach(listing => {
-                const card = createListingCard(listing);
-                listingsDiv.appendChild(card);
-              });
-              const listingperPage = 12; // number of listings per page
-              const totalPages = Math.ceil(data.total / listingperPage);
-              for (let i = 1; i <= totalPages; i++) {
-                const link = createPaginationLink(i, i === page);
-                listingsPagination.appendChild(link);
-              }
-              const previousLink = createPreviousLink(page);
-              listingsPagination.insertBefore(previousLink, listingsPagination.firstChild);
-              const nextLink = createNextLink(page, totalPages);
-              listingsPagination.appendChild(nextLink);
-              loadingSpinner.classList.add('d-none');
-              localStorage.setItem('currentPage', page);
-              localStorage.setItem('totalPages', totalPages);
-              window.history.replaceState({}, '', `${window.location.pathname}?${urlParams}`);
-              updateListingsCount(data.listings.length, data.total); // update listings count
-            } else {
-              fetch(url) // fetch listings from the API
-                .then(response => {
-                  if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                  }
-                  return response.json();
-                })
-                .then(data => {
-                  data.listings.forEach(listing => {
-                    const card = createListingCard(listing);
-                    listingsDiv.appendChild(card);
-                  });
-                  const listingperPage = 12; // number of listings per page
-                  const totalPages = Math.ceil(data.total / listingperPage);
-                  for (let i = 1; i <= totalPages; i++) {
-                    const link = createPaginationLink(i, i === page);
-                    listingsPagination.appendChild(link);
-                  }
-                  const previousLink = createPreviousLink(page);
-                  listingsPagination.insertBefore(previousLink, listingsPagination.firstChild);
-                  const nextLink = createNextLink(page, totalPages);
-                  listingsPagination.appendChild(nextLink);
-                  loadingSpinner.classList.add('d-none');
-                  localStorage.setItem('currentPage', page);
-                  localStorage.setItem('totalPages', totalPages);
-                  window.history.replaceState({}, '', `${window.location.pathname}?${urlParams}`);
-                  localStorage.setItem(url, JSON.stringify(data)); // cache response in local storage
-                  updateListingsCount(data.listings.length, data.total); // update listings count
-                })
-                .catch(error => {
-                  console.error(error);
-                  errorMessage.classList.remove('d-none');
-                  loadingSpinner.classList.add('d-none');
-                });
-            }
-          }
-
-          function handleFilterButtonClick(event) {
-            event.preventDefault();
-            const sortOption = event.target.getAttribute('data-filter');
-            fetchListings(1, sortOption);
-          }
-
-          const filterButtons = document.querySelectorAll('[data-filter]');
-          filterButtons.forEach(button => {
-            button.addEventListener('click', handleFilterButtonClick);
-          });
-
-          if (currentPage < 1 || currentPage > totalPages) {
-            fetchListings(1);
-          } else {
-            fetchListings(currentPage);
-          }
-        </script>
-
       </div>
     </div>
 
@@ -337,7 +127,6 @@ include_once './functions/functions.php';
   // include the footer file
   include_once './includes/_footer.php';
   ?>
-  <script src="./assets/js/search.js"></script>
 </body>
 
 </html>
