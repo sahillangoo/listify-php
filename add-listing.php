@@ -244,48 +244,7 @@ try {
 
 
 
-  <script type="text/javascript">
-    (() => {
-      'use strict'
-      document.addEventListener("DOMContentLoaded", function(event) {
-        const options = {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
-        };
-        navigator.geolocation.getCurrentPosition(
-          function(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            document.getElementById("latitude").value = latitude;
-            document.getElementById("longitude").value = longitude;
-            console.log(latitude, longitude);
-          },
-          function(error) {
-            if (error.code === error.PERMISSION_DENIED) {
-              alert("Enable Geolocation permission for Location.");
-            }
-            console.log(error);
-          },
-          options
-        );
-      });
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation')
-
-      // Loop over them and prevent submission
-      Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-
-          form.classList.add('was-validated')
-        }, false)
-      })
-    })()
-  </script>
+  
   <?php
   // include the footer file
   include_once './includes/_footer.php';

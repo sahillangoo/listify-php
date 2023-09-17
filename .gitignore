@@ -17,3 +17,4 @@ package-lock.json
 /playwright/.cache/
 test/e2e/example.spec.js
 tests-examples/demo-todo-app.spec.js
+*.zip

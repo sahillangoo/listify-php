@@ -39,7 +39,7 @@ include_once './functions/functions.php';
             <span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
             <label for="search-input" class="visually-hidden">Search for Business</label>
             <input class="form-control" id="search-input" name="search" placeholder="Search for a business by name" type="text">
-            <button class="btn  btn-transparent rounded mb-0" id="clear-search-input" type="button"><i class="fas fa-times text" aria-hidden="true"></i></button>
+            <button class="btn btn-icon-only btn-bg-outline-light bg-transparent rounded text-dark shadow-none mb-0" id="clear-search-input" type="button"><i class="fas fa-times text" aria-hidden="true"></i></button>
             <div class="invalid-feedback" id="search-feedback"></div>
           </div>
           <div class="list-group text-center align-items-center" id="search-results">
@@ -59,44 +59,61 @@ include_once './functions/functions.php';
   <section class="pt-5">
     <div class="container">
       <div class="row">
-        <div class="col-auto d-inline-flex justify-content-center align-items-center mb-3 gap-3 flex-wrap filter-dropdowns">
-
-          <!-- filter dropdown -->
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Filter Listings
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-              <li><button class="dropdown-item" type="button" data-filter="featured">Featured</button></li>
-              <li><button class="dropdown-item" type="button" data-filter="most_rated">Top Rated</button></li>
-              <li><button class="dropdown-item" type="button" data-filter="most_reviewed">Most Reviewed</button></li>
-            </ul>
+        <p class="lead text-secondary text-sm text-center text-bolder">Listing Filters:</p>
+        <div class="col-md-12 d-inline-flex justify-content-between align-items-center flex-wrap mb-3 gap-3 flex-md-nowrap flex-lg-nowrap flex-xl-nowrap flex-xxl-nowrap">
+          <!-- sort dropdown -->
+          <div class="input-group input-group-sm">
+            <span class="input-group-text">
+              Sort by:
+            </span>
+            <select class="form-select form-select-sm" aria-label="sortDropdown" id="sortDropdown">
+              <option selected value="featured">Featured</option>
+              <option value="most_rated">Top Rated</option>
+              <option value="most_reviewed">Most Reviewed</option>
+            </select>
           </div>
-          <!-- select city dropdown -->
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" id="cityDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Select City
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="cityDropdown">
-              <li><button class="dropdown-item" type="button">Srinagar</button></li>
-              <li><button class="dropdown-item" type="button">Anantnag</button></li>
-              <li><button class="dropdown-item" type="button">Baramulla</button></li>
-              <li><button class="dropdown-item" type="button">Budgam</button></li>
-              <li><button class="dropdown-item" type="button">Bandipora</button></li>
-              <li><button class="dropdown-item" type="button">Pulwama</button></li>
-              <li><button class="dropdown-item" type="button">Kupwara</button></li>
-              <li><button class="dropdown-item" type="button">Kulgam</button></li>
-              <li><button class="dropdown-item" type="button">Shopian</button></li>
-              <li><button class="dropdown-item" type="button">Ganderbal</button></li>
-            </ul>
+          <!-- categories filter dropdown -->
+          <div class="input-group input-group-sm">
+            <span class="input-group-text">
+              Filter category:
+            </span>
+            <select class="form-select form-select-sm" aria-label="filterCategory" id="filteCategory">
+              <option value="">Select a category!</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="hospital">Hospital</option>
+              <option value="pharmacy">Pharmacy Store</option>
+              <option value="education">Education</option>
+              <option value="bank">Bank</option>
+              <option value="atm">ATM</option>
+            </select>
           </div>
-          <span>
-            <!-- no of listings  -->
-            <span class="text-secondary text-sm">Showing <span id="listings-count">0</span> of <span id="total-listings">0</span> listings</span>
-          </span>
-          
+          <div class="input-group input-group-sm">
+            <span class="input-group-text">
+              Filter city:
+            </span>
+            <select class="form-select form-select-sm" aria-label="cityDropdown" id="cityDropdown">
+              <option value="">Select a City!</option>
+              <option value="srinagar">Srinagar</option>
+              <option value="anantnag">Anantnag</option>
+              <option value="bandipora">Bandipora</option>
+              <option value="baramulla">Baramulla</option>
+              <option value="budgam">Budgam</option>
+              <option value="ganderbal">Ganderbal</option>
+              <option value="kulgam">Kulgam</option>
+              <option value="kupwara">Kupwara</option>
+              <option value="pulwama">Pulwama</option>
+              <option value="shopian">Shopian</option>
+            </select>
+          </div>
+          <!-- clear filters -->
+          <button class="btn btn-icon-only btn-bg-outline-light bg-transparent rounded text-dark shadow-none mb-0 text-bolder" id="clear-filters"><i class="fa-solid fa-xmark"></i></button>
         </div>
+
+
         <div class="col-md-12">
+          <!-- no of listings  -->
+          <div class="text-secondary text-sm text-center text-bolder">Showing <span id="listings-count">0</span> of <span id="total-listings">0</span> listings</div>
+          </span>
           <div class="row" id="listings">
             <!-- listings will be displayed here -->
           </div>
