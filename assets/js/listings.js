@@ -19,7 +19,7 @@ const listingsPagination = document.getElementById('listings-pagination');
 const listingsCountElement = document.getElementById('listings-count');
 const totalListingsElement = document.getElementById('total-listings');
 const sortDropdown = document.getElementById('sortDropdown');
-const categoryFilterDropdown = document.getElementById('filteCategory');
+const categoryFilterDropdown = document.getElementById('filterCategory');
 const cityFilterDropdown = document.getElementById('cityDropdown');
 const filterButtons = document.querySelectorAll('[data-filter]');
 const clearFiltersButton = document.querySelector('#clear-filters');
@@ -27,7 +27,7 @@ const errorBox = document.createElement('div');
 errorBox.classList.add('alert', 'alert-danger', 'mt-3', 'd-none');
 
 let currentPage = 1;
-let sortOption = '';
+let sortOption = 'featured';
 let categoryFilter = '';
 let cityFilter = '';
 

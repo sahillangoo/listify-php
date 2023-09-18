@@ -1,30 +1,26 @@
 /*
 main.js
 Author: Sahil Langoo
-File Content =>
+File function content =>
 1. debounce function for limiting the number of times a function is called in a given time period
 2. setAttributes function for setting multiple attributes on an element
 3. togglePassword function for toggling password visibility
 4. validateInput function for validating input fields
 5. getRegexForInput function for getting regex for input fields
 6. validateDescription function for validating description textarea
-7. initializeTooltips function for initializing bootstrap tooltips
-8. addInputGroupClickHandler function for adding click handler to input groups
-9. addInputValidationListeners function for adding input validation listeners
-10. adjustTextareaSizeOnResize function for adjusting textarea size on window resize
+7. validateFileInput function for validating file input
+8. addInputValidationListeners function for adding input validation listeners
+9. addInputGroupClickHandler function for adding click handler to input groups
+10. initializeTooltips function for initializing bootstrap tooltips
 11. initializeFormValidation function for initializing form validation
-12. initializePage function for initializing page
-13. handleError function for handling errors
-14. handle unhandledrejection and error events
-15. initialize page on DOMContentLoaded event
-16. truncate description text
-17. search functionality
-18. display search results
-19. fetch search results
-20. handle search input
-21. add input event listener
-
+12. adjustTextareaSizeOnResize function for adjusting textarea size on window resize
+13. initializePage function for initializing page
+14. handleError function for handling errors
+15. Truncate description text
+16. Search functionality
+17. Function to get the current location of the user on create-listing and update-listing page
 */
+
 // debounce function for limiting the number of times a function is called in a given time period
 const debounce = (func, delay) => {
   let timeoutId;
@@ -45,11 +41,7 @@ const debounce = (func, delay) => {
     }
   };
 };
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    initializeTooltips();
-  }, 100);
-});
+
 // setAttributes function for setting multiple attributes on an element
 const setAttributes = (el, options) => {
   Object.keys(options).forEach((attr) => {
@@ -131,29 +123,46 @@ const validateDescription = () => {
   description.classList.toggle('is-invalid', !isValid);
 };
 
-// initializeTooltips function for initializing bootstrap tooltips
-const initializeTooltips = () => {
-  const tooltipTriggerList = document.querySelectorAll(
-    '[data-bs-toggle="tooltip"], [data-toggle="tooltip"]'
-  );
-  tooltipTriggerList.forEach((tooltipTriggerEl) => {
-    new bootstrap.Tooltip(tooltipTriggerEl);
-  });
-};
+// validateFileInput function for validating file input
+const validateFileInput = (input) => {
+  const file = input.files[0];
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  const maxSize = 2 * 1024 * 1024; // 2 MB
+  const minSize = 50 * 1024; // 50 KB
+  const minWidth = 500;
+  const minHeight = 500;
 
-// addInputGroupClickHandler function for adding click handler to input groups
-const addInputGroupClickHandler = () => {
-  document.addEventListener('click', (event) => {
-    const parent = event.target.closest('.input-group');
-    if (event.target.classList.contains('form-control')) {
-      const focus = document.querySelectorAll('.input-group.focused');
-      focus.forEach((el) => el.classList.remove('focused'));
-      parent.classList.add('focused');
-    }
-    const focus = document.querySelectorAll('.input-group.focused');
-    if (focus && event.target != parent && event.target.parentNode != parent) {
-      focus.forEach((el) => el.classList.remove('focused'));
-    }
+  if (!file) {
+    return 'Please select a file';
+  }
+
+  if (!allowedTypes.includes(file.type)) {
+    return 'Please select a valid image file (JPEG, PNG, or GIF)';
+  }
+
+  if (file.size > maxSize) {
+    return 'File size exceeds the maximum allowed size (2 MB)';
+  }
+
+  if (file.size < minSize) {
+    return 'File size is less than the minimum allowed size (50 KB)';
+  }
+
+  const img = new Image();
+  img.src = URL.createObjectURL(file);
+  return new Promise((resolve, reject) => {
+    img.onload = () => {
+      if (img.width < minWidth || img.height < minHeight) {
+        reject(
+          `Image dimensions are less than the minimum allowed dimensions (${minWidth}x${minHeight})`
+        );
+      } else {
+        resolve();
+      }
+    };
+    img.onerror = () => {
+      reject('An error occurred while validating the image file');
+    };
   });
 };
 
@@ -180,23 +189,58 @@ const addInputValidationListeners = () => {
     }
     const fileInput = document.getElementById('business_image');
     if (fileInput) {
-      fileInput.addEventListener('change', validateFileInput);
+      fileInput.addEventListener('change', async () => {
+        try {
+          const result = await validateFileInput(fileInput);
+          console.log(result);
+        } catch (error) {
+          console.error(error);
+        }
+      });
     }
   }
 };
 
-// adjustTextareaSizeOnResize function for adjusting textarea size on window resize
-const adjustTextareaSizeOnResize = () => {
-  window.addEventListener('resize', () => {
-    const description = document.getElementById('description');
-    description.style.height = 'auto';
-    description.style.height = `${description.scrollHeight}px`;
+// addInputGroupClickHandler function for adding click handler to input groups
+const addInputGroupClickHandler = () => {
+  document.addEventListener('click', (event) => {
+    const parent = event.target.closest('.input-group');
+    if (event.target.classList.contains('form-control')) {
+      const focus = document.querySelectorAll('.input-group.focused');
+      focus.forEach((el) => el.classList.remove('focused'));
+      parent.classList.add('focused');
+    }
+    const focus = document.querySelectorAll('.input-group.focused');
+    if (focus && event.target != parent && event.target.parentNode != parent) {
+      focus.forEach((el) => el.classList.remove('focused'));
+    }
+  });
+};
+
+// initializeTooltips function for initializing bootstrap tooltips
+const initializeTooltips = () => {
+  const tooltipTriggerList = document.querySelectorAll(
+    '[data-bs-toggle="tooltip"], [data-toggle="tooltip"]'
+  );
+  tooltipTriggerList.forEach((tooltipTriggerEl) => {
+    new bootstrap.Tooltip(tooltipTriggerEl);
   });
 };
 
 // initializeFormValidation function for initializing form validation
 const initializeFormValidation = () => {
   addInputValidationListeners();
+};
+
+// adjustTextareaSizeOnResize function for adjusting textarea size on window resize
+const adjustTextareaSizeOnResize = () => {
+  window.addEventListener('resize', () => {
+    const description = document.getElementById('description');
+    if (description) {
+      description.style.height = 'auto';
+      description.style.height = `${description.scrollHeight}px`;
+    }
+  });
 };
 
 // initializePage function for initializing page
@@ -231,125 +275,158 @@ window.addEventListener('error', (event) => {
 // initialize page on DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', initializePage);
 
-// truncate description text
+// Truncate description text
 const truncateDescription = (selector = '#truncate') => {
   const descriptions = document.querySelectorAll(selector);
   descriptions.forEach((description) => {
-    description.textContent = description.textContent.slice(0, 120) + '...';
+    // Use substring instead of slice for consistency
+    description.textContent = description.textContent.substring(0, 120) + '...';
   });
 };
 truncateDescription();
 
-// search functionality
+// Search functionality
 const searchInput = document.querySelector('#search-input');
-const searchFeedback = document.querySelector('#search-feedback');
-const searchResults = document.querySelector('#search-results');
-const searchSpinner = document.querySelector('#search-spinner');
+if (searchInput) {
+  const searchFeedback = document.querySelector('#search-feedback');
+  const searchResults = document.querySelector('#search-results');
+  const searchSpinner = document.querySelector('#search-spinner');
 
-// display search results
-const displaySearchResults = (results) => {
-  searchResults.innerHTML = '';
-  searchFeedback.textContent = '';
+  const displaySearchResults = (results) => {
+    searchResults.innerHTML = '';
+    searchFeedback.textContent = '';
 
-  if (results && Array.isArray(results.listings)) {
-    if (results.listings.length === 0 && searchInput.value.length >= 3) {
-      searchFeedback.textContent = 'No results found for this query';
+    if (results && Array.isArray(results.listings)) {
+      if (results.listings.length === 0 && searchInput.value.length >= 3) {
+        searchFeedback.textContent = 'No results found for this query';
+        searchInput.classList.add('is-invalid');
+      } else {
+        results.listings
+          .slice(0, 6)
+          .forEach(
+            ({
+              id,
+              businessName,
+              category,
+              city,
+              address,
+              avg_rating,
+              reviews_count,
+            }) => {
+              const resultElement = document.createElement('a');
+              resultElement.href = `./listing.php?listing=${id}`;
+              resultElement.classList.add(
+                'list-group-item',
+                'list-group-item-action'
+              );
+              resultElement.innerHTML = `
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                  <h6 class="text-gradient text-primary font-weight-bold h6 mb-1">${businessName}</h6>
+                  <span class="text-body-secondary text-gradient text-warning text-uppercase text-xxs mt-1"><i class="fa-solid fa-star"></i> ${
+                    avg_rating?.toFixed(2) || 0
+                  } (${reviews_count})</span>
+                  <span class="text-body-secondary text-capitalize text-xxs font-weight-bold"><i class="fa-solid fa-shop"></i> ${category}</span>
+                  <span class="text-body-secondary text-capitalize text-xxs font-weight-bold "><i class="fa-solid fa-location-dot"></i> ${address}, ${city}</span>
+                </div>
+              `;
+              searchResults.appendChild(resultElement);
+            }
+          );
+        searchInput.classList.remove('is-invalid');
+      }
+    } else if (results?.error) {
+      searchFeedback.textContent = `${results.error}`;
       searchInput.classList.add('is-invalid');
     } else {
-      results.listings
-        .slice(0, 6)
-        .forEach(
-          ({
-            id,
-            businessName,
-            category,
-            city,
-            address,
-            avg_rating,
-            reviews_count,
-          }) => {
-            const resultElement = document.createElement('a');
-            resultElement.href = `./listing.php?listing=${id}`;
-            resultElement.classList.add(
-              'list-group-item',
-              'list-group-item-action'
-            );
-            resultElement.innerHTML = `
-          <div class="d-flex w-100 justify-content-between align-items-center">
-            <h6 class="text-gradient text-primary font-weight-bold h6 mb-1">${businessName}</h6>
-            <span class="text-body-secondary text-gradient text-warning text-uppercase text-xxs mt-1"><i class="fa-solid fa-star"></i> ${
-              avg_rating?.toFixed(2) || 0
-            } (${reviews_count})</span>
-            <span class="text-body-secondary text-capitalize text-xxs font-weight-bold"><i class="fa-solid fa-shop"></i> ${category}</span>
-            <span class="text-body-secondary text-capitalize text-xxs font-weight-bold "><i class="fa-solid fa-location-dot"></i> ${address}, ${city}</span>
-          </div>
-        `;
-            searchResults.appendChild(resultElement);
-          }
-        );
-      searchInput.classList.remove('is-invalid');
+      searchFeedback.textContent =
+        'An error occurred while fetching search results';
+      searchInput.classList.add('is-invalid');
     }
-  } else if (results?.error) {
-    searchFeedback.textContent = `${results.error}`;
-    searchInput.classList.add('is-invalid');
-  } else {
-    searchFeedback.textContent = 'An error occurred while fetching search results';
-    searchInput.classList.add('is-invalid');
-  }
 
-  searchResults.classList.toggle('d-none', !results || results.listings.length === 0);
-  searchSpinner.classList.add('d-none');
-};
+    // Use classList.toggle instead of classList.add and classList.remove
+    searchResults.classList.toggle(
+      'd-none',
+      !results || results.listings.length === 0
+    );
+    searchSpinner.classList.add('d-none');
+  };
 
-// fetch search results
-const fetchSearchResults = async (searchQuery) => {
-  try {
-    const response = await fetch(`./api/listingsApi.php?query=${searchQuery}`);
-    if (!response.ok) {
+  const fetchSearchResults = async (searchQuery) => {
+    try {
+      let results = JSON.parse(
+        localStorage.getItem(`searchResults:${searchQuery}`)
+      );
+
+      if (!results) {
+        const response = await fetch(
+          `./api/listingsApi.php?query=${searchQuery}`
+        );
+        if (!response.ok) {
+          throw new Error('An error occurred while fetching search results');
+        }
+        results = await response.json();
+        localStorage.setItem(
+          `searchResults:${searchQuery}`,
+          JSON.stringify(results)
+        );
+      }
+
+      return results;
+    } catch (error) {
+      console.error(error);
       throw new Error('An error occurred while fetching search results');
     }
-    return response.json();
-  } catch (error) {
-    console.error(error);
-    throw new Error('An error occurred while fetching search results');
-  }
-};
+  };
 
-// handle search input
-const handleSearchInput = () => {
-  const searchQuery = searchInput.value.trim();
+  const handleSearchInput = () => {
+    const searchQuery = searchInput.value.trim();
 
-  if (/^\d+$/.test(searchQuery)) {
-    searchFeedback.textContent = 'Search query cannot contain only numbers';
-  } else if (!/^[a-zA-Z]{3,20}$/.test(searchQuery)) {
-    searchFeedback.textContent =
-      'Search query must be between 3 and 20 characters long and contain only letters';
-  } else {
-    searchSpinner.classList.remove('d-none');
-    fetchSearchResults(searchQuery)
-      .then(displaySearchResults)
-      .catch((error) => {
-        searchFeedback.textContent = error.message;
-        searchInput.classList.add('is-invalid');
-        searchResults.classList.add('d-none');
-        searchSpinner.classList.add('d-none');
-      });
-  }
+    if (/^\d+$/.test(searchQuery)) {
+      searchFeedback.textContent = 'Search query cannot contain only numbers';
+    } else if (!/^[a-zA-Z]{3,20}$/.test(searchQuery)) {
+      searchFeedback.textContent =
+        'Search query must be between 3 and 20 characters long and contain only letters';
+    } else {
+      searchSpinner.classList.remove('d-none');
+      fetchSearchResults(searchQuery)
+        .then(displaySearchResults)
+        .catch((error) => {
+          searchFeedback.textContent = error.message;
+          searchInput.classList.add('is-invalid');
+          searchResults.classList.add('d-none');
+          searchSpinner.classList.add('d-none');
+        });
+    }
 
-  searchInput.classList.toggle('is-invalid', searchFeedback.textContent !== '');
-  searchResults.classList.toggle('d-none', searchFeedback.textContent !== '' || !searchInput.value);
-  searchSpinner.classList.toggle('d-none', searchFeedback.textContent !== '' || !searchInput.value);
-};
+    if (searchInput.value.trim() === '') {
+      searchInput.classList.remove('is-invalid');
+      searchFeedback.textContent = '';
+      searchResults.classList.add('d-none');
+      searchSpinner.classList.add('d-none');
+    }
 
-// add input event listener
-searchInput.addEventListener('input', debounce(handleSearchInput, 500));
+    // Use classList.toggle instead of classList.add and classList.remove
+    searchInput.classList.toggle(
+      'is-invalid',
+      searchFeedback.textContent !== ''
+    );
+    searchResults.classList.toggle(
+      'd-none',
+      searchFeedback.textContent !== '' || !searchInput.value
+    );
+    searchSpinner.classList.toggle(
+      'd-none',
+      searchFeedback.textContent !== '' || !searchInput.value
+    );
+  };
 
+  searchInput.addEventListener('input', debounce(handleSearchInput, 500));
+}
 
-
-// function to get the current location of the user on create-listing and update-listing page
+// Function to get the current location of the user on create-listing and update-listing page
 (() => {
   const pathname = window.location.pathname;
-  if (pathname !== '/create-listing.php' && pathname !== '/update-listing.php') {
+  if (pathname !== '/add-listing.php' && pathname !== '/update-listing.php') {
     return;
   }
 
@@ -380,11 +457,10 @@ searchInput.addEventListener('input', debounce(handleSearchInput, 500));
     };
     updateLocation();
     setInterval(updateLocation, 60000);
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation');
 
-    // Loop over them and prevent submission
-    Array.from(forms).forEach((form) => {
+    // Use forEach instead of Array.from and for loop
+    const forms = document.querySelectorAll('.needs-validation');
+    forms.forEach((form) => {
       form.addEventListener(
         'submit',
         (event) => {

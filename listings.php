@@ -75,7 +75,7 @@ include_once './functions/functions.php';
             <span class="input-group-text">
               Filter category:
             </span>
-            <select class="form-select form-select-sm" aria-label="filterCategory" id="filteCategory">
+            <select class="form-select form-select-sm" aria-label="filterCategory" id="filterCategory">
               <option value="">Select a category!</option>
               <option value="restaurant">Restaurant</option>
               <option value="hospital">Hospital</option>
@@ -109,23 +109,27 @@ include_once './functions/functions.php';
 
 
         <div class="col-md-12">
-          <!-- no of listings  -->
-          <div class="text-secondary text-sm text-center text-bolder">Showing <span id="listings-count">0</span> of <span id="total-listings">0</span> listings</div>
-          </span>
-          <div class="row" id="listings">
-            <!-- listings will be displayed here -->
+          <!-- Number of listings -->
+          <div class="text-dark text-md text-center font-weight-bold">
+            Showing <span id="listings-count">0</span> of <span id="total-listings">0</span> listings
           </div>
+          <div class="row" id="listings">
+            <!-- Listings will be displayed here -->
+          </div>
+          <!-- Error message -->
           <div class="alert alert-danger d-none" id="error-message" role="alert">
             Error fetching listings. Please try again later.
           </div>
+          <!-- Loading spinner -->
           <div class="d-flex justify-content-center my-5" id="loading-spinner">
             <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
+              <span class="visually-hidden">Loading listings...</span>
             </div>
           </div>
+          <!-- Pagination links -->
           <nav aria-label="Listings pagination" class="d-flex justify-content-center">
             <ul class="pagination pagination-primary" id="listings-pagination">
-              <!-- pagination links will be displayed here -->
+              <!-- Pagination links will be displayed here -->
             </ul>
           </nav>
         </div>
