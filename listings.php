@@ -34,12 +34,10 @@ include_once './functions/functions.php';
           </div>
         </div>
 
-        <div class="col-lg-6 text-center mx-auto">
+        <div class="col-10 col-md-6 text-center mx-auto">
           <div class="input-group">
             <span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
-            <label for="search-input" class="visually-hidden">Search for Business</label>
-            <input class="form-control" id="search-input" name="search" placeholder="Search for a business by name" type="text">
-            <button class="btn btn-icon-only btn-bg-outline-light bg-transparent rounded text-dark shadow-none mb-0" id="clear-search-input" type="button"><i class="fas fa-times text" aria-hidden="true"></i></button>
+            <input class="form-control" id="search-input" name="search" placeholder="Search for a business by name" type="search">
             <div class="invalid-feedback" id="search-feedback"></div>
           </div>
           <div class="list-group text-center align-items-center" id="search-results">
@@ -60,7 +58,7 @@ include_once './functions/functions.php';
     <div class="container">
       <div class="row">
         <p class="lead text-secondary text-sm text-center text-bolder">Listing Filters:</p>
-        <div class="col-md-12 d-inline-flex justify-content-between align-items-center flex-wrap mb-3 gap-3 flex-md-nowrap flex-lg-nowrap flex-xl-nowrap flex-xxl-nowrap">
+        <div class="col-6 col-md-12 d-inline-flex justify-content-between align-items-center flex-wrap mb-3 gap-3 flex-md-nowrap flex-lg-nowrap flex-xl-nowrap flex-xxl-nowrap">
           <!-- sort dropdown -->
           <div class="input-group input-group-sm">
             <span class="input-group-text">
@@ -91,7 +89,7 @@ include_once './functions/functions.php';
             <span class="input-group-text">
               Filter city:
             </span>
-            <select class="form-select form-select-sm" aria-label="cityDropdown" id="cityDropdown">
+            <select class="form-select form-select-sm " aria-label="cityDropdown" id="cityDropdown">
               <option value="">Select a City!</option>
               <option value="srinagar">Srinagar</option>
               <option value="anantnag">Anantnag</option>
@@ -106,7 +104,7 @@ include_once './functions/functions.php';
             </select>
           </div>
           <!-- clear filters -->
-          <button class="btn btn-icon-only btn-bg-outline-light bg-transparent rounded text-dark shadow-none mb-0 text-bolder" id="clear-filters"><i class="fa-solid fa-xmark"></i></button>
+          <button class="btn btn-bg-outline-dark rounded text-dark mb-0 text-bolder" id="clear-filters"><i class="fa-solid fa-xmark"></i> Clear</button>
         </div>
 
 

@@ -23,16 +23,14 @@ const categoryFilterDropdown = document.getElementById('filteCategory');
 const cityFilterDropdown = document.getElementById('cityDropdown');
 const filterButtons = document.querySelectorAll('[data-filter]');
 const clearFiltersButton = document.querySelector('#clear-filters');
-const errorBox = document.createElement('div'); // create new div element for error message
-errorBox.classList.add('alert', 'alert-danger', 'mt-3', 'd-none'); // add classes to the error box
+const errorBox = document.createElement('div');
+errorBox.classList.add('alert', 'alert-danger', 'mt-3', 'd-none');
 
-// Initialize variables
 let currentPage = 1;
 let sortOption = '';
 let categoryFilter = '';
 let cityFilter = '';
 
-// Get current page number from URL or local storage
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.has('page')) {
   currentPage = parseInt(urlParams.get('page'));
@@ -40,31 +38,26 @@ if (urlParams.has('page')) {
   currentPage = parseInt(localStorage.getItem('currentPage'));
 }
 
-// Initialize loading spinner
 loadingSpinner.classList.add('d-flex');
 
-// Handle sort dropdown change
 sortDropdown.addEventListener('change', () => {
   sortOption = sortDropdown.value;
   fetchListings(1);
 });
 
-// Handle category filter dropdown change
 categoryFilterDropdown.addEventListener('change', () => {
   categoryFilter = categoryFilterDropdown.value;
   fetchListings(1);
 });
 
-// Handle city filter dropdown change
 cityFilterDropdown.addEventListener('change', () => {
   cityFilter = cityFilterDropdown.value;
   fetchListings(1);
 });
 
-// Create listing card HTML
 function createListingCard(listing) {
   const card = document.createElement('div');
-  card.classList.add('col-md-3', 'col-lg-3', 'mb-4');
+  card.classList.add('col-6', 'col-md-3', 'col-lg-3', 'mb-4');
   card.innerHTML = `
     <div class="card card-frame">
       <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
@@ -73,18 +66,19 @@ function createListingCard(listing) {
         </a>
       </div>
       <div class="card-body pt-2">
-        <div class="d-flex justify-content-between align-items-center my-2">
-          <span class="text-uppercase text-xxs font-weight-bold text-info text-gradient"><i class="fa-solid fa-shop"></i> ${listing.category}</span>
-          <span class="text-uppercase text-xxs font-weight-bold text-info text-gradient"><i class="fa-solid fa-location-dot"></i> ${listing.city}</span>
+        <div class="d-flex justify-content-between align-items-center my-md-2">
+          <span class="text-capitalize text-xs font-weight-bold text-info text-gradient"><i class="fa-solid fa-shop"></i> ${listing.category}</span>
+          <span class="text-capitalize text-xs font-weight-bold text-info text-gradient"><i class="fa-solid fa-location-dot"></i> ${listing.city}</span>
         </div>
+        <span class="d-md-none text-gradient text-warning text-uppercase text-xxs my-md-2"><i class="fa-solid fa-star"></i> ${listing.avg_rating} (${listing.reviews_count})</span>
         <div class="d-flex justify-content-between ">
           <a href="./listing.php?listing=${listing.id}" class="card-title h6 d-block text-gradient text-primary font-weight-bold ">${listing.businessName}</a>
-          <span class="text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> ${listing.avg_rating} (${listing.reviews_count})</span>
+          <span class="d-none d-md-block text-gradient text-warning text-uppercase text-xs mt-1"><i class="fa-solid fa-star"></i> ${listing.avg_rating} (${listing.reviews_count})</span>
         </div>
-        <p class="card-description text-sm mb-3" id="truncate">${listing.description} ...</p>
-        <p class="mb-2 text-xxs font-weight-bolder text-info text-gradient text-uppercase"><span>By―</span> ${listing.user}</p>
-        <div class="d-flex justify-content-start my-2">
-          <a href="./listing.php?listing=${listing.id}" class="text-primary text-sm icon-move-right text-gradient">View details <i class="fas fa-arrow-right text-sm " aria-hidden="true"></i>
+        <p class="d-none d-md-block card-description text-sm mb-3" id="truncate">${listing.description} ...</p>
+        <p class="d-none d-md-block mb-2 text-xxs text-info text-gradient text-capitalize"><span>by―</span> ${listing.user}</p>
+        <div class="d-flex justify-content-start my-md-2">
+          <a href="./listing.php?listing=${listing.id}" class="text-gradient text-primary text-xs icon-move-right">view details <i class="fas fa-arrow-right " aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -93,7 +87,6 @@ function createListingCard(listing) {
   return card;
 }
 
-// Create pagination link HTML
 function createPaginationLink(page, isActive) {
   const link = document.createElement('li');
   link.classList.add('page-item');
@@ -113,7 +106,6 @@ function createPaginationLink(page, isActive) {
   return link;
 }
 
-// Create previous page link HTML
 function createPreviousLink(page) {
   const link = document.createElement('li');
   link.classList.add('page-item');
@@ -137,7 +129,6 @@ function createPreviousLink(page) {
   return link;
 }
 
-// Create next page link HTML
 function createNextLink(page, totalPages) {
   const link = document.createElement('li');
   link.classList.add('page-item');
@@ -160,6 +151,7 @@ function createNextLink(page, totalPages) {
   link.appendChild(linkContent);
   return link;
 }
+
 async function fetchListings(page) {
   try {
     loadingSpinner.classList.remove('d-none');
@@ -225,60 +217,21 @@ async function fetchListings(page) {
   }
 }
 
-// Render listings and pagination
-function renderListings(listings, total) {
-  if (listings.length === 0) {
-    // Display "No listings found" message to the user
-    listingsDiv.innerHTML = '<p class="text-center text-bolder text-2xl text-info text-gradient my-5">Ugh! No listings found.</p>';
-    listingsPagination.innerHTML = '';
-    loadingSpinner.classList.add('d-none');
-    updateListingsCount(0, total);
-    return;
-  }
-  listings.forEach((listing) => {
-    const card = createListingCard(listing);
-    listingsDiv.appendChild(card);
-  });
-  const listingperPage = 12; // number of listings per page
-  const totalPages = Math.ceil(total / listingperPage);
-  for (let i = 1; i <= totalPages; i++) {
-    const link = createPaginationLink(i, i === currentPage);
-    listingsPagination.appendChild(link);
-  }
-  const previousLink = createPreviousLink(currentPage);
-  listingsPagination.insertBefore(previousLink, listingsPagination.firstChild);
-  const nextLink = createNextLink(currentPage, totalPages);
-  listingsPagination.appendChild(nextLink);
-  loadingSpinner.classList.add('d-none');
-  localStorage.setItem('currentPage', currentPage);
-  localStorage.setItem('totalPages', totalPages);
-  window.history.replaceState(
-    {},
-    '',
-    `${window.location.pathname}?${urlParams}`
-  ); // update URL bar
-  updateListingsCount(listings.length, total);
-}
-
-// Handle filter button click
 function handleFilterButtonClick(event) {
   event.preventDefault();
   sortOption = event.target.getAttribute('data-filter');
   fetchListings(1);
 }
 
-// Add event listeners to filter buttons
 filterButtons.forEach((button) => {
   button.addEventListener('click', handleFilterButtonClick);
 });
 
-// Update listings count
 function updateListingsCount(listingsCount, totalListings) {
   listingsCountElement.textContent = listingsCount;
   totalListingsElement.textContent = totalListings;
 }
 
-// Get the total number of listings from the API
 fetch('./api/listingsApi.php?total')
   .then((response) => {
     if (!response.ok) {
@@ -294,13 +247,46 @@ fetch('./api/listingsApi.php?total')
   })
   .catch((error) => {
     console.error(error);
-    errorBox.textContent =
-      'An error occurred in listing count. Please try again later.'; // update error message
-    errorBox.classList.remove('d-none'); // show error message
+    errorBox.textContent = 'An error occurred in listing count. Please try again later.';
+    errorBox.classList.remove('d-none');
   });
 
-// Fetch listings on page load
+function renderListings(listings, total) {
+  if (listings.length === 0) {
+    listingsDiv.innerHTML = '<p class="text-center text-bolder text-2xl text-info text-gradient my-5">Ugh! No listings found.</p>';
+    listingsPagination.innerHTML = '';
+    loadingSpinner.classList.add('d-none');
+    updateListingsCount(0, total);
+    return;
+  }
+  listings.forEach((listing) => {
+    const card = createListingCard(listing);
+    listingsDiv.appendChild(card);
+  });
+  const listingperPage = 12;
+  const totalPages = Math.ceil(total / listingperPage);
+  for (let i = 1; i <= totalPages; i++) {
+    const link = createPaginationLink(i, i === currentPage);
+    listingsPagination.appendChild(link);
+  }
+  const previousLink = createPreviousLink(currentPage);
+  listingsPagination.insertBefore(previousLink, listingsPagination.firstChild);
+  const nextLink = createNextLink(currentPage, totalPages);
+  listingsPagination.appendChild(nextLink);
+  loadingSpinner.classList.add('d-none');
+  localStorage.setItem('currentPage', currentPage);
+  localStorage.setItem('totalPages', totalPages);
+  window.history.replaceState({}, '', `${window.location.pathname}?${urlParams}`);
+  updateListingsCount(listings.length, total);
+}
+
 fetchListings(currentPage);
+
+function clearQueryParams() {
+  const url = new URL(window.location.href);
+  url.search = '';
+  window.location.href = url.toString();
+}
 
 // Add event listener to clear filters button
 clearFiltersButton.addEventListener('click', () => {
@@ -309,17 +295,8 @@ clearFiltersButton.addEventListener('click', () => {
   categoryFilterDropdown.value = '';
   cityFilterDropdown.value = '';
   // Remove query parameters from URL
-  const url = new URL(window.location.href);
-  url.searchParams.delete('page');
-  url.searchParams.delete('featured');
-  url.searchParams.delete('most_rated');
-  url.searchParams.delete('most_reviewed');
-  url.searchParams.delete('sortOption');
-  url.searchParams.delete('category');
-  url.searchParams.delete('city');
-  // Reload page with updated URL
-  window.location.href = url.toString();
+  clearQueryParams();
 });
 
 // Add error box to the DOM
-listingsDiv.parentNode.insertBefore(errorBox, listingsDiv.nextSibling);
+listingsDiv.insertAdjacentElement('afterend', errorBox);

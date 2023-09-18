@@ -11,19 +11,20 @@ File Content =>
 7. initializeTooltips function for initializing bootstrap tooltips
 8. addInputGroupClickHandler function for adding click handler to input groups
 9. addInputValidationListeners function for adding input validation listeners
-10. addTextareaValidationListener function for adding textarea validation listener
-11. adjustTextareaSizeOnResize function for adjusting textarea size on window resize
-12. addFileInputValidationListener function for adding file input validation listener
-13. initializeFormValidation function for initializing form validation
-14. initializePage function for initializing page
-15. handleError function for handling errors
-16. displaySearchResults function for displaying search results
-17. fetchSearchResults function for fetching search results
-18. handleSearchInput function for handling search input
-19. clearSearchInput function for clearing search input
-20. truncateDescription function for truncating description text
-*/
+10. adjustTextareaSizeOnResize function for adjusting textarea size on window resize
+11. initializeFormValidation function for initializing form validation
+12. initializePage function for initializing page
+13. handleError function for handling errors
+14. handle unhandledrejection and error events
+15. initialize page on DOMContentLoaded event
+16. truncate description text
+17. search functionality
+18. display search results
+19. fetch search results
+20. handle search input
+21. add input event listener
 
+*/
 // debounce function for limiting the number of times a function is called in a given time period
 const debounce = (func, delay) => {
   let timeoutId;
@@ -33,18 +34,22 @@ const debounce = (func, delay) => {
     const now = Date.now();
 
     if (now - lastExecuted >= delay) {
-      func.apply(this, args);
+      func(...args);
       lastExecuted = now;
     } else {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        func.apply(this, args);
+        func(...args);
         lastExecuted = Date.now();
       }, delay - (now - lastExecuted));
     }
   };
 };
-
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    initializeTooltips();
+  }, 100);
+});
 // setAttributes function for setting multiple attributes on an element
 const setAttributes = (el, options) => {
   Object.keys(options).forEach((attr) => {
@@ -128,11 +133,9 @@ const validateDescription = () => {
 
 // initializeTooltips function for initializing bootstrap tooltips
 const initializeTooltips = () => {
-  const tooltipTriggerList = [
-    ...document.querySelectorAll(
-      '[data-bs-toggle="tooltip"], [data-toggle="tooltip"]'
-    ),
-  ];
+  const tooltipTriggerList = document.querySelectorAll(
+    '[data-bs-toggle="tooltip"], [data-toggle="tooltip"]'
+  );
   tooltipTriggerList.forEach((tooltipTriggerEl) => {
     new bootstrap.Tooltip(tooltipTriggerEl);
   });
@@ -208,9 +211,10 @@ const initializePage = () => {
 const handleError = (error) => {
   const errorMessage = document.getElementById('error-message');
   if (errorMessage) {
-    errorMessage.textContent = 'An error occurred. Please try again later.';
+    errorMessage.textContent = 'An error occurred in Search. Please try again later.';
     errorMessage.classList.remove('d-none');
   }
+  console.error(error);
 };
 
 // handle unhandledrejection and error events
@@ -227,20 +231,29 @@ window.addEventListener('error', (event) => {
 // initialize page on DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', initializePage);
 
+// truncate description text
+const truncateDescription = (selector = '#truncate') => {
+  const descriptions = document.querySelectorAll(selector);
+  descriptions.forEach((description) => {
+    description.textContent = description.textContent.slice(0, 120) + '...';
+  });
+};
+truncateDescription();
+
 // search functionality
-const searchInput = document.getElementById('search-input');
-const searchFeedback = document.getElementById('search-feedback');
-const searchResults = document.getElementById('search-results');
-const searchSpinner = document.getElementById('search-spinner');
+const searchInput = document.querySelector('#search-input');
+const searchFeedback = document.querySelector('#search-feedback');
+const searchResults = document.querySelector('#search-results');
+const searchSpinner = document.querySelector('#search-spinner');
 
 // display search results
 const displaySearchResults = (results) => {
   searchResults.innerHTML = '';
-  searchFeedback.innerHTML = '';
+  searchFeedback.textContent = '';
 
-  if (Array.isArray(results.listings)) {
+  if (results && Array.isArray(results.listings)) {
     if (results.listings.length === 0 && searchInput.value.length >= 3) {
-      searchFeedback.innerHTML = `No results found for this query`;
+      searchFeedback.textContent = 'No results found for this query';
       searchInput.classList.add('is-invalid');
     } else {
       results.listings
@@ -277,18 +290,29 @@ const displaySearchResults = (results) => {
       searchInput.classList.remove('is-invalid');
     }
   } else if (results?.error) {
-    searchFeedback.innerHTML = `${results.error}`;
+    searchFeedback.textContent = `${results.error}`;
+    searchInput.classList.add('is-invalid');
+  } else {
+    searchFeedback.textContent = 'An error occurred while fetching search results';
     searchInput.classList.add('is-invalid');
   }
 
-  searchResults.classList.toggle('d-none', results.listings.length === 0);
+  searchResults.classList.toggle('d-none', !results || results.listings.length === 0);
   searchSpinner.classList.add('d-none');
 };
 
 // fetch search results
 const fetchSearchResults = async (searchQuery) => {
-  const response = await fetch(`./api/listingsApi.php?query=${searchQuery}`);
-  return response.json();
+  try {
+    const response = await fetch(`./api/listingsApi.php?query=${searchQuery}`);
+    if (!response.ok) {
+      throw new Error('An error occurred while fetching search results');
+    }
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    throw new Error('An error occurred while fetching search results');
+  }
 };
 
 // handle search input
@@ -296,87 +320,83 @@ const handleSearchInput = () => {
   const searchQuery = searchInput.value.trim();
 
   if (/^\d+$/.test(searchQuery)) {
-    searchFeedback.innerHTML = `Search query cannot contain only numbers`;
+    searchFeedback.textContent = 'Search query cannot contain only numbers';
   } else if (!/^[a-zA-Z]{3,20}$/.test(searchQuery)) {
-    searchFeedback.innerHTML = `Search query must be between 3 and 20 characters long and contain only letters`;
+    searchFeedback.textContent =
+      'Search query must be between 3 and 20 characters long and contain only letters';
   } else {
     searchSpinner.classList.remove('d-none');
     fetchSearchResults(searchQuery)
       .then(displaySearchResults)
-      .catch(() => {
-        searchFeedback.innerHTML = `An error occurred while fetching search results`;
+      .catch((error) => {
+        searchFeedback.textContent = error.message;
+        searchInput.classList.add('is-invalid');
+        searchResults.classList.add('d-none');
+        searchSpinner.classList.add('d-none');
       });
   }
 
-  searchInput.classList.toggle('is-invalid', searchFeedback.innerHTML !== '');
-  searchResults.classList.toggle('d-none', searchFeedback.innerHTML !== '');
-  searchSpinner.classList.toggle('d-none', searchFeedback.innerHTML !== '');
+  searchInput.classList.toggle('is-invalid', searchFeedback.textContent !== '');
+  searchResults.classList.toggle('d-none', searchFeedback.textContent !== '' || !searchInput.value);
+  searchSpinner.classList.toggle('d-none', searchFeedback.textContent !== '' || !searchInput.value);
 };
 
-// clear search input
-const clearSearchInput = () => {
-  searchInput.value = '';
-  searchInput.classList.remove('is-invalid');
-  searchResults.innerHTML = '';
-  searchResults.classList.add('d-none');
-};
-
-// add event listeners for search functionality
+// add input event listener
 searchInput.addEventListener('input', debounce(handleSearchInput, 500));
-document
-  .getElementById('clear-search-input')
-  .addEventListener('click', clearSearchInput);
 
-// truncate description text
-const truncateDescription = (selector = '#truncate') => {
-  const descriptions = document.querySelectorAll(selector);
-  descriptions.forEach((description) => {
-    description.textContent = description.textContent.slice(0, 120) + '...';
-  });
-};
 
-truncateDescription();
 
+// function to get the current location of the user on create-listing and update-listing page
 (() => {
-  document.addEventListener('DOMContentLoaded', function (event) {
+  const pathname = window.location.pathname;
+  if (pathname !== '/create-listing.php' && pathname !== '/update-listing.php') {
+    return;
+  }
+
+  document.addEventListener('DOMContentLoaded', (event) => {
     const options = {
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0,
     };
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        document.getElementById('latitude').value = latitude;
-        document.getElementById('longitude').value = longitude;
-        console.log(latitude, longitude);
-      },
-      function (error) {
-        if (error.code === error.PERMISSION_DENIED) {
-          alert('Enable Geolocation permission for Location.');
-        }
-        console.log(error);
-      },
-      options
-    );
-  });
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  const forms = document.querySelectorAll('.needs-validation');
+    let latitude = null;
+    let longitude = null;
+    const updateLocation = () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          latitude = position.coords.latitude.toFixed(4);
+          longitude = position.coords.longitude.toFixed(4);
+          console.log(latitude, longitude);
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            console.error('Enable Geolocation permission for Location.');
+          } else {
+            console.error(error);
+          }
+        },
+        options
+      );
+    };
+    updateLocation();
+    setInterval(updateLocation, 60000);
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation');
 
-  // Loop over them and prevent submission
-  Array.from(forms).forEach((form) => {
-    form.addEventListener(
-      'submit',
-      (event) => {
-        if (!form.checkValidity()) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        'submit',
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
 
-        form.classList.add('was-validated');
-      },
-      false
-    );
+          form.classList.add('was-validated');
+        },
+        false
+      );
+    });
   });
 })();

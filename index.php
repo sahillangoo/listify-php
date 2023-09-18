@@ -30,9 +30,7 @@ include_once './functions/functions.php';
             <p class="lead text-white text-sm">"Bringing order to the digital chaos"</p>
             <div class="input-group my-4">
               <span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <label for="search-input" class="visually-hidden">Search for Business</label>
-              <input class="form-control" id="search-input" name="search" placeholder="Search for a business by name" type="text">
-              <button class="btn btn-bg-outline-while mb-0" id="clear-search-input" type="button"><i class="fas fa-times text" aria-hidden="true"></i></button>
+              <input class="form-control" id="search-input" name="search" placeholder="Search for a business by name" type="search">
               <div class="invalid-feedback" id="search-feedback"></div>
             </div>
             <div class="list-group text-center align-items-center" id="search-results">
