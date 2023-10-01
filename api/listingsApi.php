@@ -90,7 +90,6 @@ try {
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
   }
-
   $stmt->execute();
   $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

@@ -6,14 +6,16 @@ if (!isAuthenticated()) {
   redirect('signin.php');
   exit;
 }
+// If the user is not not active
+if ($_SESSION['status'] === 'inactive') {
+  $_SESSION['errorsession'] = 'You are not active. Please contact admin to activate your account.';
+  redirect('signin.php');
+  exit;
+}
+
 // get the user id from the session
 if (isset($_SESSION['user_id'])) {
   $user_id = sanitize($_SESSION['user_id']);
-}
-
-// If the user is not not active show errorsession : you are not active please contact admin to activate your account
-if ($_SESSION['status'] === 'inactive') {
-  $_SESSION['errorsession'] = 'You are not active. Please contact admin to activate your account.';
 }
 
 // Fetch user's listings from the database
@@ -36,6 +38,22 @@ $user_since = date('d M Y', strtotime($_SESSION['user_since']));
   // include the head file
   include_once './includes/_head.php';
   ?>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const deleteButtons = document.getElementsByClassName('deleteListingButton');
+
+      for (let i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].addEventListener('click', () => {
+          // confirm the user wants to delete the listing
+          const confirmDelete = confirm('Are you sure you want to delete this listing?');
+          if (confirmDelete) {
+            const listingId = deleteButtons[i].getAttribute('data-listing-id');
+            window.location.href = `./functions/listings/delete_listing.php?listing_id=${listingId}`;
+          }
+        });
+      }
+    });
+  </script>
 </head>
 
 <body class="blog-author bg-gray-100">
@@ -58,7 +76,7 @@ $user_since = date('d M Y', strtotime($_SESSION['user_since']));
       <div class="row">
         <?php include_once('./functions/dialog.php'); ?>
         <div class="col-12 mx-auto">
-          <div class="row py-lg-7 py-2">
+          <div class="row ">
             <div class="col-lg-3 col-md-5 position-relative my-auto">
               <img class="img border-radius-lg max-width-200 w-100 position-relative z-index-2" src="<?php echo $_SESSION['profile_image']; ?>" alt="user">
             </div>
@@ -89,11 +107,6 @@ $user_since = date('d M Y', strtotime($_SESSION['user_since']));
                 <div class="col-auto">
                   <a href="./add-listing.php" class="btn btn-sm btn-outline-info text-nowrap mb-0">Create Listing</a>
                 </div>
-                <?php if (!empty($listings)) : ?>
-                  <!-- <div class="col-auto">
-                    <button href="#" type="submit" class="btn btn-sm btn-outline-info text-nowrap mb-0">Update Listing</button>
-                  </div> -->
-                <?php endif; ?>
               </div>
             </div>
           </div>
@@ -104,11 +117,13 @@ $user_since = date('d M Y', strtotime($_SESSION['user_since']));
 
   <!-- Listings -->
   <section class="py-3">
-    <div class="container my-5">
+    <div class="container">
       <div class="row">
         <div class="col-lg-12">
           <h3 class="h3 text-center text-primary text-gradient">Your Business Listings</h3>
-          <p class="text-center">Listify is a comprehensive business listing app that allows you to list your business and get reviews from your customers.</p>
+          <p class="text-center">
+            Your business listings are displayed below. You can <span class="text-primary text-gradient">edit or delete</span> them.
+          </p>
         </div>
 
         <!-- if the user has no listings, display a message -->
@@ -128,38 +143,6 @@ $user_since = date('d M Y', strtotime($_SESSION['user_since']));
       </div>
   </section>
   <!-- End Listings -->
-  <!-- Reviews -->
-  <section>
-    <div class="container">
-      <h3 class="h3 text-center text-primary text-gradient">Your Reviews</h3>
-      <?php
-      // Get user reviews
-      $reviews = getUserReviews($db, $user_id);
-
-      // If the user has no reviews, display a message
-      if (empty($reviews)) {
-        echo '<p class="text-center">You have no reviews yet.</p>';
-      } else {
-        // If the user has reviews, display them
-        foreach ($reviews as $review) {
-          // Display review data
-          echo <<<HTML
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title">$review[rating]</h5>
-              <p class="card-text">$review[review]</p>
-              <p class="card-text">$review[businessName]</p>
-              <p class="card-text">$review[createdAt]</p>
-              <p class="card-text">$review[user_id]</p>
-            </div>
-          </div>
-          HTML;
-        }
-      }
-      ?>
-    </div>
-  </section>
-
 
   <!-- Footer -->
   <?php

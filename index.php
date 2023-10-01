@@ -44,7 +44,7 @@ include_once './functions/functions.php';
         <div class="row justify-content-center">
           <p class="col-12 lead text-white text-capitalize font-font-weight-normal my-2">Browse our top categories</p>
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./categories.php?slug=restaurant">
+            <a href="./category.php?category=restaurant">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_restaurant.svg" alt="Restaurants" height="50px">
                 <p class="text-white font-weight-bold text-xs">Restaurant's</p>
@@ -53,7 +53,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./categories.php?slug=hospital">
+            <a href="./category.php?category=hospital">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_hospital_3.svg" alt="Hospitals" height="50px">
                 <p class="text-white font-weight-bold text-xs">Hospital's</p>
@@ -62,7 +62,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./categories.php?slug=pharmacy">
+            <a href="./category.php?category=pharmacy">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_pharmacy_shop.svg" alt="Pharmacy" height="50px">
                 <span class="text-white font-weight-bold text-xs">Pharmacy's</p>
@@ -71,7 +71,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./categories.php?slug=education">
+            <a href="./category.php?category=education">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_school.svg" alt="Education" height="50px">
                 <p class="text-white font-weight-bold text-xs">Education's</p>
@@ -80,7 +80,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./categories.php?slug=atm">
+            <a href="./category.php?category=atm">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_atm.svg" alt="ATMs" height="50px">
                 <p class="text-white font-weight-bold text-xs">ATM's</p>
@@ -89,7 +89,7 @@ include_once './functions/functions.php';
           </div>
 
           <div class="col-auto text-center move-on-hover mb-2">
-            <a href="./categories.php?slug=bank">
+            <a href="./category.php?category=bank">
               <div class="d-flex flex-column bg-primary rounded-3 p-2">
                 <img src="assets/img/svgs/icons8_euro_bank_building_2.svg" alt="Banks" height="50px">
                 <p class="text-white font-weight-bold text-xs">Bank's</p>
@@ -98,7 +98,7 @@ include_once './functions/functions.php';
           </div>
           <div class="col-md-12">
             <!-- button for all listing page -->
-            <a href="./listings.php" class="btn btn-primary btn-sm mt-3">
+            <a href="./category.php" class="btn btn-primary btn-sm mt-3">
               <i class="fas fa-list" aria-hidden="true"></i> View All Listings
 
             </a>
@@ -125,58 +125,6 @@ include_once './functions/functions.php';
     </div>
   </header>
   <!-- ========== End Hero ========== -->
-
-  <!-- ========== Start featured Listing Grid ========== -->
-  <section class="py-5">
-    <div class="container my-5">
-      <div class="row">
-        <h2 class="text-center">Featured Business Listings</h2>
-        <p class="text-center">Listify is a comprehensive business listing app that allows you to list your business and get reviews from your customers.</p>
-        <?php
-        // Define the maximum number of featured listings per page
-        $maxFeaturedListingsPerPage = 8;
-
-        // Get the current page number from the query string
-        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-        // Calculate the offset based on the current page number and the number of listings per page
-        $offset = ($currentPage - 1) * $maxFeaturedListingsPerPage;
-
-        // Retrieve the featured listings for the current page and the total number of featured listings from the database
-        $featuredListings = getFeaturedListings($db, $maxFeaturedListingsPerPage, $offset);
-        $totalFeaturedListings = $featuredListings['total'];
-
-        // Calculate the total number of pages based on the total number of featured listings and the number of listings per page
-        $totalPages = ceil($totalFeaturedListings / $maxFeaturedListingsPerPage);
-
-        // Loop through the featured listings and display each listing
-        foreach ($featuredListings['listings'] as $listing) {
-          displayListing($listing);
-        }
-
-        // Check if there are any listings
-        $hasListings = !empty($featuredListings['listings']);
-        if (!$hasListings) {
-          // Display a message if there are no listings
-          echo '<div class="col-md-12 text-center my-5"><p class="lead text-muted">No featured listings found</p></div>';
-        }
-
-        // Display the pagination links
-        if ($totalPages > 1) {
-          echo '<div class="col-md-12 text-center my-5">';
-          echo '<ul class="pagination">';
-          for ($i = 1; $i <= $totalPages; $i++) {
-            $active = $i === $currentPage ? ' active' : '';
-            echo '<li class="page-item' . $active . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-          }
-          echo '</ul>';
-          echo '</div>';
-        }
-        ?>
-      </div>
-    </div>
-  </section>
-  <!-- ========== End featured Listing Grid ========== -->
 
   <!-- ========== Start Why Choose Listify ========== -->
   <section id="why-choose-listify" class="py-5">

@@ -19,12 +19,20 @@ try {
 
   // Receive the data from the create listing form, validate it, and insert it into the database
   if (isset($_POST['create_listing'])) {
+    // If non-required fields are empty, set them to NULL or 0
+    $whatsapp = empty($whatsapp) ? null : $whatsapp;
+    $facebookId = empty($facebookId) ? null : $facebookId;
+    $instagramId = empty($instagramId) ? null : $instagramId;
+    $website = empty($website) ? null : $website;
+    $latitude = empty($latitude) ? 0 : $latitude;
+    $longitude = empty($longitude) ? 0 : $longitude;
+    // Sanitize the data received from the form
     $user_id = sanitize($_SESSION['user_id']);
     $businessName = sanitize($_POST['businessName']);
     $category = sanitize($_POST['category']);
     $description = sanitize($_POST['description']);
-    $latitude = sanitize($_POST['latitude']);
-    $longitude = sanitize($_POST['longitude']);
+    $latitude = clean($_POST['latitude']);
+    $longitude = clean($_POST['longitude']);
     $address = clean($_POST['address']);
     $city = sanitize($_POST['city']);
     $pincode = sanitize($_POST['pincode']);
@@ -36,12 +44,6 @@ try {
     $website = clean($_POST['website']);
     $featured = 0;
     $active = 1;
-
-    // If non-required fields (whatsapp, facebookId, instagramId, website) are empty, set them to NULL
-    $whatsapp = empty($whatsapp) ? null : $whatsapp;
-    $facebookId = empty($facebookId) ? null : $facebookId;
-    $instagramId = empty($instagramId) ? null : $instagramId;
-    $website = empty($website) ? null : $website;
 
     // Check if required fields are empty and sanitize them
     $requiredFields = ['businessName', 'category', 'description', 'address', 'city', 'pincode', 'phone', 'email'];

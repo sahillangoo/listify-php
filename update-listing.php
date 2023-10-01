@@ -72,8 +72,8 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || $_SESSION['us
       <div class="row">
         <div class="col-md-8 mx-auto d-flex justify-content-center flex-column">
           <h3 class="font-weight-bolder text-primary text-gradient text-center">Update Listing</h3>
-          <p class="my-2 text-primary text-gradient text-sm mx-auto text-center">
-            Enter your business details below to Update listing.
+          <p class="my-2 mx-auto text-center">
+            Enter your business details below to <span class="text-primary text-gradient">update</span> listing.
           </p>
           <?php include_once('./functions/dialog.php'); ?>
           <div class="card-body">
@@ -293,52 +293,6 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || $_SESSION['us
       </div>
     </div>
   </section>
-
-
-
-
-  <script type="text/javascript">
-    (() => {
-      'use strict'
-      document.addEventListener("DOMContentLoaded", function(event) {
-        const options = {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
-        };
-        navigator.geolocation.getCurrentPosition(
-          function(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            document.getElementById("latitude").value = latitude;
-            document.getElementById("longitude").value = longitude;
-            console.log(latitude, longitude);
-          },
-          function(error) {
-            if (error.code === error.PERMISSION_DENIED) {
-              alert("Enable Geolocation permission for Location.");
-            }
-            console.log(error);
-          },
-          options
-        );
-      });
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation')
-
-      // Loop over them and prevent submission
-      Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-
-          form.classList.add('was-validated')
-        }, false)
-      })
-    })()
-  </script>
   <?php
   // include the footer file
   include_once './includes/_footer.php';

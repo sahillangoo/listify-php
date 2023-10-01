@@ -430,49 +430,56 @@ if (searchInput) {
     return;
   }
 
-  document.addEventListener('DOMContentLoaded', (event) => {
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-    let latitude = null;
-    let longitude = null;
-    const updateLocation = () => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          latitude = position.coords.latitude.toFixed(4);
-          longitude = position.coords.longitude.toFixed(4);
-          console.log(latitude, longitude);
-        },
-        (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            console.error('Enable Geolocation permission for Location.');
-          } else {
-            console.error(error);
-          }
-        },
-        options
-      );
-    };
-    updateLocation();
-    setInterval(updateLocation, 60000);
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
 
-    // Use forEach instead of Array.from and for loop
-    const forms = document.querySelectorAll('.needs-validation');
-    forms.forEach((form) => {
-      form.addEventListener(
-        'submit',
-        (event) => {
+  try {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        const { latitude, longitude } = position.coords;
+        document.getElementById('latitude').value = latitude;
+        document.getElementById('longitude').value = longitude;
+        console.log(latitude, longitude);
+      },
+      function (error) {
+        if (error.code === error.PERMISSION_DENIED) {
+          alert('Enable Geolocation permission for Location.');
+        } else if (error.code === error.TIMEOUT) {
+          document.getElementById('latitude').value = '0.00';
+          document.getElementById('longitude').value = '0.00';
+        } else {
+          console.error(error);
+        }
+      },
+      options
+    );
+  } catch (error) {
+    console.error(error);
+  }
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation');
+
+  // Loop over them and prevent submission
+  forms.forEach((form) => {
+    form.addEventListener(
+      'submit',
+      (event) => {
+        try {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
           }
 
           form.classList.add('was-validated');
-        },
-        false
-      );
-    });
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      false
+    );
   });
 })();

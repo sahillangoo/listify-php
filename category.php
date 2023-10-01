@@ -1,12 +1,21 @@
 <?php
 // Path: listings.php
 include_once './functions/functions.php';
+
+// check for catagory category in the url
+if (!isset($_GET['category']) || empty($_GET['category']) || !is_string($_GET['category']) || strlen($_GET['category']) > 255 || !preg_match('/^[a-zA-Z]+$/', $_GET['category'])) {
+  $category = 'All';
+} else {
+  $category = sanitize($_GET['category']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
 <head>
-  <title>All Listings</title>
+  <title>
+    Listify Businesses Listings
+  </title>
   <?php include_once './includes/_head.php'; ?>
   <script src="./assets/js/listings.js" type="module"></script>
 </head>
@@ -25,12 +34,12 @@ include_once './functions/functions.php';
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
-              <li class="breadcrumb-item"><a href="./categories.php">Categories</a></li>
+              <li class="breadcrumb-item text-capitalize"><?php echo $category; ?> Businesses Listings</li>
             </ol>
           </nav>
           <div class="heading text-center">
-            <h2 class="h2 text-gradient text-primary ">All Listings</h2>
-            <p class="lead text-secondary text-sm">"Bringing order to the digital chaos"</p>
+            <h2 class="h2 text-capitalize"><?php echo $category; ?> Businesses Listings</h2>
+            <p class="lead text-secondary text-sm ">"Search from <span class="text-primary"><?php echo $category; ?></span> businesses listings"</p>
           </div>
         </div>
 
@@ -54,7 +63,7 @@ include_once './functions/functions.php';
 
 
   <!-- ========== Start listing grid with pagination  ========== -->
-  <section class="pt-5">
+  <section class="pt-3">
     <div class="container">
       <div class="row">
         <p class="lead text-secondary text-sm text-center text-bolder">Listing Filters:</p>
@@ -135,13 +144,8 @@ include_once './functions/functions.php';
         </div>
       </div>
     </div>
-
   </section>
-
-
   <!-- ========== End listing grid with pagination  ========== -->
-
-
   <?php
   // include the footer file
   include_once './includes/_footer.php';

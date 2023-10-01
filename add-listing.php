@@ -7,6 +7,11 @@ if (!isAuthenticated()) {
   redirect('signin.php');
   exit;
 }
+// If the user is not not active
+if ($_SESSION['status'] === 'inactive') {
+  $_SESSION['errorsession'] = 'You are not active. Please contact admin to activate your account.';
+  redirect('account.php');
+}
 // get the user id from the session
 $user_id = $_SESSION['user_id'];
 // check users listing
@@ -34,7 +39,6 @@ try {
     Create Listing - Listify
   </title>
   <?php
-  // todo fix labels add validation
   // include the head file
   include_once './includes/_head.php';
   ?>
@@ -240,11 +244,6 @@ try {
       </div>
     </div>
   </section>
-
-
-
-
-  
   <?php
   // include the footer file
   include_once './includes/_footer.php';
