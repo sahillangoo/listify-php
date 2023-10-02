@@ -1,62 +1,67 @@
 <?php
 // include functions file
-include_once './functions/functions.php';
+require_once './functions/functions.php';
 
 // get listing id from the URL
-$listing_id = $_GET['id'];
+$listing_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-// check if the listing id is set in the url and is not empty and is a number and is not more than 255 characters long and is an integer value and is greater than 0 else redirect to account page with error message
-
-if (!isset($_GET['id']) || empty($_GET['id']) || strlen($_GET['id']) > 255 || !preg_match('/^[0-9]+$/', $_GET['id']) || $_GET['id'] < 1) {
-  redirect('account.php', 'Something went wrong. Please try again.', 'error');
-  exit();
-} else {
-  // get the listing id from the url
-  $listing_id = sanitize($_GET['id']);
-
-  // get the listing details from the database
-  $stmt = $db->prepare('SELECT * FROM listings WHERE id = :id');
-  $stmt->bindParam(':id', $listing_id, PDO::PARAM_INT);
-  $stmt->execute();
-  $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-  // check if the listing exists in the database
-  if (!$result) {
-    redirect('account.php', 'Something went wrong. Please try again.', 'error');
-    exit();
-  }
+// check if the listing id is valid
+if (!$listing_id) {
+  handle_error('Something went wrong. Please try again.');
 }
 
-// check if the user is authenticate else redirect to account page with error message
+// get the listing details from the database
+$sql = "SELECT * FROM listings WHERE id = ? LIMIT 1";
+$stmt = $db->prepare($sql);
+$stmt->execute([$listing_id]);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// check if the listing exists in the database
+if (!$result) {
+  handle_error('Something went wrong. Please try again.');
+}
+
+// check if the user is authenticated and owns the listing
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || $_SESSION['user_id'] != $result['user_id']) {
-  redirect('account.php', 'Something went wrong. Please try again.', 'error');
+  handle_error('You do not have permission to edit this listing.');
+}
+
+function handle_error($message)
+{
+  $_SESSION['errorsession'] = $message;
+  redirect('account.php');
   exit();
 }
 
+// set the category and city values in the form
+$category = $result['category'];
+$city = $result['city'];
 ?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
 
 <head>
   <title>
-    Create Listing - Listify
+    Update Listing - Listify
   </title>
   <?php
   // include the head file
   include_once './includes/_head.php';
   ?>
+
+  <script>
+    // category and city values from PHP variables
+    const category = <?php echo json_encode($result['category'] ?? []); ?>;
+    const city = <?php echo json_encode($result['city'] ?? []); ?>;
+  </script>
 </head>
 
 <body class="blog-author bg-gray-100">
-  <!-- Navbar Light -->
-  <?php
-
-
-  // include the header file
-  include_once './includes/_navbar.php';  ?>
+  <!-- Navbar -->
+  <?php include_once './includes/_navbar.php';  ?>
   <!-- End Navbar -->
 
-  <!-- create listing form -->
+  <!-- update listing form -->
   <section class="py-5 position-relative">
     <div class="container">
       <!-- breadcrumb -->
@@ -78,10 +83,8 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || $_SESSION['us
           <?php include_once('./functions/dialog.php'); ?>
           <div class="card-body">
 
-            <form role="form" id="create_listing" method="post" autocomplete="on" action="./functions/listings/process_listing.php" enctype="multipart/form-data" name="create_listing" class="needs-validation" novalidate>
-
+            <form role="form" id="update_listing" method="post" autocomplete="on" action="./functions/listings/update_listing.php" enctype="multipart/form-data" name="update_listing" class="needs-validation" novalidate>
               <div class="row">
-
                 <div class="col-md-6 ps-2 mb-3 ">
                   <input type="text" class="form-control d-none" name="listing_id" id="listing_id" value="<?php echo $listing_id; ?>" disabled>
                   <label for="businessName">
@@ -101,13 +104,12 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || $_SESSION['us
                     <h6 class="h6 font-weight-bolder text-primary text-gradient">Category</h6>
                   </label>
                   <select class="form-control has-validation" list="category" id="category" name="category" aria-label="category" aria-describedby="category" data-bs-toggle="tooltip" data-bs-placement="right" title="Which category suits your business?" required>
-                    <option value="">Select a category!</option>
-                    <option value="restaurant">Restaurant</option>
-                    <option value="hospital">Hospital</option>
-                    <option value="pharmacy">Pharmacy Store</option>
-                    <option value="education">Education</option>
-                    <option value="bank">Bank</option>
-                    <option value="atm">ATM</option>
+                    <option value="restaurant" <?php if ($category == 'restaurant') echo 'selected'; ?>>Restaurant</option>
+                    <option value="hospital" <?php if ($category == 'hospital') echo 'selected'; ?>>Hospital</option>
+                    <option value="pharmacy" <?php if ($category == 'pharmacy') echo 'selected'; ?>>Pharmacy Store</option>
+                    <option value="education" <?php if ($category == 'education') echo 'selected'; ?>>Education</option>
+                    <option value="bank" <?php if ($category == 'bank') echo 'selected'; ?>>Bank</option>
+                    <option value="atm" <?php if ($category == 'atm') echo 'selected'; ?>>ATM</option>
                   </select>
                   <div class="valid-feedback">
                     Looks good!
@@ -151,17 +153,16 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || $_SESSION['us
                     <h6 class="h6 font-weight-bolder text-primary text-gradient">City</h6>
                   </label>
                   <select class="form-control has-validation" id="city" name="city" aria-label="city" aria-describedby="city" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter city name for your business." required>
-                    <option value="">Select a City!</option>
-                    <option value="srinagar">Srinagar</option>
-                    <option value="anantnag">Anantnag</option>
-                    <option value="bandipora">Bandipora</option>
-                    <option value="baramulla">Baramulla</option>
-                    <option value="budgam">Budgam</option>
-                    <option value="ganderbal">Ganderbal</option>
-                    <option value="kulgam">Kulgam</option>
-                    <option value="kupwara">Kupwara</option>
-                    <option value="pulwama">Pulwama</option>
-                    <option value="shopian">Shopian</option>
+                    <option value="srinagar" <?php if ($city == 'srinagar') echo 'selected'; ?>>Srinagar</option>
+                    <option value="anantnag" <?php if ($city == 'anantnag') echo 'selected'; ?>>Anantnag</option>
+                    <option value="bandipora" <?php if ($city == 'bandipora') echo 'selected'; ?>>Bandipora</option>
+                    <option value="baramulla" <?php if ($city == 'baramulla') echo 'selected'; ?>>Baramulla</option>
+                    <option value="budgam" <?php if ($city == 'budgam') echo 'selected'; ?>>Budgam</option>
+                    <option value="ganderbal" <?php if ($city == 'ganderbal') echo 'selected'; ?>>Ganderbal</option>
+                    <option value="kulgam" <?php if ($city == 'kulgam') echo 'selected'; ?>>Kulgam</option>
+                    <option value="kupwara" <?php if ($city == 'kupwara') echo 'selected'; ?>>Kupwara</option>
+                    <option value="pulwama" <?php if ($city == 'pulwama') echo 'selected'; ?>>Pulwama</option>
+                    <option value="shopian" <?php if ($city == 'shopian') echo 'selected'; ?>>Shopian</option>
                   </select>
                   <div class="valid-feedback">
                     Looks good!
@@ -283,7 +284,7 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || $_SESSION['us
 
                 <div class="mb-3">
                   <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
-                  <button type="submit" name="create_listing" class="btn bg-gradient-primary w-100"><i class="fas fa-lock"></i> Create Listing</button>
+                  <button type="submit" name="update_listing" class="btn bg-gradient-primary w-100"><i class="fas fa-lock"></i> Update Listing</button>
                 </div>
 
               </div>

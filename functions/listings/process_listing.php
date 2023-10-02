@@ -19,39 +19,35 @@ try {
 
   // Receive the data from the create listing form, validate it, and insert it into the database
   if (isset($_POST['create_listing'])) {
-    // If non-required fields are empty, set them to NULL or 0
-    $whatsapp = empty($whatsapp) ? null : $whatsapp;
-    $facebookId = empty($facebookId) ? null : $facebookId;
-    $instagramId = empty($instagramId) ? null : $instagramId;
-    $website = empty($website) ? null : $website;
-    $latitude = empty($latitude) ? 0 : $latitude;
-    $longitude = empty($longitude) ? 0 : $longitude;
     // Sanitize the data received from the form
     $user_id = sanitize($_SESSION['user_id']);
     $businessName = sanitize($_POST['businessName']);
     $category = sanitize($_POST['category']);
     $description = sanitize($_POST['description']);
-    $latitude = clean($_POST['latitude']);
-    $longitude = clean($_POST['longitude']);
     $address = clean($_POST['address']);
     $city = sanitize($_POST['city']);
     $pincode = sanitize($_POST['pincode']);
     $phone = sanitize($_POST['phone']);
     $email = clean($_POST['email']);
-    $whatsapp = sanitize($_POST['whatsapp']);
-    $instagramId = sanitize($_POST['instagramId']);
-    $facebookId = sanitize($_POST['facebookId']);
-    $website = clean($_POST['website']);
-    $featured = 0;
-    $active = 1;
+    $whatsapp = sanitize($_POST['whatsapp']) ?: null;
+    $instagramId = sanitize($_POST['instagramId']) ?: null;
+    $facebookId = sanitize($_POST['facebookId']) ?: null;
+    $website = clean($_POST['website']) ?: null;
 
-    // Check if required fields are empty and sanitize them
+    // Set non-required fields to NULL or 0 if empty
+    $latitude = empty($_POST['latitude']) ? 0 : sanitize($_POST['latitude']);
+    $longitude = empty($_POST['longitude']) ? 0 : sanitize($_POST['longitude']);
+
+    // Check if required fields are empty and throw an exception if so
     $requiredFields = ['businessName', 'category', 'description', 'address', 'city', 'pincode', 'phone', 'email'];
     foreach ($requiredFields as $field) {
       if (empty($_POST[$field])) {
         throw new Exception("Please fill in the $field field");
       }
     }
+
+    $featured = 0;
+    $active = 1;
 
     // Validate the data
     validateFields($_POST);
@@ -197,7 +193,7 @@ function validateImage($displayImage, $businessName, $city)
   $i = 1;
   while (file_exists('../../uploads/business_images/' . $displayImage_name)) {
     $displayImage_name = sanitize($businessName) . '_' . sanitize($city) . '_' . $i . '.' . $file_extension;
-    $i++;
+    $i++;a
   }
 
   // Move image to uploads folder

@@ -46,9 +46,6 @@
                       <a href="./add-listing.php" class="dropdown-item border-radius-md">
                         Create Listing
                       </a>
-                      <a href="./update-listing.php" class="dropdown-item border-radius-md">
-                        Update Listing
-                      </a>
                       <a href="../functions/account/signout_function.php" class="dropdown-item border-radius-md">
                         Sign Out
                       </a>
@@ -60,9 +57,6 @@
                       </a>
                       <a href="./add-listing.php" class="dropdown-item border-radius-md">
                         Create Listing
-                      </a>
-                      <a href="./update-listing.php" class="dropdown-item border-radius-md">
-                        Update Listing
                       </a>
                       <a href="../functions/account/signout_function.php" class="dropdown-item border-radius-md">
                         Sign Out
