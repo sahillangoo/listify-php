@@ -28,14 +28,18 @@
                   <a href="./signin.php" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="SignUp or SignIn to Listify">SignUp / SignIn</a>
                 </li>
               <?php endif; ?>
-
+              <?php if (isAuthenticated() && isAdmin()) : ?>
+                <li class="nav-item ms-lg-auto my-auto ms-3 ms-lg-0">
+                  <a href="./admin/dashboard.php" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Admin Panel">Admin Panel</a>
+                </li>
+              <?php endif; ?>
               <?php if (isAuthenticated()) : ?>
                 <li class="nav-item dropdown dropdown-hover mx-2">
                   <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
                     <span>
-                      <img src="<?php echo $_SESSION['profile_image']; ?>" class="avatar avatar-sm rounded-circle" alt="<?php echo $_SESSION['username']; ?>">
+                      <img src="<?php echo sanitize($_SESSION['profile_image']); ?>" class="avatar avatar-sm rounded-circle" alt="<?php echo sanitize($_SESSION['username']); ?>">
                     </span>
-                    <?php echo $_SESSION['username']; ?>
+                    <?php echo sanitize($_SESSION['username']); ?>
                     <img src="./assets/img/down-arrow-dark.svg" alt="down-arrow" class="arrow ms-1">
                   </a>
                   <div class="dropdown-menu dropdown-menu-animation dropdown-md p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">

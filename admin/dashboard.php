@@ -1,14 +1,9 @@
 <?php
 // include functions file
 require_once __DIR__ . '/../functions/functions.php';
-//  check if the user is logged in or not
-if (!isAuthenticated()) {
+//  check if the user is logged in and is an admin
+if (!isAuthenticated() || !isAdmin()) {
   redirect('signin.php');
-  exit;
-}
-// check if user is admin
-if (!isAdmin()) {
-  redirect('index.php');
   exit;
 }
 ?>
@@ -56,7 +51,7 @@ if (!isAdmin()) {
                 </div>
                 <div class="col-4 text-end">
                   <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                    <i class="ni ni-users text-lg opacity-10" aria-hidden="true"></i>
+                    <i class="fa-solid fa-users fa-xl opacity-10" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
@@ -83,7 +78,7 @@ if (!isAdmin()) {
                 </div>
                 <div class="col-4 text-end">
                   <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                    <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                    <i class="fa-solid fa-clipboard-list fa-xl opacity-10" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
@@ -96,11 +91,6 @@ if (!isAdmin()) {
       <?php include './includes/_footer.php'; ?>
     </div>
   </main>
-
-
-  <!-- include theme config file -->
-  <?php include './includes/_theme_config.php'; ?>
-
   <!-- include footer file -->
   <?php include './includes/_scripts.php'; ?>
 

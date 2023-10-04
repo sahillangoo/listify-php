@@ -1,14 +1,9 @@
 <?php
 // include functions file
 require_once __DIR__ . '/../functions/functions.php';
-//  check if the user is logged in or not
-if (!isAuthenticated()) {
+//  check if the user is logged in and is an admin
+if (!isAuthenticated() || !isAdmin()) {
   redirect('signin.php');
-  exit;
-}
-// check if user is admin
-if (!isAdmin()) {
-  redirect('index.php');
   exit;
 }
 ?>
@@ -38,9 +33,9 @@ if (!isAdmin()) {
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <?php
-              // Fetch all users from the database
+              // Fetch all users from the database, sorted by role
               try {
-                $sql = "SELECT * FROM users";
+                $sql = "SELECT * FROM users ORDER BY role DESC";
                 $stmt = $db->prepare($sql);
                 $stmt->execute();
                 $users = $stmt->fetchAll();
@@ -49,48 +44,77 @@ if (!isAdmin()) {
               } finally {
                 $stmt = null;
               }
+
               // Output the users in a Bootstrap table
-              echo '<div class="table-responsive p-0">';
-              echo '<table class="table align-items-center mb-0">';
-              echo '<thead>';
-              echo '<tr>';
-              echo '<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">User</th>';
-              echo '<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Role</th>';
-              echo '<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">User Since</th>';
-              echo '<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Manage User</th>';
-              echo '</tr>';
-              echo '</thead>';
-              echo '<tbody>';
+              echo <<<HTML
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">User</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Role</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">User Since</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Active</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+              HTML;
 
               foreach ($users as $row) {
-                echo '<tr>';
-                echo '<td>
-                <div class="d-flex px-2 py-1">
-                          <div>
-                            <img src="' . $row['profile_image'] . '" alt="Profile Image" class="avatar avatar-sm me-3">
-                          </div>
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row['username'] . '</h6>
-                            <p class="text-xs text-secondary mb-0">' . $row['email'] . '</p>
-                          </div>
+                $active = $row['status'] == 'active' ? 'checked' : '';
+                echo <<<HTML
+                  <tr>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                          <img src="{$row['profile_image']}" alt="Profile Image" class="avatar avatar-sm me-3">
                         </div>
-                </td>                ';
-                echo '<td><p class="badge badge-xsm bg-gradient-primary text-xsm font-weight-bold mb-0">' . $row['role'] . '</p></td>';
-                echo '<td><span class="text-secondary text-sm font-weight-bold">' . $row['user_since'] . '</span></td>';
-                echo '<th class="align-middle">
-                <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Manage user">
-                  Manage
-                </a></th>';
-                echo '</tr>';
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm">{$row['username']} [{$row['id']}]</h6>
+                          <p class="text-xs text-secondary mb-0">{$row['email']}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td><p class="badge badge-xsm bg-gradient-primary text-xsm font-weight-bold mb-0">{$row['role']}</p></td>
+                    <td><span class="text-secondary text-sm font-weight-bold">{$row['user_since']}</span></td>
+                    <td>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="active-{$row['id']}" name="active" {$active} onchange="toggleActive({$row['id']})">
+                        <label class="form-check-label" for="active-{$row['id']}"></label>
+                      </div>
+                    </td>
+                  </tr>
+              HTML;
               }
 
-              echo '</tbody>';
-              echo '</table>';
-              echo '</div>';
+              echo <<<HTML
+                  </tbody>
+                </table>
+              </div>
+              HTML;
 
               // Close the database connection
               $db = null;
               ?>
+
+              <script>
+              function toggleActive(id) {
+                const checkbox = document.getElementById(`active-${id}`);
+                const value = checkbox.checked ? 'active' : 'inactive';
+                fetch(`./functions/toggle_active_user.php?id=${id}&value=${value}`)
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.success) {
+                      console.log(`User ${id} active status updated to ${value}`);
+                    } else {
+                      console.error(`Failed to update active status for user ${id}`);
+                    }
+                  })
+                  .catch(error => {
+                    console.error(`Failed to update active status for user ${id}: ${error}`);
+                  });
+              }
+              </script>
             </div>
           </div>
         </div>
@@ -98,10 +122,6 @@ if (!isAdmin()) {
       <?php include './includes/_footer.php'; ?>
     </div>
   </main>
-
-
-  <!-- include theme config file -->
-  <?php include './includes/_theme_config.php'; ?>
 
   <!-- include footer file -->
   <?php include './includes/_scripts.php'; ?>

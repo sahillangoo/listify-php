@@ -48,12 +48,6 @@ $city = $result['city'];
   // include the head file
   include_once './includes/_head.php';
   ?>
-
-  <script>
-    // category and city values from PHP variables
-    const category = <?php echo json_encode($result['category'] ?? []); ?>;
-    const city = <?php echo json_encode($result['city'] ?? []); ?>;
-  </script>
 </head>
 
 <body class="blog-author bg-gray-100">
@@ -266,21 +260,7 @@ $city = $result['city'];
                   <div class="invalid-feedback">Uploaded Image Error</div>
                 </div>
 
-                <div class="mb-3">
-                  <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
-                    <label class="form-check-label" for="terms">I agree to the
-                      <i class="fa-solid fa-info-circle"></i>
-                      <a href="./privacy.php" class="text-info text-gradient font-weight-bold" target="_blank">Privacy Policy</a> &amp;
-                      <a href="./terms.php" class="text-info text-gradient font-weight-bold" target="_blank">Terms of Use</a>.</label>
-                  </div>
-                  <div class="valid-feedback">
-                    Looks good!
-                  </div>
-                  <div class="invalid-feedback">
-                    You must agree before submitting.
-                  </div>
-                </div>
+                
 
                 <div class="mb-3">
                   <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">

@@ -176,43 +176,6 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
         <div class="my-3 rounded" id="mapid"></div>
       </div>
     </div>
-    <div class="col-md-12">
-      <!-- business reviews -->
-      <h4 class="h3 text-center text-gradient text-primary font-weight-bolder mt-5">Reviews</h4>
-      <p class="text-center text-sm">The reviews are based on the user experience.</p>
-      <!-- reviews with pagination -->
-      <div class="row mt-6">
-        <div class="col-lg-4 col-md-8">
-          <div class="card card-plain move-on-hover">
-            <div class="card-body">
-              <div class="author">
-                <div class="name">
-                  <h6 class="mb-0 font-weight-bolder">Nick Willever</h6>
-                  <div class="stats">
-                    <i class="far fa-clock" aria-hidden="true"></i> 1 day ago
-                  </div>
-                </div>
-              </div>
-              <p class="mt-4">"<?php echo $result['review']; ?>"</p>
-              <div class="rating mt-3">
-                <?php
-                $rating = $result['avg_rating'];
-                for ($i = 0; $i < 5; $i++) {
-                  if ($i < $rating) {
-                    echo '<i class="fas fa-star"></i>';
-                  } else {
-                    echo '<i class="far fa-star"></i>';
-                  }
-                }
-                ?>
-                <!-- Display the average rating -->
-                <span class="text-sm">(<?php echo $result['reviews_count']; ?>)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
   <?php
   // include the footer file
