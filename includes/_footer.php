@@ -7,9 +7,7 @@
           <h6 class="text-white font-weight-bolder text-uppercase mb-lg-4 mb-2">Listify</h6>
           <p class="text-sm opacity-8 mb-0 text-white mb-2">Listify is a business listing app that allows you to list your business.</p>
           <p class="text-sm text-white opacity-8 mb-0">
-            Copyright © <script>
-              document.write(new Date().getFullYear())
-            </script> Listify by Sahil and Farah.
+            Copyright © <span id="year"></span> Listify by Sahil and Farah.
           </p>
         </div>
         <div class="col-lg-6 ms-auto text-lg-end text-center">
@@ -18,5 +16,8 @@
       </div>
     </div>
   </footer>
-
-
+  <script>
+    const yearElement = document.getElementById('year');
+    const currentYear = new Date().getFullYear();
+    yearElement.textContent = currentYear;
+  </script>
