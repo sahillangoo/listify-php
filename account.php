@@ -18,6 +18,15 @@ if (isset($_SESSION['user_id'])) {
   $user_id = sanitize($_SESSION['user_id']);
 }
 
+  // check if user email is verified
+  if (isset($_SESSION['verified'])) {
+    $verified = sanitize($_SESSION['verified']);
+    if ($verified === 0) {
+      $_SESSION['errorsession'] = 'Your email is not verified. Please verify your email.';
+    }
+  }
+
+
 // Fetch user's listings from the database
 try {
   $listings = getUserListings($db, $user_id);
@@ -26,6 +35,8 @@ try {
 }
 // convert user_since to a readable format
 $user_since = date('d M Y', strtotime($_SESSION['user_since']));
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">

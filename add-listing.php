@@ -207,7 +207,7 @@ try {
                 </div>
 
                 <div class="col-md-6 ps-2 mb-3">
-                  <input type="url" class="form-control" placeholder="Your Website Link" id="website" name="website" aria-label="website" aria-describedby="website" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your business website link">
+                  <input type="url" value="https://" class="form-control" placeholder="Your Website Link" id="website" name="website" aria-label="website" aria-describedby="website" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your business website link">
                   <div class="valid-feedback">
                     Looks good!
                   </div>

@@ -196,3 +196,134 @@ function displayListing(array $listing): void
               </div>
         HTML;
 }
+
+
+
+// Function to validate the form fields
+function validateFields($fields)
+{
+  foreach ($fields as $field => $value) {
+    switch ($field) {
+      case 'businessName':
+        if (!preg_match('/^[a-zA-Z0-9 ]{3,30}$/', $value)) {
+          throw new Exception('Please enter a valid business name (letters, numbers, spaces, and hyphens only)');
+        }
+        break;
+      case 'category':
+        if (!preg_match('/^[a-zA-Z\s-]+$/', $value)) {
+          throw new Exception('Please enter a valid category');
+        }
+        break;
+      case 'description':
+        if (!preg_match('/^[\w\s!?"\'&()!%.:;,-]{10,999}$/', $value)) {
+          throw new Exception('Please enter a valid description (letters, numbers, spaces, and punctuation only)');
+        }
+        break;
+      case 'latitude':
+        if (!empty($value) && (!is_numeric($value) || $value < -90 || $value > 90)) {
+          throw new Exception('Enable location permission');
+        }
+        break;
+      case 'longitude':
+        if (!empty($value) && (!is_numeric($value) || $value < -180 || $value > 180)) {
+          throw new Exception('Enable location permission');
+        }
+        break;
+      case 'address':
+        if (!preg_match('/^[a-zA-Z0-9 -,_&]{8,30}$/', $value)) {
+          throw new Exception('Please enter a valid address (letters, numbers, spaces, and punctuation only)');
+        }
+        break;
+      case 'city':
+        if (!preg_match('/^[a-zA-Z\s-]+$/', $value)) {
+          throw new Exception('Please enter a valid city (letters, numbers, spaces, and hyphens only)');
+        }
+        break;
+      case 'pincode':
+        if (!preg_match('/^[0-9]{6}$/', $value)) {
+          throw new Exception('Please enter a valid pincode (6 digits only)');
+        }
+        break;
+      case 'phone':
+        if (!preg_match('/^[0-9]{10}$/', $value)) {
+          throw new Exception("Invalid phone number. Please enter a 10-digit phone number.");
+        }
+        break;
+      case 'email':
+        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+          throw new Exception("Check your email address");
+        }
+        break;
+      case 'whatsapp':
+        if ($value && !preg_match('/^[0-9]{10}$/', $value)) {
+          throw new Exception('Please enter a valid WhatsApp number (10 digits only)');
+        }
+        break;
+      case 'facebookId':
+        if ($value && !preg_match('/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,30}$/', $value)) {
+          throw new Exception('Please enter a valid Facebook ID (letters, numbers, and periods only)');
+        }
+        break;
+      case 'instagramId':
+        if ($value && !preg_match('/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,30}$/', $value)) {
+          throw new Exception('Please enter a valid Instagram ID (letters, numbers, and underscores only)');
+        }
+        break;
+      case 'website':
+        if ($value && !filter_var($value, FILTER_VALIDATE_URL)) {
+          throw new Exception('Please enter a valid website URL (e.g. https://www.example.com)');
+        }
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+
+
+// Function to validate the image
+function validateImage(array $displayImage, string $businessName, string $city): string
+{
+  // Check if file was uploaded
+  if (!isset($displayImage['error']) || $displayImage['error'] !== UPLOAD_ERR_OK) {
+    throw new Exception("Please upload an image of your business");
+  }
+
+  // Check file type
+  $allowedExtensions = [
+    'jpg', 'jpeg', 'png'
+  ];
+  $fileExtension = pathinfo($displayImage['name'], PATHINFO_EXTENSION);
+  $fileExtension = strtolower($fileExtension);
+  if (!in_array($fileExtension, $allowedExtensions, true)) {
+    throw new Exception("The image you uploaded is not a jpg, jpeg or png image");
+  }
+
+  // Check file size
+  $maxFileSize = 2000000; // 2mb
+  $minFileSize = 50000; // 50kb
+  if ($displayImage['size'] >= $maxFileSize || $displayImage['size'] <= $minFileSize) {
+    throw new Exception("Please upload an image between 50kb and 2MB");
+  }
+
+  // Check image dimensions
+  [$width, $height] = getimagesize($displayImage['tmp_name']);
+  if ($width < 500 || $height < 500) {
+    throw new Exception("Please upload an image with dimensions of at least 500x500 pixels");
+  }
+
+  // Compress image to WebP format
+  $quality = 75; // Set WebP quality
+  $image = imagecreatefromstring(file_get_contents($displayImage['tmp_name']));
+  $newFileName = uniqid() . '_' . $businessName . '_' . $city . '.' . 'webp';
+  $newFilePath = '../../uploads/business_images/' . $newFileName;
+  if (!imagewebp($image, $newFilePath, $quality)) {
+    throw new Exception("Failed to upload the image retry later!");
+  }
+
+  // Remove uploaded file
+  unlink($displayImage['tmp_name']);
+
+  return $newFileName;
+}

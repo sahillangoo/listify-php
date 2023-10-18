@@ -12,5 +12,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 <!-- Font Awesome Icons -->
 <script async src="https://kit.fontawesome.com/c4bd7c7b30.js" crossorigin="anonymous"></script>
-<script src="./assets/js/main.js" type="module"></script>
+<script src="./assets/js/main.js" type="text/javascript"></script>
 <!-- ========== End Script files ========== -->

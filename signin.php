@@ -23,8 +23,6 @@ if (isset($_COOKIE['remember_me'])) {
   // include the head file
   include_once './includes/_head.php';
 
-  // todo add google recaptcha || add forgot password || user can login with username, email or phone number
-
   ?>
 </head>
 

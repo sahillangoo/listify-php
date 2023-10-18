@@ -1,24 +1,6 @@
 /*
 main.js
 Author: Sahil Langoo
-File function content =>
-1. debounce function for limiting the number of times a function is called in a given time period
-2. setAttributes function for setting multiple attributes on an element
-3. togglePassword function for toggling password visibility
-4. validateInput function for validating input fields
-5. getRegexForInput function for getting regex for input fields
-6. validateDescription function for validating description textarea
-7. validateFileInput function for validating file input
-8. addInputValidationListeners function for adding input validation listeners
-9. addInputGroupClickHandler function for adding click handler to input groups
-10. initializeTooltips function for initializing bootstrap tooltips
-11. initializeFormValidation function for initializing form validation
-12. adjustTextareaSizeOnResize function for adjusting textarea size on window resize
-13. initializePage function for initializing page
-14. handleError function for handling errors
-15. Truncate description text
-16. Search functionality
-17. Function to get the current location of the user on create-listing and update-listing page
 */
 
 // debounce function for limiting the number of times a function is called in a given time period
@@ -77,7 +59,7 @@ const getRegexForInput = (input) => {
     case 'phone':
       return /^[0-9]{10}$/;
     case 'password':
-      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#\-_@$!%*?&+~|{}:;<>/])[A-Za-z\d#\-_@$!%*?&+~|{}:;<>/]{8,18}$/;
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#\-_@$!%*?&+~|{}:;<>./])[A-Za-z\d#\-_@$!%*?&+~|{}:;<>./]{8,18}$/;
     case 'businessName':
       return /^[a-zA-Z0-9 ]{3,30}$/;
     case 'address':

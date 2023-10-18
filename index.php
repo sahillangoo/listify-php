@@ -13,9 +13,6 @@ include_once './functions/functions.php';
 
 <body class="index-page">
   <?php
-  /*
-  Todo - fix text and add images
-  */
   // include the header file
   include_once './includes/_navbar.php';
   ?>
@@ -186,14 +183,14 @@ include_once './functions/functions.php';
             <div class="card-body">
               <div class="author">
                 <div class="name">
-                  <h6 class="mb-0 font-weight-bolder">Nick Willever</h6>
+                  <h6 class="mb-0 font-weight-bolder">Jone Dove</h6>
                   <div class="stats">
                     <i class="far fa-clock" aria-hidden="true"></i> 1 day ago
                   </div>
                 </div>
               </div>
               <p class="mt-4">"Listify has helped me grow my business by reaching more customers and getting more reviews. Highly recommended!"</p>
-              <div class="rating mt-3">
+              <div class="rating text-warning mt-3">
                 <i class="fas fa-star" aria-hidden="true"></i>
                 <i class="fas fa-star" aria-hidden="true"></i>
                 <i class="fas fa-star" aria-hidden="true"></i>
@@ -209,14 +206,14 @@ include_once './functions/functions.php';
             <div class="card-body">
               <div class="author align-items-center">
                 <div class="name">
-                  <h6 class="text-white mb-0 font-weight-bolder">Shailesh Kushwaha</h6>
+                  <h6 class="text-white mb-0 font-weight-bolder">Jane Dove</h6>
                   <div class="stats text-white">
                     <i class="far fa-clock" aria-hidden="true"></i> 1 week ago
                   </div>
                 </div>
               </div>
               <p class="mt-4 text-white">"Listify is the best business listing app out there. It's easy to use, affordable, and has helped me get more customers."</p>
-              <div class="rating mt-3">
+              <div class="rating text-warning mt-3">
                 <i class="fas fa-star text-white" aria-hidden="true"></i>
                 <i class="fas fa-star text-white" aria-hidden="true"></i>
                 <i class="fas fa-star text-white" aria-hidden="true"></i>
@@ -239,7 +236,7 @@ include_once './functions/functions.php';
                 </div>
               </div>
               <p class="mt-4">"Listify has been a game-changer for my business. I've seen a significant increase in traffic and sales since I started using it."</p>
-              <div class="rating mt-3">
+              <div class="rating text-warning mt-3">
                 <i class="fas fa-star" aria-hidden="true"></i>
                 <i class="fas fa-star" aria-hidden="true"></i>
                 <i class="fas fa-star" aria-hidden="true"></i>
