@@ -4,7 +4,7 @@
  * This file handles the create listing form data and inserts it into the database.
  *
  * Author: SahilLangoo
- * Last modified: 23/8/2023
+ * Last modified: 15/10/2023
  */
 
 require_once __DIR__ . '/../functions.php';
