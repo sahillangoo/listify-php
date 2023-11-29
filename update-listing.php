@@ -1,4 +1,11 @@
 <?php
+/**
+ * File: update-listing.php
+ * Description: Update listing page
+ * Author: SahilLangoo
+ * Last modified: 15/10/2023
+ */
+
 // include functions file
 require_once './functions/functions.php';
 
@@ -183,8 +190,8 @@ $city = $result['city'];
                 </style>
 
                 <div class="col-md-6 ps-2 mb-3">
-                  <label for="state">
-                    <h6 class="h6 font-weight-bolder text-primary text-gradient">State</h6>
+                  <label for="phone">
+                    <h6 class="h6 font-weight-bolder text-primary text-gradient">Phone</h6>
                   </label>
                   <input type="tel" class="form-control " placeholder="Business Phone +91" id="phone" name="phone" aria-label="phone" aria-describedby="phone" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter 10 digit business phone number " required value="<?php echo $result['phoneNumber']; ?>">
                   <div class="valid-feedback">
@@ -260,7 +267,7 @@ $city = $result['city'];
                   <div class="invalid-feedback">Uploaded Image Error</div>
                 </div>
 
-                
+
 
                 <div class="mb-3">
                   <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">

@@ -2,10 +2,6 @@
 // include functions file
 include_once './functions/functions.php';
 
-/*
-  Listing Page
-  If this page gets listing id from the url, it will show the listing details to the user else it will redirect to the home page
-  */
 // check if the listing id is set in the url
 if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing']) > 255 || !preg_match('/^[0-9]+$/', $_GET['listing'])) {
   redirect('404.php');
@@ -21,8 +17,6 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
     exit();
   }
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
@@ -92,8 +86,8 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
-          <li class="breadcrumb-item"><a href="./categories.php">Categories</a></li>
-          <li class="breadcrumb-item text-capitalize"><a href="./categories.php?slug=<?php echo $result['category']; ?>"><?php echo $result['category']; ?></a></li>
+          <li class="breadcrumb-item"><a href="./category.php">Categories</a></li>
+          <li class="breadcrumb-item text-capitalize"><a href="./category.php?category=<?php echo $result['category']; ?>"><?php echo $result['category']; ?></a></li>
           <li class="breadcrumb-item active text-capitalize" aria-current="page"><?php echo $result['businessName']; ?></li>
         </ol>
       </nav>
@@ -176,6 +170,126 @@ if (!isset($_GET['listing']) || empty($_GET['listing']) || strlen($_GET['listing
         <div class="my-3 rounded" id="mapid"></div>
       </div>
     </div>
+
+    <div class="col-md-12">
+      <!-- business reviews -->
+      <h4 class="h3 text-center text-gradient text-primary font-weight-bolder mt-5">Reviews</h4>
+      <p class="text-center text-sm">The reviews are based on the user experience.</p>
+      <!-- reviews with pagination -->
+      <div class="row mt-6">
+        <div class="col-lg-4 col-md-8">
+          <div class="card card-plain move-on-hover">
+            <div class="card-body">
+              <div class="author">
+                <div class="name">
+                  <h6 class="mb-0 font-weight-bolder">Nick Willever</h6>
+                  <div class="stats">
+                    <i class="far fa-clock" aria-hidden="true"></i> 1 day ago
+                  </div>
+                </div>
+              </div>
+              <p class="mt-4">"<?php echo $result['review']; ?>"</p>
+              <div class="rating mt-3">
+                <?php
+                $rating = $result['avg_rating'];
+                for ($i = 0; $i < 5; $i++) {
+                  if ($i < $rating) {
+                    echo '<i class="fas fa-star"></i>';
+                  } else {
+                    echo '<i class="far fa-star"></i>';
+                  }
+                }
+                ?>
+                <!-- Display the average rating -->
+                <span class="text-sm">(<?php echo $result['reviews_count']; ?>)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-md-12">
+      <h4 class="h4 text-center text-bolder">
+        Reviews
+      </h4>
+      <?php
+      // include the functions file
+      include_once './includes/functions.php';
+
+      // get all the reviews for the listing
+      $reviews = getReviews($db, $result['id']);
+
+      // check if there are any reviews
+      if (count($reviews) > 0) {
+        // loop through the reviews and display them
+        foreach ($reviews as $review) {
+      ?>
+          <div class="card my-3">
+            <div class="card-body">
+              <h5 class="card-title"><?php echo $review['title']; ?></h5>
+              <h6 class="card-subtitle mb-2 text-muted"><?php echo $review['username']; ?></h6>
+              <p class="card-text"><?php echo $review['review']; ?></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-warning">
+                  <?php
+                  $rating = $review['rating'];
+                  for ($i = 0; $i < 5; $i++) {
+                    if ($i < $rating) {
+                      echo '<i class="fas fa-star"></i>';
+                    } else {
+                      echo '<i class="far fa-star"></i>';
+                    }
+                  }
+                  ?>
+                </span>
+                <span class="text-muted"><?php echo $review['created_at']; ?></span>
+              </div>
+            </div>
+          </div>
+      <?php
+        }
+      } else {
+        // display a message if there are no reviews
+        echo '<p class="text-center">No reviews yet.</p>';
+      }
+      ?>
+      <!-- Review Form -->
+    <div class="card my-3">
+      <div class="card-body">
+        <h5 class="card-title">Leave a Review</h5>
+        <?php
+        // check if the user is logged in
+        if (isset($_SESSION['user_id'])) {
+        ?>
+          <form action="add_review.php" method="POST">
+            <div class="form-group">
+              <label for="rating">Rating:</label>
+              <select class="form-control" id="rating" name="rating">
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="review">Review:</label>
+              <textarea class="form-control" id="review" name="review" rows="3"></textarea>
+            </div>
+            <input type="hidden" name="listing_id" value="<?php echo $result['id']; ?>">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        <?php
+        } else {
+          // display a message if the user is not logged in
+          echo '<p class="text-center">Please <a href="login.php">log in</a> to leave a review.</p>';
+        }
+        ?>
+      </div>
+    </div>
+  </div> -->
+
+
   </div>
   <?php
   // include the footer file
